@@ -1,0 +1,24 @@
+LATEX     = platex
+LATEXFLAG = --kanji=utf8
+DVIPDFM = dvipdfmx
+
+TARGETS = word.cls word.clo
+DOCUMENT = word.pdf
+TEXDTX = word.dtx
+TEXINS = word.ins
+
+$(TARGETS) : % : $(TEXINS) $(TEXDTX)
+	$(LATEX) $(LATEXFLAG) $<
+
+$(DOCUMENT) : % : $(TEXDTX)
+	$(LATEX) $(LATEXFLAG) $<
+	$(DVIPDFM) $*
+
+.DEFAULT: $(TARGETS) $(DOCUMENT)
+
+.PHONY: clean
+
+clean:
+	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf
+
+

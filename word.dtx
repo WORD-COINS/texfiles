@@ -704,7 +704,7 @@
 % \begin{macro}{\c@topnumber}
 % \Lcount{topnumber}は、本文ページの上部に出力できるフロートの最大数です。
 %    \begin{macrocode}
-%<*article|report|book>
+%<*book>
 \setcounter{topnumber}{2}
 %    \end{macrocode}
 % \end{macro}
@@ -779,19 +779,29 @@
 %
 %
 % \section{ページスタイル}\label{sec:pagestyle}
-% p\LaTeXe{}では、つぎの6種類のページスタイルを使用できます。
+% WORDクラスファイルでは、つぎの3種類のページスタイルを使用できます。
 % \pstyle{empty}は\file{latex.dtx}で定義されています。 
 %
 % \begin{tabular}{ll}
 % empty      & ヘッダにもフッタにも出力しない\\
 % plain      & フッタにページ番号のみを出力する\\
-% headnombre & ヘッダにページ番号のみを出力する\\
-% footnombre & フッタにページ番号のみを出力する\\
 % headings   & ヘッダに見出しとページ番号を出力する\\
-% bothstyle  & ヘッダに見出し、フッタにページ番号を出力する\\
 % \end{tabular}
+% 
+% ただし、WORDではページ番号を赤入れの時にしか使わないので、
+% |\if@pagenumber|が\pstyle{true}の時のみページ番号を表示します。
+% |\if@pagenumber|はオプションに\pstyle{draft}か\pstyle{pagenum}を指定した時に
+% \pstyle{true}になります。
 %
 % ページスタイル\pstyle{foo}は、|\ps@foo|コマンドとして定義されます。
+%
+% WORDでは次のように使います。
+%
+% \begin{tabular}{ll}
+% empty      & 通常は使わない\\
+% plain      & 通常は使わない\\
+% headings   & これを使う\\
+% \end{tabular}
 %
 % \begin{macro}{\@evenhead}
 % \begin{macro}{\@oddhead}
@@ -836,6 +846,27 @@
 %     |\rightmark|は\TeX{}の|\firstmark|コマンドのような働きをします。
 %     初期値は空でなくてはいけません。
 % \end{flushleft}
+% 
+% \subsubsection{マークの取得}
+% ここではマークの取得について詳しく説明します。
+% |\botmark|と|\firstmark|、さらに|\topmark|は次のようになります。
+%
+% \begin{macro}{\botmark}
+% \begin{macro}{\firstmark}
+% \begin{macro}{\topmark}
+%
+% |\firstmark|は現在のページの最初のマークです。
+% 現在のページにマークが存在しなければ|\topmark|と等しくなります。
+%
+% |\botmark|は現在のページの最後のマークです。
+% 現在のページにマークが存在しなければ|\topmark|と等しくなります。
+%
+% |\topmark|は現在のページを取得する直前の|\botmark|と等しくなります。
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection{マークの挿入}
 %
 % マークコマンドの動作は、左マークの`範囲内の'右マークのために
 % 合理的になっています。たとえば、左マークは|\chapter|コマンドによって
@@ -848,7 +879,6 @@
 % |\@mkboth|は、|\ps@...|コマンドによって、|\markboth|（ヘッダを設定する）か、
 % |\@gobbletwo|（何もしない）に|\let|されます。
 %
-% \changes{v1.0a}{1995/08/30}{柱の書体がノンブルに影響するバグの修正}
 %
 % \subsection{plainページスタイル}
 % \pstyle{jpl@in}に|\let|するために、ここで定義をします。
@@ -865,7 +895,6 @@
 % \end{macro}
 %
 % \subsection{jpl@inページスタイル}
-% \changes{v1.0d}{1996/02/29}{\pstyle{jpl@in}の初期値を定義}
 %
 % \pstyle{jpl@in}スタイルは、クラスファイル内部で使用するものです。
 % \LaTeX{}では、bookクラスを\pstyle{headings}としています。
@@ -887,35 +916,6 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsection{headnombreページスタイル}
-%
-% \begin{macro}{\ps@headnombre}
-% \pstyle{headnombre}スタイルは、ヘッダにページ番号のみを出力します。
-%    \begin{macrocode}
-\def\ps@headnombre{\let\@mkboth\@gobbletwo
-    \let\ps@jpl@in\ps@headnombre
-%<yoko>  \def\@evenhead{\thepage\hfil}%
-%<yoko>  \def\@oddhead{\hfil\thepage}%
-%<tate>  \def\@evenhead{\hfil\thepage}%
-%<tate>  \def\@oddhead{\thepage\hfil}%
-  \let\@oddfoot\@empty\let\@evenfoot\@empty}
-%    \end{macrocode}
-% \end{macro}
-%
-% \subsection{footnombreページスタイル}
-%
-% \begin{macro}{\ps@footnombre}
-% \pstyle{footnombre}スタイルは、フッタにページ番号のみを出力します。
-%    \begin{macrocode}
-\def\ps@footnombre{\let\@mkboth\@gobbletwo
-    \let\ps@jpl@in\ps@footnombre
-%<yoko>  \def\@evenfoot{\thepage\hfil}%
-%<yoko>  \def\@oddfoot{\hfil\thepage}%
-%<tate>  \def\@evenfoot{\hfil\thepage}%
-%<tate>  \def\@oddfoot{\thepage\hfil}%
-  \let\@oddhead\@empty\let\@evenhead\@empty}
-%    \end{macrocode}
-% \end{macro}
 %
 % \subsection{headingsスタイル}
 % \pstyle{headings}スタイルは、ヘッダに見出しとページ番号を出力します。
@@ -1962,7 +1962,7 @@
 \@beginparpenalty -\@lowpenalty
 \@endparpenalty   -\@lowpenalty
 \@itempenalty     -\@lowpenalty
-%</article|report|book>
+%</book>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

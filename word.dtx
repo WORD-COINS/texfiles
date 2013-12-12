@@ -28,7 +28,7 @@
 % \StopEventually{}
 %
 % \iffalse
-% \changes{v1.0}{2013/12/27}{dtxファイルへ以降}
+% \changes{v1.0}{2013/12/27}{dtxファイルへ移行}
 % \fi
 %
 % \iffalse
@@ -43,6 +43,8 @@
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{word.dtx}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
 \title{WORDの標準クラス\space\fileversion}
 \author{Yoshimura Hikaru}
 \date{作成日：\filedate}
@@ -71,7 +73,6 @@
 % \MakeShortVerb{\|}
 %
 %
-%<*book>
 % \section{オプションスイッチ}
 % ここでは、後ほど使用するいくつかのコマンドやスイッチを定義しています。
 %
@@ -79,6 +80,7 @@
 % chapterレベルを奇数ページからはじめるかどうかのスイッチです。
 % デフォルトは、``no''です。
 %    \begin{macrocode}
+%<*book>
 \newif\if@openright
 %    \end{macrocode}
 % \end{macro}
@@ -97,7 +99,7 @@
 % スイッチ|\@mainmatter|が真の場合、本文を処理しています。
 % このスイッチが偽の場合は、|\chapter|コマンドは見出し番号を出力しません。
 %    \begin{macrocode}
-%<book>\newif\if@mainmatter \@mainmattertrue
+\newif\if@mainmatter \@mainmattertrue
 %    \end{macrocode}
 % \end{macro}
 %
@@ -141,61 +143,6 @@
 % \end{macro}
 %
 % \section{オプションの宣言}
-% ここでは、クラスオプションの宣言を行なっています。
-%
-% \subsection{用紙オプション}
-% 用紙サイズを指定するオプションです。
-%    \begin{macrocode}
-\DeclareOption{a4paper}{\setcounter{@paper}{1}%
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5paper}{\setcounter{@paper}{2}%
-  \setlength\paperheight {210mm}
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{b4paper}{\setcounter{@paper}{3}%
-  \setlength\paperheight {364mm}
-  \setlength\paperwidth  {257mm}}
-\DeclareOption{b5paper}{\setcounter{@paper}{4}%
-  \setlength\paperheight {257mm}
-  \setlength\paperwidth  {182mm}}
-%    \end{macrocode}
-% ドキュメントクラスに、以下のオプションを指定すると、通常よりもテキストを
-% 組み立てる領域の広いスタイルとすることができます。
-%    \begin{macrocode}
-\DeclareOption{a4j}{\setcounter{@paper}{1}\@stysizetrue
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5j}{\setcounter{@paper}{2}\@stysizetrue
-  \setlength\paperheight {210mm}
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{b4j}{\setcounter{@paper}{3}\@stysizetrue
-  \setlength\paperheight {364mm}
-  \setlength\paperwidth  {257mm}}
-\DeclareOption{b5j}{\setcounter{@paper}{4}\@stysizetrue
-  \setlength\paperheight {257mm}
-  \setlength\paperwidth  {182mm}}
-\DeclareOption{a4p}{\setcounter{@paper}{1}\@stysizetrue
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5p}{\setcounter{@paper}{2}\@stysizetrue
-  \setlength\paperheight {210mm}
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{b4p}{\setcounter{@paper}{3}\@stysizetrue
-  \setlength\paperheight {364mm}
-  \setlength\paperwidth  {257mm}}
-\DeclareOption{b5p}{\setcounter{@paper}{4}\@stysizetrue
-  \setlength\paperheight {257mm}
-  \setlength\paperwidth  {182mm}}
-%    \end{macrocode}
-%
-% \subsection{横置きオプション}
-% このオプションが指定されると、用紙の縦と横の長さを入れ換えます。
-%    \begin{macrocode}
-\DeclareOption{landscape}{\@landscapetrue
-  \setlength\@tempdima{\paperheight}%
-  \setlength\paperheight{\paperwidth}%
-  \setlength\paperwidth{\@tempdima}}
-%    \end{macrocode}
 %
 % \subsection{組方向オプション}
 % このオプションが指定されると、縦組で組版をします。
@@ -211,13 +158,6 @@
 %    \begin{macrocode}
 \DeclareOption{oneside}{\@twosidefalse}
 \DeclareOption{twoside}{\@twosidetrue}
-%    \end{macrocode}
-%
-% \subsection{二段組オプション}
-% 二段組にするかどうかのオプションです。
-%    \begin{macrocode}
-\DeclareOption{onecolumn}{\@twocolumnfalse}
-\DeclareOption{twocolumn}{\@twocolumntrue}
 %    \end{macrocode}
 %
 % \subsection{表題ページオプション}
@@ -292,7 +232,6 @@
 	\@pagenumbertrue
 }
 \DeclareOption{final}{\setlength\overfullrule{0pt}}
-%</book>
 %    \end{macrocode}
 %
 % \subsection{ページ番号の表示}
@@ -306,16 +245,17 @@
 % \subsection{サイズクラスのロード}
 % サイズクラスのロードを行ないます。
 %    \begin{macrocode}
-%<*book>
 \ProcessOptions\relax
 \input{word.clo}
-%    \end{macrocode}
 %</book>
+%    \end{macrocode}
 %
 % \section{フォント}
 %
 % ここでは、\LaTeX{}のフォントサイズコマンドの定義をしています。
 % フォントサイズコマンドの定義は、次のコマンドを用います。
+% またWORDクラスはOTFパッケージを読み込むことを前提としているため、
+% TFMファイルを拡大・縮小するといったことはしていません。
 %
 % |\@setfontsize||\size|\meta{font-size}\meta{baselineskip}
 %
@@ -450,12 +390,25 @@
 %
 % \subsection{用紙サイズの決定}
 %
+% 用紙サイズを指定します。
+% WORDはJIS B5を用います。
+% \begin{macro}{\paperheight}
+% \begin{macro}{\paperwidth}
+%    \begin{macrocode}
+%<*book>
+\setcounter{@paper}{4}
+\@stysizetrue
+\setlength\paperheight {257mm}
+\setlength\paperwidth  {182mm}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
 % \begin{macro}{\columnsep}
 % \begin{macro}{\columnseprule}
 % |\columnsep|は、二段組のときの、左右（あるいは上下）の段間の幅です。
 % このスペースの中央に|\columnseprule|の幅の罫線が引かれます。
 %    \begin{macrocode}
-%<*book>
 \setlength\columnsep{3\Cwd}
 \setlength\columnseprule{\z@}
 %    \end{macrocode}
@@ -543,7 +496,7 @@
 %    \begin{macrocode}
 %<*geometry>
 \setlength\headheight{20\p@}
-\setlength\headsep{20\p@}
+\setlength\headsep{5mm}
 \setlength\topskip{1sp}
 %    \end{macrocode}
 % \end{macro}
@@ -578,144 +531,8 @@
 % \begin{macro}{\textwidth}
 % 基本組の字詰めです。
 %
-% 互換モードの場合：
 %    \begin{macrocode}
-\if@compatibility
-%    \end{macrocode}
-% \changes{v1.1a}{1997/01/25}{Add paper option with compatibility mode.}
-% \changes{v1.1h}{1997/09/03}{landscapeでの指定を追加}
-% 互換モード：|a4j|や|b5j|のクラスオプションが指定された場合の設定：
-%    \begin{macrocode}
-  \if@stysize
-    \ifnum\c@@paper=2 % A5
-      \if@landscape
-%<10pt&yoko>        \setlength\textwidth{47\Cwd}
-%<11pt&yoko>        \setlength\textwidth{42\Cwd}
-%<12pt&yoko>        \setlength\textwidth{40\Cwd}
-%<10pt&tate>        \setlength\textwidth{27\Cwd}
-%<11pt&tate>        \setlength\textwidth{25\Cwd}
-%<12pt&tate>        \setlength\textwidth{23\Cwd}
-      \else
-%<10pt&yoko>        \setlength\textwidth{28\Cwd}
-%<11pt&yoko>        \setlength\textwidth{25\Cwd}
-%<12pt&yoko>        \setlength\textwidth{24\Cwd}
-%<10pt&tate>        \setlength\textwidth{46\Cwd}
-%<11pt&tate>        \setlength\textwidth{42\Cwd}
-%<12pt&tate>        \setlength\textwidth{38\Cwd}
-      \fi
-    \else\ifnum\c@@paper=3 % B4
-      \if@landscape
-%<10pt&yoko>        \setlength\textwidth{75\Cwd}
-%<11pt&yoko>        \setlength\textwidth{69\Cwd}
-%<12pt&yoko>        \setlength\textwidth{63\Cwd}
-%<10pt&tate>        \setlength\textwidth{53\Cwd}
-%<11pt&tate>        \setlength\textwidth{49\Cwd}
-%<12pt&tate>        \setlength\textwidth{44\Cwd}
-      \else
-%<10pt&yoko>        \setlength\textwidth{60\Cwd}
-%<11pt&yoko>        \setlength\textwidth{55\Cwd}
-%<12pt&yoko>        \setlength\textwidth{50\Cwd}
-%<10pt&tate>        \setlength\textwidth{85\Cwd}
-%<11pt&tate>        \setlength\textwidth{76\Cwd}
-%<12pt&tate>        \setlength\textwidth{69\Cwd}
-      \fi
-    \else\ifnum\c@@paper=4 % B5
-      \if@landscape
-%<10pt&yoko>        \setlength\textwidth{60\Cwd}
-%<11pt&yoko>        \setlength\textwidth{55\Cwd}
-%<12pt&yoko>        \setlength\textwidth{50\Cwd}
-%<10pt&tate>        \setlength\textwidth{34\Cwd}
-%<11pt&tate>        \setlength\textwidth{31\Cwd}
-%<12pt&tate>        \setlength\textwidth{28\Cwd}
-      \else
-%<10pt&yoko>        \setlength\textwidth{37\Cwd}
-%<11pt&yoko>        \setlength\textwidth{34\Cwd}
-%<12pt&yoko>        \setlength\textwidth{31\Cwd}
-%<10pt&tate>        \setlength\textwidth{55\Cwd}
-%<11pt&tate>        \setlength\textwidth{51\Cwd}
-%<12pt&tate>        \setlength\textwidth{47\Cwd}
-      \fi
-    \else % A4 ant other
-      \if@landscape
-%<10pt&yoko>        \setlength\textwidth{73\Cwd}
-%<11pt&yoko>        \setlength\textwidth{68\Cwd}
-%<12pt&yoko>        \setlength\textwidth{61\Cwd}
-%<10pt&tate>        \setlength\textwidth{41\Cwd}
-%<11pt&tate>        \setlength\textwidth{38\Cwd}
-%<12pt&tate>        \setlength\textwidth{35\Cwd}
-      \else
-%<10pt&yoko>        \setlength\textwidth{47\Cwd}
-%<11pt&yoko>        \setlength\textwidth{43\Cwd}
-%<12pt&yoko>        \setlength\textwidth{40\Cwd}
-%<10pt&tate>        \setlength\textwidth{67\Cwd}
-%<11pt&tate>        \setlength\textwidth{61\Cwd}
-%<12pt&tate>        \setlength\textwidth{57\Cwd}
-      \fi
-    \fi\fi\fi
-  \else
-%    \end{macrocode}
-% 互換モード：デフォルト設定
-%    \begin{macrocode}
-    \if@twocolumn
-      \setlength\textwidth{52\Cwd}
-    \else
-%<10pt&!bk&yoko>      \setlength\textwidth{327\p@}
-%<11pt&!bk&yoko>      \setlength\textwidth{342\p@}
-%<12pt&!bk&yoko>      \setlength\textwidth{372\p@}
-%<10pt&bk&yoko>      \setlength\textwidth{4.3in}
-%<11pt&bk&yoko>      \setlength\textwidth{4.8in}
-%<12pt&bk&yoko>      \setlength\textwidth{4.8in}
-%<10pt&tate>      \setlength\textwidth{67\Cwd}
-%<11pt&tate>      \setlength\textwidth{61\Cwd}
-%<12pt&tate>      \setlength\textwidth{57\Cwd}
-    \fi
-  \fi
-%    \end{macrocode}
-% 2eモードの場合：
-%    \begin{macrocode}
-\else
-%    \end{macrocode}
-% 2eモード：|a4j|や|b5j|のクラスオプションが指定された場合の設定：
-% 二段組では用紙サイズの８割、一段組では用紙サイズの７割を版面の幅として
-% 設定します。
-%    \begin{macrocode}
-  \if@stysize
-    \if@twocolumn
-%<yoko>      \setlength\textwidth{.8\paperwidth}
-%<tate>      \setlength\textwidth{.8\paperheight}
-    \else
-%<yoko>      \setlength\textwidth{.7\paperwidth}
-%<tate>      \setlength\textwidth{.7\paperheight}
-    \fi
-  \else
-%    \end{macrocode}
-% 2eモード：デフォルト設定
-%    \begin{macrocode}
-%<tate>    \setlength\@tempdima{\paperheight}
-%<yoko>    \setlength\@tempdima{\paperwidth}
-    \addtolength\@tempdima{-2in}
-%<tate>    \addtolength\@tempdima{-1.3in}
-%<yoko&10pt>    \setlength\@tempdimb{327\p@}
-%<yoko&11pt>    \setlength\@tempdimb{342\p@}
-%<yoko&12pt>    \setlength\@tempdimb{372\p@}
-%<tate&10pt>    \setlength\@tempdimb{67\Cwd}
-%<tate&11pt>    \setlength\@tempdimb{61\Cwd}
-%<tate&12pt>    \setlength\@tempdimb{57\Cwd}
-    \if@twocolumn
-      \ifdim\@tempdima>2\@tempdimb\relax
-        \setlength\textwidth{2\@tempdimb}
-      \else
-        \setlength\textwidth{\@tempdima}
-      \fi
-    \else
-      \ifdim\@tempdima>\@tempdimb\relax
-        \setlength\textwidth{\@tempdimb}
-      \else
-        \setlength\textwidth{\@tempdima}
-      \fi
-    \fi
-  \fi
-\fi
+\setlength\textwidth{150mm}
 \@settopoint\textwidth
 %    \end{macrocode}
 % \end{macro}
@@ -723,126 +540,8 @@
 % \begin{macro}{\textheight}
 % 基本組の行数です。
 %
-% 互換モードの場合：
 %    \begin{macrocode}
-\if@compatibility
-%    \end{macrocode}
-% \changes{v1.1a}{1997/01/25}{Add paper option with compatibility mode.}
-% \changes{v1.1f}{1997/09/03}{landscapeでの指定を追加}
-% 互換モード：|a4j|や|b5j|のクラスオプションが指定された場合の設定：
-%    \begin{macrocode}
-  \if@stysize
-    \ifnum\c@@paper=2 % A5
-      \if@landscape
-%<10pt&yoko>        \setlength\textheight{17\Cvs}
-%<11pt&yoko>        \setlength\textheight{17\Cvs}
-%<12pt&yoko>        \setlength\textheight{16\Cvs}
-%<10pt&tate>        \setlength\textheight{26\Cvs}
-%<11pt&tate>        \setlength\textheight{26\Cvs}
-%<12pt&tate>        \setlength\textheight{25\Cvs}
-      \else
-%<10pt&yoko>        \setlength\textheight{28\Cvs}
-%<11pt&yoko>        \setlength\textheight{25\Cvs}
-%<12pt&yoko>        \setlength\textheight{24\Cvs}
-%<10pt&tate>        \setlength\textheight{16\Cvs}
-%<11pt&tate>        \setlength\textheight{16\Cvs}
-%<12pt&tate>        \setlength\textheight{15\Cvs}
-      \fi
-    \else\ifnum\c@@paper=3 % B4
-      \if@landscape
-%<10pt&yoko>        \setlength\textheight{38\Cvs}
-%<11pt&yoko>        \setlength\textheight{36\Cvs}
-%<12pt&yoko>        \setlength\textheight{34\Cvs}
-%<10pt&tate>        \setlength\textheight{48\Cvs}
-%<11pt&tate>        \setlength\textheight{48\Cvs}
-%<12pt&tate>        \setlength\textheight{45\Cvs}
-      \else
-%<10pt&yoko>        \setlength\textheight{57\Cvs}
-%<11pt&yoko>        \setlength\textheight{55\Cvs}
-%<12pt&yoko>        \setlength\textheight{52\Cvs}
-%<10pt&tate>        \setlength\textheight{33\Cvs}
-%<11pt&tate>        \setlength\textheight{33\Cvs}
-%<12pt&tate>        \setlength\textheight{31\Cvs}
-      \fi
-    \else\ifnum\c@@paper=4 % B5
-      \if@landscape
-%<10pt&yoko>        \setlength\textheight{22\Cvs}
-%<11pt&yoko>        \setlength\textheight{21\Cvs}
-%<12pt&yoko>        \setlength\textheight{20\Cvs}
-%<10pt&tate>        \setlength\textheight{34\Cvs}
-%<11pt&tate>        \setlength\textheight{34\Cvs}
-%<12pt&tate>        \setlength\textheight{32\Cvs}
-      \else
-%<10pt&yoko>        \setlength\textheight{35\Cvs}
-%<11pt&yoko>        \setlength\textheight{34\Cvs}
-%<12pt&yoko>        \setlength\textheight{32\Cvs}
-%<10pt&tate>        \setlength\textheight{21\Cvs}
-%<11pt&tate>        \setlength\textheight{21\Cvs}
-%<12pt&tate>        \setlength\textheight{20\Cvs}
-      \fi
-    \else % A4 and other
-      \if@landscape
-%<10pt&yoko>        \setlength\textheight{27\Cvs}
-%<11pt&yoko>        \setlength\textheight{26\Cvs}
-%<12pt&yoko>        \setlength\textheight{25\Cvs}
-%<10pt&tate>        \setlength\textheight{41\Cvs}
-%<11pt&tate>        \setlength\textheight{41\Cvs}
-%<12pt&tate>        \setlength\textheight{38\Cvs}
-      \else
-%<10pt&yoko>        \setlength\textheight{43\Cvs}
-%<11pt&yoko>        \setlength\textheight{42\Cvs}
-%<12pt&yoko>        \setlength\textheight{39\Cvs}
-%<10pt&tate>        \setlength\textheight{26\Cvs}
-%<11pt&tate>        \setlength\textheight{26\Cvs}
-%<12pt&tate>        \setlength\textheight{22\Cvs}
-      \fi
-    \fi\fi\fi
-%<yoko>    \addtolength\textheight{\topskip}
-%<bk&yoko>    \addtolength\textheight{\baselineskip}
-%<tate>    \addtolength\textheight{\Cht}
-%<tate>    \addtolength\textheight{\Cdp}
-%    \end{macrocode}
-% 互換モード：デフォルト設定
-%    \begin{macrocode}
-  \else
-%<10pt&!bk&yoko>  \setlength\textheight{578\p@}
-%<10pt&bk&yoko>  \setlength\textheight{554\p@}
-%<11pt&yoko>  \setlength\textheight{580.4\p@}
-%<12pt&yoko>  \setlength\textheight{586.5\p@}
-%<10pt&tate>  \setlength\textheight{26\Cvs}
-%<11pt&tate>  \setlength\textheight{25\Cvs}
-%<12pt&tate>  \setlength\textheight{24\Cvs}
-  \fi
-%    \end{macrocode}
-% 2eモードの場合：
-%    \begin{macrocode}
-\else
-%    \end{macrocode}
-% 2eモード：|a4j|や|b5j|のクラスオプションが指定された場合の設定：
-% 縦組では用紙サイズの70\%(book)か78\%(ariticle,report)、
-% 横組では70\%(book)か75\%(article,report)を版面の高さに設定します。
-%    \begin{macrocode}
-  \if@stysize
-%<tate&bk>    \setlength\textheight{.75\paperwidth}
-%<tate&!bk>    \setlength\textheight{.78\paperwidth}
-%<yoko&bk>    \setlength\textheight{.70\paperheight}
-%<yoko&!bk>    \setlength\textheight{.75\paperheight}
-%    \end{macrocode}
-% 2eモード：デフォルト値
-%    \begin{macrocode}
-  \else
-%<tate>    \setlength\@tempdima{\paperwidth}
-%<yoko>    \setlength\@tempdima{\paperheight}
-    \addtolength\@tempdima{-2in}
-%<yoko>    \addtolength\@tempdima{-1.5in}
-    \divide\@tempdima\baselineskip
-    \@tempcnta\@tempdima
-    \setlength\textheight{\@tempcnta\baselineskip}
-  \fi
-\fi
-%    \end{macrocode}
-% 最後に、|\textheight|に|\topskip|の値を加えます。
-%    \begin{macrocode}
+\setlength\textheight{210mm}
 \addtolength\textheight{\topskip}
 \@settopoint\textheight
 %    \end{macrocode}
@@ -851,67 +550,13 @@
 % \subsubsection{マージン}
 %
 % \begin{macro}{\topmargin}
-% |\topmargin|は、``印字可能領域''---用紙の上端から１インチ内側---%
+% |\topmargin|は、``印字可能領域''---用紙の上端から1インチ内側---%
 % の上端からヘッダ部分の上端までの距離です。
+% WORDでは12mmとなっています。
 %
-% 2.09互換モードの場合：
 %    \begin{macrocode}
-\if@compatibility
-%<*yoko>
-  \if@stysize
-    \setlength\topmargin{-.3in}
-  \else
-%<!bk>    \setlength\topmargin{27\p@}
-%<10pt&bk>    \setlength\topmargin{.75in}
-%<11pt&bk>    \setlength\topmargin{.73in}
-%<12pt&bk>    \setlength\topmargin{.73in}
-  \fi
-%</yoko>
-%<*tate>
-  \if@stysize
-    \ifnum\c@@paper=2 % A5
-      \setlength\topmargin{.8in}
-    \else % A4, B4, B5 and other
-      \setlength\topmargin{32mm}
-    \fi
-  \else
-    \setlength\topmargin{32mm}
-  \fi
-  \addtolength\topmargin{-1in}
-  \addtolength\topmargin{-\headheight}
-  \addtolength\topmargin{-\headsep}
-%</tate>
-%    \end{macrocode}
-% 2eモードの場合：
-%    \begin{macrocode}
-\else
-  \setlength\topmargin{\paperheight}
-  \addtolength\topmargin{-\headheight}
-  \addtolength\topmargin{-\headsep}
-%<tate>  \addtolength\topmargin{-\textwidth}
-%<yoko>  \addtolength\topmargin{-\textheight}
-  \addtolength\topmargin{-\footskip}
-%    \end{macrocode}
-% \changes{v1.1e}{1997/04/08}{横組クラスでの調整量を
-%      -2.4インチから-2.0インチにした。}
-% \changes{v1.1j}{1998/02/03}{互換モード時のa5pのトップマージンを0.7in増加}
-%    \begin{macrocode}
-  \if@stysize
-    \ifnum\c@@paper=2 % A5
-      \addtolength\topmargin{-1.3in}
-    \else
-      \addtolength\topmargin{-2.0in}
-    \fi
-  \else
-%<yoko>    \addtolength\topmargin{-2.0in}
-%<tate>    \addtolength\topmargin{-2.8in}
-  \fi
-%    \end{macrocode}
-% \changes{v1.1d}{1997/02/05}{\cs{tompargin}を半分にするのはアキ領域の計算後}
-% \changes{v1.1r}{1999/08/09}{\cs{if@stysize}フラグに限らず半分にする}
-%    \begin{macrocode}
-  \addtolength\topmargin{-.5\topmargin}
-\fi
+\setlength\topmargin{-1.0in}
+\addtolength\topmargin{12mm}
 \@settopoint\topmargin
 %    \end{macrocode}
 % \end{macro}
@@ -922,19 +567,10 @@
 % 横組では本文の左（右）端と傍注、
 % 縦組では本文の下（上）端と傍注の間になります。
 % |\marginparpush|は、傍注と傍注との間のスペースの幅です。
+% WORDでは傍注を使わないので、|\z@|（0）とします
 %    \begin{macrocode}
-\if@twocolumn
-  \setlength\marginparsep{10\p@}
-\else
-%<tate>  \setlength\marginparsep{15\p@}
-%<yoko>  \setlength\marginparsep{10\p@}
-\fi
-%<tate>\setlength\marginparpush{7\p@}
-%<*yoko>
-%<10pt>\setlength\marginparpush{5\p@}
-%<11pt>\setlength\marginparpush{5\p@}
-%<12pt>\setlength\marginparpush{7\p@}
-%</yoko>
+\setlength\marginparsep{\z@}
+\setlength\marginparpush{\z@}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -942,137 +578,20 @@
 % \begin{macro}{\oddsidemargin}
 % \begin{macro}{\evensidemargin}
 % \begin{macro}{\marginparwidth}
-% まず、互換モードでの長さを示します。
-%
-% 互換モード、縦組の場合：
+% WORDでは左右で同じマージンを使っています。
+% 紙の横幅（|\paperwidth|）から本文領域の横幅（|\textwidth|）を引いたものを
+% 半分にしたものがマージンとなります。
 %    \begin{macrocode}
-\if@compatibility
-%<tate>   \setlength\oddsidemargin{0\p@}
-%<tate>   \setlength\evensidemargin{0\p@}
+\setlength\@tempdima{\paperwidth}
+\addtolength\@tempdima{-\textwidth}
+\setlength\oddsidemargin{.5\@tempdima}
+\addtolength\oddsidemargin{-1in}
+\@settopoint\oddsidemargin
+\setlength\evensidemargin\oddsidemargin
 %    \end{macrocode}
-% 互換モード、横組、bookクラスの場合：
+% 次に傍注ですが、WORDの組版では傍注を使わないので|\z@|（0）とします。
 %    \begin{macrocode}
-%<*yoko>
-%<*bk>
-%<10pt>    \setlength\oddsidemargin   {.5in}
-%<11pt>    \setlength\oddsidemargin   {.25in}
-%<12pt>    \setlength\oddsidemargin   {.25in}
-%<10pt>    \setlength\evensidemargin  {1.5in}
-%<11pt>    \setlength\evensidemargin  {1.25in}
-%<12pt>    \setlength\evensidemargin  {1.25in}
-%<10pt>    \setlength\marginparwidth {.75in}
-%<11pt>    \setlength\marginparwidth {1in}
-%<12pt>    \setlength\marginparwidth {1in}
-%</bk>
-%    \end{macrocode}
-% 互換モード、横組、reportとarticleクラスの場合：
-%    \begin{macrocode}
-%<*!bk>
-    \if@twoside
-%<10pt>      \setlength\oddsidemargin   {44\p@}
-%<11pt>      \setlength\oddsidemargin   {36\p@}
-%<12pt>      \setlength\oddsidemargin   {21\p@}
-%<10pt>      \setlength\evensidemargin  {82\p@}
-%<11pt>      \setlength\evensidemargin  {74\p@}
-%<12pt>      \setlength\evensidemargin  {59\p@}
-%<10pt>      \setlength\marginparwidth {107\p@}
-%<11pt>      \setlength\marginparwidth {100\p@}
-%<12pt>      \setlength\marginparwidth {85\p@}
-    \else
-%<10pt>     \setlength\oddsidemargin   {60\p@}
-%<11pt>     \setlength\oddsidemargin   {54\p@}
-%<12pt>     \setlength\oddsidemargin   {39.5\p@}
-%<10pt>     \setlength\evensidemargin  {60\p@}
-%<11pt>     \setlength\evensidemargin  {54\p@}
-%<12pt>     \setlength\evensidemargin  {39.5\p@}
-%<10pt>     \setlength\marginparwidth  {90\p@}
-%<11pt>     \setlength\marginparwidth  {83\p@}
-%<12pt>     \setlength\marginparwidth  {68\p@}
-  \fi
-%</!bk>
-%    \end{macrocode}
-% 互換モード、横組、二段組の場合：
-%    \begin{macrocode}
-  \if@twocolumn
-     \setlength\oddsidemargin  {30\p@}
-     \setlength\evensidemargin {30\p@}
-     \setlength\marginparwidth {48\p@}
-  \fi
-%</yoko>
-%    \end{macrocode}
-% 縦組、横組にかかわらず、スタイルオプション設定ではゼロです。
-% \changes{v1.0g}{1997/01/25}{\cs{oddsidemargin}, \cs{evensidemagin}:
-%    0pt if specified papersize at \cs{documentstyle} option.}
-%    \begin{macrocode}
-  \if@stysize
-    \if@twocolumn\else
-      \setlength\oddsidemargin{0\p@}
-      \setlength\evensidemargin{0\p@}
-    \fi
-  \fi
-%    \end{macrocode}
-%
-% 互換モードでない場合：
-%    \begin{macrocode}
-\else
-  \setlength\@tempdima{\paperwidth}
-%<tate>  \addtolength\@tempdima{-\textheight}
-%<yoko>  \addtolength\@tempdima{-\textwidth}
-%    \end{macrocode}
-%
-% |\oddsidemargin|を計算します。
-%    \begin{macrocode}
-  \if@twoside
-%<tate>    \setlength\oddsidemargin{.6\@tempdima}
-%<yoko>    \setlength\oddsidemargin{.4\@tempdima}
-  \else
-    \setlength\oddsidemargin{.5\@tempdima}
-  \fi
-  \addtolength\oddsidemargin{-1in}
-%    \end{macrocode}
-% \changes{v1.1p}{1999/1/6}{\cs{oddsidemargin}のポイントへの変換を後ろに}
-% |\evensidemargin|を計算します。
-%    \begin{macrocode}
-  \setlength\evensidemargin{\paperwidth}
-  \addtolength\evensidemargin{-2in}
-%<tate>  \addtolength\evensidemargin{-\textheight}
-%<yoko>  \addtolength\evensidemargin{-\textwidth}
-  \addtolength\evensidemargin{-\oddsidemargin}
-  \@settopoint\oddsidemargin % 1999.1.6
-  \@settopoint\evensidemargin
-%    \end{macrocode}
-% |\marginparwidth|を計算します。
-% ここで、|\@tempdima|の値は、\linebreak
-% |\paperwidth| $-$ |\textwidth|です。
-% \changes{v1.1d}{1995/11/24}{typo: \cs{marginmarwidth} to \cs{marginparwidth}}
-%    \begin{macrocode}
-%<*yoko>
-  \if@twoside
-    \setlength\marginparwidth{.6\@tempdima}
-    \addtolength\marginparwidth{-.4in}
-  \else
-    \setlength\marginparwidth{.5\@tempdima}
-    \addtolength\marginparwidth{-.4in}
-  \fi
-  \ifdim \marginparwidth >2in
-    \setlength\marginparwidth{2in}
-  \fi
-%</yoko>
-%    \end{macrocode}
-%
-% 縦組の場合は、少し複雑です。
-%    \begin{macrocode}
-%<*tate>
-  \setlength\@tempdima{\paperheight}
-  \addtolength\@tempdima{-\textwidth}
-  \addtolength\@tempdima{-\topmargin}
-  \addtolength\@tempdima{-\headheight}
-  \addtolength\@tempdima{-\headsep}
-  \addtolength\@tempdima{-\footskip}
-  \setlength\marginparwidth{.5\@tempdima}
-%</tate>
-  \@settopoint\marginparwidth
-\fi
+\setlength\marginparwidth{\z@}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1086,18 +605,14 @@
 % このクラスでは、通常の|\footnotesize|の支柱と同じ長さですので、
 % 脚注間に余計な空白は入りません。
 %    \begin{macrocode}
-%<10pt>\setlength\footnotesep{6.65\p@}
-%<11pt>\setlength\footnotesep{7.7\p@}
-%<12pt>\setlength\footnotesep{8.4\p@}
+\setlength\footnotesep{3mm}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\footins}
 % |\skip\footins|は、本文の最終行と最初の脚注との間の距離です。
 %    \begin{macrocode}
-%<10pt>\setlength{\skip\footins}{9\p@ \@plus 4\p@ \@minus 2\p@}
-%<11pt>\setlength{\skip\footins}{10\p@ \@plus 4\p@ \@minus 2\p@}
-%<12pt>\setlength{\skip\footins}{10.8\p@ \@plus 4\p@ \@minus 2\p@}
+\setlength{\skip\footins}{5mm \@plus 10mm \@minus 3mm}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1122,21 +637,9 @@
 %
 % |\intextsep|は、本文の途中に出力されるフロートと本文との距離です。
 %    \begin{macrocode}
-%<*10pt>
 \setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
 \setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
 \setlength\intextsep   {12\p@ \@plus 2\p@ \@minus 2\p@}
-%</10pt>
-%<*11pt>
-\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
-\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
-\setlength\intextsep   {12\p@ \@plus 2\p@ \@minus 2\p@}
-%</11pt>
-%<*12pt>
-\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 4\p@}
-\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
-\setlength\intextsep   {14\p@ \@plus 4\p@ \@minus 4\p@}
-%</12pt>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1152,18 +655,8 @@
 %
 % |\dbltextfloatsep|は、ページ上部あるいは下部のフロート間の距離です。
 %    \begin{macrocode}
-%<*10pt>
 \setlength\dblfloatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
 \setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
-%</10pt>
-%<*11pt>
-\setlength\dblfloatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
-\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
-%</11pt>
-%<*12pt>
-\setlength\dblfloatsep    {14\p@ \@plus 2\p@ \@minus 4\p@}
-\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
-%</12pt>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1183,21 +676,9 @@
 % なお、そのページを空白で満たすために、|\@fptop|と|\@fpbot|の
 % 少なくともどちらか一方に、|plus ...fil|を含めてください。
 %    \begin{macrocode}
-%<*10pt>
 \setlength\@fptop{0\p@ \@plus 1fil}
 \setlength\@fpsep{8\p@ \@plus 2fil}
 \setlength\@fpbot{0\p@ \@plus 1fil}
-%</10pt>
-%<*11pt>
-\setlength\@fptop{0\p@ \@plus 1fil}
-\setlength\@fpsep{8\p@ \@plus 2fil}
-\setlength\@fpbot{0\p@ \@plus 1fil}
-%</11pt>
-%<*12pt>
-\setlength\@fptop{0\p@ \@plus 1fil}
-\setlength\@fpsep{10\p@ \@plus 2fil}
-\setlength\@fpbot{0\p@ \@plus 1fil}
-%</12pt>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1209,21 +690,9 @@
 % 二段組モードでの二段抜きのフロートに対しては、
 % これらのパラメータが使われます。
 %    \begin{macrocode}
-%<*10pt>
 \setlength\@dblfptop{0\p@ \@plus 1fil}
 \setlength\@dblfpsep{8\p@ \@plus 2fil}
 \setlength\@dblfpbot{0\p@ \@plus 1fil}
-%</10pt>
-%<*11pt>
-\setlength\@dblfptop{0\p@ \@plus 1fil}
-\setlength\@dblfpsep{8\p@ \@plus 2fil}
-\setlength\@dblfpbot{0\p@ \@plus 1fil}
-%</11pt>
-%<*12pt>
-\setlength\@dblfptop{0\p@ \@plus 1fil}
-\setlength\@dblfpsep{10\p@ \@plus 2fil}
-\setlength\@dblfpbot{0\p@ \@plus 1fil}
-%</12pt>
 %</geometry>
 %    \end{macrocode}
 % \end{macro}

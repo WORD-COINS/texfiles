@@ -51,12 +51,11 @@
 \begin{document}
   \maketitle
   \tableofcontents
+  \newpage
   \DocInput{\filename}
 \end{document}
 %</driver>
 % \fi
-%
-% \newpage
 %
 % このファイルは、WORDの標準クラスファイルです。
 % \dst{}プログラムによって、横組用のクラスファイル
@@ -1030,28 +1029,12 @@
 % reportとbookクラスのデフォルトは独立した表題です。
 % articleクラスはオプションで独立させることができます。
 %
-% \begin{macro}{\p@thanks}
-% 縦組のときは、|\thanks|コマンドを|\p@thanks|に|\let|します。
-% このコマンドは|\footnotetext|を使わず、直接、文字を|\@thanks|に格納
-% していきます。
-%    \begin{macrocode}
-\def\p@thanks#1{\footnotemark
-\protected@xdef\@thanks{\@thanks
-\protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
-%    \end{macrocode}
-% \end{macro}
-%
 %    \begin{macrocode}
 \if@titlepage
 \newcommand{\maketitle}{\begin{titlepage}%
 \let\footnotesize\small
 \let\footnoterule\relax
-%<tate>  \let\thanks\p@thanks
 \let\footnote\thanks
-%    \end{macrocode}
-% \changes{v1.1d}{1997/02/12}{縦組クラスの表紙を縦書きにするようにした}
-%    \begin{macrocode}
-%<tate>  \vbox to\textheight\bgroup\tate\hsize\textwidth
 \null\vfil
 \vskip 60\p@
 \begin{center}%
@@ -1065,9 +1048,7 @@
   \vskip 1.5em%
 {\large \@date \par}%       % Set date in \large size.
 \end{center}\par
-%<tate>  \vfil{\centering\@thanks}\vfil\null
-%<tate>  \egroup
-%<yoko>  \@thanks\vfil\null
+  \@thanks\vfil\null
 \end{titlepage}%
 %    \end{macrocode}
 % \Lcount{footnote}カウンタをリセットし、|\thanks|と|\maketitle|コマンドを
@@ -1096,14 +1077,8 @@
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}%
 \def\@makefnmark{\hbox{\ifydir $\m@th^{\@thefnmark}$
   \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
-%<*tate>
-\long\def\@makefntext##1{\parindent 1zw\noindent
-   \hbox to 2zw{\hss\@makefnmark}##1}%
-%</tate>
-%<*yoko>
  \long\def\@makefntext##1{\parindent 1em\noindent
    \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
-%</yoko>
 \if@twocolumn
   \ifnum \col@number=\@ne \@maketitle
   \else \twocolumn[\@maketitle]%
@@ -1123,7 +1098,6 @@
 \setcounter{footnote}{0}%
 \global\let\thanks\relax
 \global\let\maketitle\relax
-\global\let\p@thanks\relax
 \global\let\@thanks\@empty
 \global\let\@author\@empty
 \global\let\@date\@empty
@@ -1143,8 +1117,7 @@
 \newpage\null
 \vskip 2em%
 \begin{center}%
-%<yoko>  \let\footnote\thanks
-%<tate>  \let\footnote\p@thanks
+  \let\footnote\thanks
 {\LARGE \@title \par}%
 \vskip 1.5em%
 {\large
@@ -1159,40 +1132,6 @@
 \fi
 %    \end{macrocode}
 % \end{macro}
-%
-% \subsubsection{概要}
-%
-% \begin{environment}{abstract}
-% 要約文のための環境です。bookクラスでは使えません。
-% reportスタイルと、|titlepage|オプションを指定したarticleスタイルでは、
-% 独立したページに出力されます。
-%    \begin{macrocode}
-%<*article|report>
-\if@titlepage
-\newenvironment{abstract}{%
-  \titlepage
-  \null\vfil
-  \@beginparpenalty\@lowpenalty
-  \begin{center}%
-	{\bfseries\abstractname}%
-	\@endparpenalty\@M
-  \end{center}}%
-  {\par\vfil\null\endtitlepage}
-\else
-\newenvironment{abstract}{%
-\if@twocolumn
-  \section*{\abstractname}%
-\else
-  \small
-  \begin{center}%
-	{\bfseries\abstractname\vspace{-.5em}\vspace{\z@}}%
-  \end{center}%
-  \quotation
-\fi}{\if@twocolumn\else\endquotation\fi}
-\fi
-%</article|report>
-%    \end{macrocode}
-% \end{environment}
 %
 %
 % \subsection{章見出し}

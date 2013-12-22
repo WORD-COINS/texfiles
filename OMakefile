@@ -19,6 +19,6 @@ $(DOCUMENT) : % : $(TEXDTX)
 .PHONY: clean
 
 clean:
-	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf
+	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out
 
 

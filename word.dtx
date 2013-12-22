@@ -56,9 +56,14 @@
 %</driver>
 % \fi
 %
+% \newpage
+%
 % このファイルは、WORDの標準クラスファイルです。
-% \dst{}プログラムによって、横組用のクラスファイルと縦組用のクラスファイル
+% \dst{}プログラムによって、横組用のクラスファイル
 % を作成することができます。
+%
+% 元となったp\LaTeXe{}のライセンスと同様に、このクラスファイルのライセンスは
+% 修正BSDライセンスとします。
 %
 % 次に\dst{}プログラムのためのオプションを示します。
 %
@@ -794,7 +799,6 @@
 % \pstyle{true}になります。
 %
 % ページスタイル\pstyle{foo}は、|\ps@foo|コマンドとして定義されます。
-%
 % WORDでは次のように使います。
 %
 % \begin{tabular}{ll}
@@ -919,172 +923,49 @@
 %
 % \subsection{headingsスタイル}
 % \pstyle{headings}スタイルは、ヘッダに見出しとページ番号を出力します。
+% WORDでは基本的にこのスタイルを用います。
+% ただし、ページ番号は赤入れ時（|\if@pagenumber|が\pstyle{true}）にのみ表示されます。
+%
+% \begin{macro}{\@header@thepage}
+% |\if@pagenumber|の真偽値に応じてページ番号を表示するマクロです。
+%    \begin{macrocode}
+\def\@header@thepage{
+  \if@pagenumber%
+    \thepage
+  \else%
+    \setbox0=\hbox{\vrule \thepage \vrule}
+    \unskip
+    \hskip \wd0
+  \fi%
+\relax}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\ps@headings}
-% このスタイルは、両面印刷と片面印刷とで形式が異なります。
+% フッターは使わないので左右とも|\@empty|とします。
 %    \begin{macrocode}
-\if@twoside
-%    \end{macrocode}
-% 横組の場合は、奇数ページが右に、偶数ページが左にきます。
-% 縦組の場合は、奇数ページが左に、偶数ページが右にきます。
-%    \begin{macrocode}
-  \def\ps@headings{\let\ps@jpl@in\ps@headnombre
-    \let\@oddfoot\@empty\let\@evenfoot\@empty
-%<yoko>    \def\@evenhead{\thepage\hfil\leftmark}%
-%<yoko>    \def\@oddhead{{\rightmark}\hfil\thepage}%
-%<tate>    \def\@evenhead{{\leftmark}\hfil\thepage}%
-%<tate>    \def\@oddhead{\thepage\hfil\rightmark}%
-    \let\@mkboth\markboth
-%<*article>
-    \def\sectionmark##1{\markboth{%
-       \ifnum \c@secnumdepth >\z@ \thesection.\hskip1zw\fi
-       ##1}{}}%
-    \def\subsectionmark##1{\markright{%
-       \ifnum \c@secnumdepth >\@ne \thesubsection.\hskip1zw\fi
-       ##1}}%
-%</article>
-%<*report|book>
-  \def\chaptermark##1{\markboth{%
-     \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
-         \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
-     \fi
-     ##1}{}}%
-  \def\sectionmark##1{\markright{%
-     \ifnum \c@secnumdepth >\z@ \thesection.\hskip1zw\fi
-     ##1}}%
-%</report|book>
-  }
-%    \end{macrocode}
-% 片面印刷の場合：
-% \changes{v1.1g}{1997/08/25}{片面印刷のとき、sectionレベルが出力されない
-%      のを修正}
-%    \begin{macrocode}
-\else % if not twoside
-  \def\ps@headings{\let\ps@jpl@in\ps@headnombre
-    \let\@oddfoot\@empty
-%<yoko>    \def\@oddhead{{\rightmark}\hfil\thepage}%
-%<tate>    \def\@oddhead{\thepage\hfil\rightmark}%
-    \let\@mkboth\markboth
-%<*article>
-  \def\sectionmark##1{\markright{%
-     \ifnum \c@secnumdepth >\m@ne \thesection.\hskip1zw\fi
-     ##1}}%
-%</article>
-%<*report|book>
-\def\chaptermark##1{\markright{%
-   \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
-       \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
-   \fi
-   ##1}}%
-%</report|book>
-  }
-\fi
-%    \end{macrocode}
-% \end{macro}
-%
-% \subsection{bothstyleスタイル}
-%
-% \begin{macro}{\ps@bothstyle}
-% \pstyle{bothstyle}スタイルは、
-% ヘッダに見出しを、フッタにページ番号を出力します。
-%
-% このスタイルは、両面印刷と片面印刷とで形式が異なります。
-% \changes{v1.0d}{1995/08/23}{横組の evenfoot が中央揃えになっていたのを修正}
-% \changes{v1.0d}{1996/03/05}{横組で偶数ページと奇数ページの設定が逆なのを修正}
-%    \begin{macrocode}
-\if@twoside
-  \def\ps@bothstyle{\let\ps@jpl@in\ps@footnombre
-%<*yoko>
-    \def\@evenhead{\leftmark\hfil}% right page
-    \def\@evenfoot{\thepage\hfil}% right page
-    \def\@oddhead{\hfil\rightmark}% left page
-    \def\@oddfoot{\hfil\thepage}% left page
-%</yoko>
-%<*tate>
-    \def\@evenhead{\hfil\leftmark}% right page
-    \def\@evenfoot{\hfil\thepage}% right page
-    \def\@oddhead{\rightmark\hfil}% left page
-    \def\@oddfoot{\thepage\hfil}% left page
-%</tate>
+\def\ps@headings{
+  \let\ps@jpl@in\ps@headings
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
   \let\@mkboth\markboth
-%<*article>
-  \def\sectionmark##1{\markboth{%
-     \ifnum \c@secnumdepth >\z@ \thesection.\hskip1zw\fi
-     ##1}{}}%
-  \def\subsectionmark##1{\markright{%
-     \ifnum \c@secnumdepth >\@ne \thesubsection.\hskip1zw\fi
-     ##1}}%
-%</article>
-%<*report|book>
-\def\chaptermark##1{\markboth{%
-     \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
-         \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
-     \fi
-     ##1}{}}%
-  \def\sectionmark##1{\markright{%
-     \ifnum \c@secnumdepth >\z@ \thesection.\hskip1zw\fi
-     ##1}}%
-%</report|book>
-  }
 %    \end{macrocode}
-% \changes{v1.1g}{1997/08/25}{片面印刷のとき、sectionレベルが出力されない
-%      のを修正}
-% \changes{v1.1i}{1997/12/12}{report, bookクラスで片面印刷時に、
-%      bothstyleスタイルにすると、コンパイルエラーになるのを修正}
+% 次にヘッダーを定義します。
 %    \begin{macrocode}
-\else % if one column
-  \def\ps@bothstyle{\let\ps@jpl@in\ps@footnombre
-%<yoko>    \def\@oddhead{\hfil\rightmark}%
-%<yoko>    \def\@oddfoot{\hfil\thepage}%
-%<tate>    \def\@oddhead{\rightmark\hfil}%
-%<tate>    \def\@oddfoot{\thepage\hfil}%
-    \let\@mkboth\markboth
-%<*article>
-  \def\sectionmark##1{\markright{%
-     \ifnum \c@secnumdepth >\m@ne \thesection.\hskip1zw\fi
-     ##1}}%
-%</article>
-%<*report|book>
-  \def\chaptermark##1{\markright{%
-     \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
-         \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
-     \fi
-     ##1}}%
-%</report|book>
-  }
-\fi
+  \def\@evenhead{\vbox{%
+    \hbox to\textwidth{%
+      \@subtitle\hfil%
+      \@header@thepage}
+    \vskip.05\Cvs
+    \hrule}}
+  \def\@oddhead{\vbox{%
+    \hbox to\textwidth{%
+      \@header@thepage%
+      \hfil\@subtitle}
+    \vskip.05\Cvs
+    \hrule}}
 %    \end{macrocode}
 % \end{macro}
-%
-% \subsection{myheadingスタイル}
-%
-% \begin{macro}{\ps@myheadings}
-% \changes{v1.0d}{1995/08/23}{横組モードの左右が逆であったのを修正}
-% \pstyle{myheadings}ページスタイルは簡潔に定義されています。
-% ユーザがページスタイルを設計するときのヒナ型として使用することができます。
-%    \begin{macrocode}
-\def\ps@myheadings{\let\ps@jpl@in\ps@plain%
-  \let\@oddfoot\@empty\let\@evenfoot\@empty
-%<yoko>  \def\@evenhead{\thepage\hfil\leftmark}%
-%<yoko>  \def\@oddhead{{\rightmark}\hfil\thepage}%
-%<tate>  \def\@evenhead{{\leftmark}\hfil\thepage}%
-%<tate>  \def\@oddhead{\thepage\hfil\rightmark}%
-  \let\@mkboth\@gobbletwo
-%<!article>  \let\chaptermark\@gobble
-  \let\sectionmark\@gobble
-%<article>  \let\subsectionmark\@gobble
-}
-%    \end{macrocode}
-% \end{macro}
-%
 %
 % \section{文書コマンド}
 %
@@ -1094,7 +975,7 @@
 % \begin{macro}{\autor}
 % \begin{macro}{\date}
 % 文書のタイトル、著者、日付の情報のための、
-% これらの３つのコマンドは\file{latex.dtx}で提供されています。
+% これらの3つのコマンドは\file{latex.dtx}で提供されています。
 % これらのコマンドは次のように定義されています。
 %    \begin{macrocode}
 %\newcommand*{\title}[1]{\gdef\@title{#1}}
@@ -1109,6 +990,14 @@
 % \end{macro}
 % \end{macro}
 %
+% \begin{macro}{\subtitle}
+% ヘッダに表示されるサブタイトル|\@subtitle|を定義します。初期値は|\@empty|です。
+%	 \begin{macrocode}
+\def\subtitle#1{\gdef\@subtitle{#1}}
+\let\@subtitle\@empty
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{environment}{titlepage}
 % 通常の環境では、ページの最初と最後を除き、タイトルページ環境は何もしません。
 % また、ページ番号の出力を抑制します。レポートスタイルでは、
@@ -1117,45 +1006,21 @@
 % 右起こしページ用のページパラメータでは誤った結果になります。
 % 二段組スタイルでも一段組のページが作られます。
 %
-% 最初に互換モードの定義を作ります。
-%    \begin{macrocode}
-\if@compatibility
-\newenvironment{titlepage}
-    {%
-%<book>      \cleardoublepage
-     \if@twocolumn\@restonecoltrue\onecolumn
-     \else\@restonecolfalse\newpage\fi
-     \thispagestyle{empty}%
-     \setcounter{page}\z@
-    }%
-    {\if@restonecol\twocolumn\else\newpage\fi
-    }
-%   \end{macrocode}
-%
-% そして、\LaTeX{}ネイティブのための定義です。
 %   \begin{macrocode}
-\else
 \newenvironment{titlepage}
-    {%
-%<book>      \cleardoublepage
-      \if@twocolumn
-        \@restonecoltrue\onecolumn
-      \else
-        \@restonecolfalse\newpage
-      \fi
-      \thispagestyle{empty}%
-      \setcounter{page}\@ne
-    }%
-    {\if@restonecol\twocolumn \else \newpage \fi
-%    \end{macrocode}
-% 二段組モードでなければ、タイトルページの直後のページのページ番号も1に
-% します。
-%    \begin{macrocode}
-     \if@twoside\else
-        \setcounter{page}\@ne
-     \fi
-    }
-\fi
+{%
+  \cleardoublepage
+  \if@twocolumn
+	\@restonecoltrue\onecolumn
+  \else
+	\@restonecolfalse\newpage
+  \fi
+  \thispagestyle{empty}%
+  \setcounter{page}\@ne
+}%
+{\if@restonecol\twocolumn \else \newpage \fi
+\setcounter{page}\@ne
+}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -1171,126 +1036,126 @@
 % していきます。
 %    \begin{macrocode}
 \def\p@thanks#1{\footnotemark
-  \protected@xdef\@thanks{\@thanks
-    \protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
+\protected@xdef\@thanks{\@thanks
+\protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
 %    \end{macrocode}
 % \end{macro}
 %
 %    \begin{macrocode}
 \if@titlepage
-  \newcommand{\maketitle}{\begin{titlepage}%
-  \let\footnotesize\small
-  \let\footnoterule\relax
+\newcommand{\maketitle}{\begin{titlepage}%
+\let\footnotesize\small
+\let\footnoterule\relax
 %<tate>  \let\thanks\p@thanks
-  \let\footnote\thanks
+\let\footnote\thanks
 %    \end{macrocode}
 % \changes{v1.1d}{1997/02/12}{縦組クラスの表紙を縦書きにするようにした}
 %    \begin{macrocode}
 %<tate>  \vbox to\textheight\bgroup\tate\hsize\textwidth
-  \null\vfil
-  \vskip 60\p@
-  \begin{center}%
-    {\LARGE \@title \par}%
-    \vskip 3em%
-    {\Large
-     \lineskip .75em%
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}\par}%
-      \vskip 1.5em%
-    {\large \@date \par}%       % Set date in \large size.
-  \end{center}\par
+\null\vfil
+\vskip 60\p@
+\begin{center}%
+{\LARGE \@title \par}%
+\vskip 3em%
+{\Large
+ \lineskip .75em%
+  \begin{tabular}[t]{c}%
+	\@author
+  \end{tabular}\par}%
+  \vskip 1.5em%
+{\large \@date \par}%       % Set date in \large size.
+\end{center}\par
 %<tate>  \vfil{\centering\@thanks}\vfil\null
 %<tate>  \egroup
 %<yoko>  \@thanks\vfil\null
-  \end{titlepage}%
+\end{titlepage}%
 %    \end{macrocode}
 % \Lcount{footnote}カウンタをリセットし、|\thanks|と|\maketitle|コマンドを
 % 無効にし、いくつかの内部マクロを空にして格納領域を節約します。
 %    \begin{macrocode}
-  \setcounter{footnote}{0}%
-  \global\let\thanks\relax
-  \global\let\maketitle\relax
-  \global\let\p@thanks\relax
-  \global\let\@thanks\@empty
-  \global\let\@author\@empty
-  \global\let\@date\@empty
-  \global\let\@title\@empty
+\setcounter{footnote}{0}%
+\global\let\thanks\relax
+\global\let\maketitle\relax
+\global\let\p@thanks\relax
+\global\let\@thanks\@empty
+\global\let\@author\@empty
+\global\let\@date\@empty
+\global\let\@title\@empty
 %    \end{macrocode}
 % タイトルが組版されたら、|\title|コマンドなどの宣言を無効にできます。
 % |\and|の定義は、|\author|の引数でのみ使用しますので、破棄します。
 %    \begin{macrocode}
-  \global\let\title\relax
-  \global\let\author\relax
-  \global\let\date\relax
-  \global\let\and\relax
-  }%
+\global\let\title\relax
+\global\let\author\relax
+\global\let\date\relax
+\global\let\and\relax
+}%
 \else
-  \newcommand{\maketitle}{\par
-  \begingroup
-    \renewcommand{\thefootnote}{\fnsymbol{footnote}}%
-    \def\@makefnmark{\hbox{\ifydir $\m@th^{\@thefnmark}$
-      \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
+\newcommand{\maketitle}{\par
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\def\@makefnmark{\hbox{\ifydir $\m@th^{\@thefnmark}$
+  \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
 %<*tate>
-    \long\def\@makefntext##1{\parindent 1zw\noindent
-       \hbox to 2zw{\hss\@makefnmark}##1}%
+\long\def\@makefntext##1{\parindent 1zw\noindent
+   \hbox to 2zw{\hss\@makefnmark}##1}%
 %</tate>
 %<*yoko>
-     \long\def\@makefntext##1{\parindent 1em\noindent
-       \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
+ \long\def\@makefntext##1{\parindent 1em\noindent
+   \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
 %</yoko>
-    \if@twocolumn
-      \ifnum \col@number=\@ne \@maketitle
-      \else \twocolumn[\@maketitle]%
-      \fi
-    \else
-      \newpage
-      \global\@topnum\z@   % Prevents figures from going at top of page.
-      \@maketitle
-    \fi
-     \thispagestyle{jpl@in}\@thanks
+\if@twocolumn
+  \ifnum \col@number=\@ne \@maketitle
+  \else \twocolumn[\@maketitle]%
+  \fi
+\else
+  \newpage
+  \global\@topnum\z@   % Prevents figures from going at top of page.
+  \@maketitle
+\fi
+ \thispagestyle{jpl@in}\@thanks
 %    \end{macrocode}
 % ここでグループを閉じ、\Lcount{footnote}カウンタをリセットし、
 % |\thanks|, |\maketitle|, |\@maketitle|を無効にし、
 % いくつかの内部マクロを空にして格納領域を節約します。
 %    \begin{macrocode}
-  \endgroup
-  \setcounter{footnote}{0}%
-  \global\let\thanks\relax
-  \global\let\maketitle\relax
-  \global\let\p@thanks\relax
-  \global\let\@thanks\@empty
-  \global\let\@author\@empty
-  \global\let\@date\@empty
-  \global\let\@title\@empty
-  \global\let\title\relax
-  \global\let\author\relax
-  \global\let\date\relax
-  \global\let\and\relax
-  }
+\endgroup
+\setcounter{footnote}{0}%
+\global\let\thanks\relax
+\global\let\maketitle\relax
+\global\let\p@thanks\relax
+\global\let\@thanks\@empty
+\global\let\@author\@empty
+\global\let\@date\@empty
+\global\let\@title\@empty
+\global\let\title\relax
+\global\let\author\relax
+\global\let\date\relax
+\global\let\and\relax
+}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@maketitle}
 % 独立した表題ページを作らない場合の、表題の出力形式です。
 %    \begin{macrocode}
-  \def\@maketitle{%
-  \newpage\null
-  \vskip 2em%
-  \begin{center}%
+\def\@maketitle{%
+\newpage\null
+\vskip 2em%
+\begin{center}%
 %<yoko>  \let\footnote\thanks
 %<tate>  \let\footnote\p@thanks
-    {\LARGE \@title \par}%
-    \vskip 1.5em%
-    {\large
-      \lineskip .5em%
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}\par}%
-    \vskip 1em%
-    {\large \@date}%
-  \end{center}%
-  \par\vskip 1.5em}
+{\LARGE \@title \par}%
+\vskip 1.5em%
+{\large
+  \lineskip .5em%
+  \begin{tabular}[t]{c}%
+	\@author
+  \end{tabular}\par}%
+\vskip 1em%
+{\large \@date}%
+\end{center}%
+\par\vskip 1.5em}
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -1304,26 +1169,26 @@
 %    \begin{macrocode}
 %<*article|report>
 \if@titlepage
-  \newenvironment{abstract}{%
-      \titlepage
-      \null\vfil
-      \@beginparpenalty\@lowpenalty
-      \begin{center}%
-        {\bfseries\abstractname}%
-        \@endparpenalty\@M
-      \end{center}}%
-      {\par\vfil\null\endtitlepage}
+\newenvironment{abstract}{%
+  \titlepage
+  \null\vfil
+  \@beginparpenalty\@lowpenalty
+  \begin{center}%
+	{\bfseries\abstractname}%
+	\@endparpenalty\@M
+  \end{center}}%
+  {\par\vfil\null\endtitlepage}
 \else
-  \newenvironment{abstract}{%
-    \if@twocolumn
-      \section*{\abstractname}%
-    \else
-      \small
-      \begin{center}%
-        {\bfseries\abstractname\vspace{-.5em}\vspace{\z@}}%
-      \end{center}%
-      \quotation
-    \fi}{\if@twocolumn\else\endquotation\fi}
+\newenvironment{abstract}{%
+\if@twocolumn
+  \section*{\abstractname}%
+\else
+  \small
+  \begin{center}%
+	{\bfseries\abstractname\vspace{-.5em}\vspace{\z@}}%
+  \end{center}%
+  \quotation
+\fi}{\if@twocolumn\else\endquotation\fi}
 \fi
 %</article|report>
 %    \end{macrocode}

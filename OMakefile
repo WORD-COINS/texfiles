@@ -12,6 +12,7 @@ $(TARGETS) : % : $(TEXINS) $(TEXDTX)
 
 $(DOCUMENT) : % : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
+	$(LATEX) $(LATEXFLAG) $<
 	$(DVIPDFM) $*
 
 .DEFAULT: $(TARGETS) $(DOCUMENT)

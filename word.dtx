@@ -1148,7 +1148,7 @@
 % 定義で使われます（第\ref{sec:pagestyle}節参照）。
 % これらのたいていのコマンドは\file{latex.dtx}ですでに定義されています。
 %    \begin{macrocode}
-%<!article>\newcommand*{\chaptermark}[1]{}
+\newcommand*{\chaptermark}[1]{}
 %\newcommand*{\sectionmark}[1]{}
 %\newcommand*{\subsectionmark}[1]{}
 %\newcommand*{\subsubsectionmark}[1]{}
@@ -1167,8 +1167,7 @@
 % \begin{macro}{\c@secnumdepth}
 % \Lcount{secnumdepth}には、番号を付ける、見出しコマンドのレベルを設定します。
 %    \begin{macrocode}
-%<article>\setcounter{secnumdepth}{3}
-%<!article>\setcounter{secnumdepth}{2}
+\setcounter{secnumdepth}{2}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1183,11 +1182,8 @@
 % 二番目のカウンタはすでに定義されているものでなくてはいけません。
 %    \begin{macrocode}
 \newcounter{part}
-%<*book|report>
 \newcounter{chapter}
 \newcounter{section}[chapter]
-%</book|report>
-%<article>\newcounter{section}
 \newcounter{subsection}[section]
 \newcounter{subsubsection}[subsection]
 \newcounter{paragraph}[subsubsection]
@@ -1207,7 +1203,7 @@
 % \begin{macro}{\thesubsubsection}
 % \begin{macro}{\theparagraph}
 % \begin{macro}{\thesubparagraph}
-% |\theCTR|が実際に出力される形式の定義です。
+% |\the|\Lcount{COUNTER}||が実際に出力される形式の定義です。
 %
 % |\arabic{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
 % 算用数字で出力します。
@@ -1227,32 +1223,10 @@
 % |\kansuji{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
 % 漢数字で出力します。
 %
-% |\rensuji{|\meta{obj}|}|は、\meta{obj}を横に並べて出力します。
-% したがって、横組のときには、何も影響しません。
-%
 %    \begin{macrocode}
-%<*tate>
-\renewcommand{\thepart}{\rensuji{\@Roman\c@part}}
-%<article>\renewcommand{\thesection}{\rensuji{\@arabic\c@section}}
-%<*report|book>
-\renewcommand{\thechapter}{\rensuji{\@arabic\c@chapter}}
-\renewcommand{\thesection}{\thechapter・\rensuji{\@arabic\c@section}}
-%</report|book>
-\renewcommand{\thesubsection}{\thesection・\rensuji{\@arabic\c@subsection}}
-\renewcommand{\thesubsubsection}{%
-   \thesubsection・\rensuji{\@arabic\c@subsubsection}}
-\renewcommand{\theparagraph}{%
-   \thesubsubsection・\rensuji{\@arabic\c@paragraph}}
-\renewcommand{\thesubparagraph}{%
-   \theparagraph・\rensuji{\@arabic\c@subparagraph}}
-%</tate>
-%<*yoko>
 \renewcommand{\thepart}{\@Roman\c@part}
-%<article>\renewcommand{\thesection}{\@arabic\c@section}
-%<*report|book>
 \renewcommand{\thechapter}{\@arabic\c@chapter}
 \renewcommand{\thesection}{\thechapter.\@arabic\c@section}
-%</report|book>
 \renewcommand{\thesubsection}{\thesection.\@arabic\c@subsection}
 \renewcommand{\thesubsubsection}{%
    \thesubsection.\@arabic\c@subsubsection}
@@ -1260,7 +1234,6 @@
    \thesubsubsection.\@arabic\c@paragraph}
 \renewcommand{\thesubparagraph}{%
    \theparagraph.\@arabic\c@subparagraph}
-%</yoko>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1276,14 +1249,12 @@
 %
 % |\@chappos|の初期値は`|\postchaptername|'です。
 %
-% |\appendix|コマンドは|\@chapapp|を`|\appendixname|'に、
-% |\@chappos|を空に再定義します。
-%    \begin{macrocode}
-%<*report|book>
-\newcommand{\@chapapp}{\prechaptername}
-\newcommand{\@chappos}{\postchaptername}
-%</report|book>
-%    \end{macrocode}
+% \begin{macro}{\prechaptername}
+% \begin{macro}{\postchaptername}
+% それぞれ|\chaptermark|の前と後に入る文字列です。
+% \end{macro}
+% \end{macro}
+%
 % \end{macro}
 % \end{macro}
 %
@@ -1294,7 +1265,7 @@
 % \begin{macro}{\backmatter}
 % \changes{v1.1}{1997/01/15}{\cs{frontmatter}, \cs{mainmatter}, \cs{backmatter}
 %   を\LaTeX\ の定義に修正}
-% 一冊の本は論理的に３つに分割されます。
+% 一冊の本は論理的に3つに分割されます。
 % 表題や目次や「はじめに」あるいは権利などの前付け、
 % そして本文、それから用語集や索引や奥付けなどの後付けです。
 %    \begin{macrocode}

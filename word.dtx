@@ -972,7 +972,7 @@
 %
 % \section{文書コマンド}
 %
-% \subsubsection{表題}
+% \subsection{表題}
 %
 % \begin{macro}{\title}
 % \begin{macro}{\autor}
@@ -1140,7 +1140,7 @@
 %
 % \subsection{章見出し}
 %
-% \subsection{マークコマンド}
+% \subsubsection{マークコマンド}
 %
 % \begin{macro}{\chaptermark}
 % \begin{macro}{\sectionmark}
@@ -1267,13 +1267,10 @@
 % \begin{macro}{\frontmatter}
 % \begin{macro}{\mainmatter}
 % \begin{macro}{\backmatter}
-% \changes{v1.1}{1997/01/15}{\cs{frontmatter}, \cs{mainmatter}, \cs{backmatter}
-%   を\LaTeX\ の定義に修正}
 % 一冊の本は論理的に3つに分割されます。
 % 表題や目次や「はじめに」あるいは権利などの前付け、
 % そして本文、それから用語集や索引や奥付けなどの後付けです。
 %    \begin{macrocode}
-%<*book>
 \newcommand\frontmatter{%
   \if@openright \cleardoublepage \else \clearpage \fi
   \@mainmatterfalse\pagenumbering{roman}}
@@ -1283,17 +1280,71 @@
 \newcommand{\backmatter}{%
   \if@openright \cleardoublepage \else \clearpage \fi
   \@mainmatterfalse}
-%</book>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+% \end{macro}
+%
+% \subsubsection{見出しの修飾}
+% 見出しを修飾する際に、|\@sect|などを改造することなく
+% 編集出来るようにマクロをいくつか提供します。
+%
+% \begin{macro}{\@head@prefix@section}
+% \begin{macro}{\@head@postfix@section}
+% \begin{macro}{\@head@prefix@subsection}
+% \begin{macro}{\@head@postfix@subsection}
+% \begin{macro}{\@head@prefix@subsubsection}
+% \begin{macro}{\@head@postfix@subsubsection}
+% これらは見出しの前後の修飾です。
+% \pstyle{pretfix}が前を表わし、\pstyle{postfix}が後を表わします。
+% WORDクラスファイルは、一太郎との互換性を維持するため特に修飾を行いません。
+%
+%    \begin{macrocode}
+\let\@head@prefix@section\@empty
+\let\@head@postfix@section\@empty
+\let\@head@prefix@subsection\@empty
+\let\@head@postfix@subsection\@empty
+\let\@head@prefix@subsubsection\@empty
+\let\@head@prefix@subsubsection\@empty
+\let\@head@postfix@subsubsection\@empty
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@seccnt@section}
+% \begin{macro}{\@seccnt@subsection}
+% \begin{macro}{\@seccnt@subsubsection}
+% これらの初期値はそれぞれ|\thesection|、|\thesubsection|、|\thesubsubsection|に
+% スペースを付与したものとなっています。
+%    \begin{macrocode}
+\def\@seccnt@section{\thesection}
+\def\@seccnt@subsection{\thesubsection \hspace \Cwd}
+\def\@seccnt@subsubsection{\thesubsubsection \hspace \Cwd}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@seccntformat}
+% 見出しの修飾を統括するマクロです。
+% 引数に\meta{name}（``section''、``subsection''など）を取り、
+% それに応じた修飾を呼び出すようにしています。
+%
+%    \begin{macrocode}
+\def\@seccntformat#1{%
+   \@nameuse{@seccnt@#1}
+%    \end{macrocode}
 % \end{macro}
 %
 % \subsubsection{ボックスの組み立て}
 % クラスファイル定義の、この部分では、|\@startsection|と|\secdef|の
 % 二つの内部マクロを使います。これらの構文を次に示します。
 %
-% |\@startsection|マクロは６つの引数と１つのオプション引数`*'を取ります。
+% |\@startsection|マクロは6つの引数と1つのオプション引数`*'を取ります。
 %
 %    |\@startsection|\meta{name}\meta{level}\meta{indent}^^A
 %                    \meta{beforeskip}\meta{afterskip}\meta{style}
@@ -1318,11 +1369,11 @@
 % \item[\meta{heading}] 新しい見出しの文字列です。
 % \end{description}
 %
-% 見出しコマンドは通常、|\@startsection|と６つの引数で定義されています。
+% 見出しコマンドは通常、|\@startsection|と6つの引数で定義されています。
 %
 % |\secdef|マクロは、
 % 見出しコマンドを|\@startsection|を用いないで定義するときに使います。
-% このマクロは、２つの引数を持ちます。
+% このマクロは、2つの引数を持ちます。
 %
 % |\secdef|\meta{unstarcmds}\meta{starcmds}
 %
@@ -1338,75 +1389,130 @@
 %    \def\CMDB    #1{....}     % \chapter*{...} の定義
 % \end{verbatim}
 %
+% \begin{macro}{\@sect}
+% WORDクラスファイルでは、|\@startsection|が内部で呼び出している
+% マクロ|\@sect|を改造しています。
+% |\@sect|の引数は次のようになります。
 %
+%    |\@sect|\meta{name}\meta{level}\meta{indent}
+%                    \meta{beforeskip}\meta{afterskip}\meta{style}
+%                    \meta{indexstyle}\meta{mainstyle}
+% \begin{description}
+%   \item[\meta{name}] レベルコマンドの名前です（``section''など）。
+%   \item[\meta{level}] 見出しの深さを示す数値です（chapter=1, section=2)。
+%   \item[\meta{indent}] 見出しに対する、左マージンからの字下げ（インデント）です。
+%   \item[\meta{beforeskip}] 見出しの上に置かれる空白量です。
+%   \item[\meta{afterskip}] 正のとき、見出しの後の垂直方向のスペースとなります。
+%   \item[\meta{style}] 見出しのスタイルを設定するコマンドです。
+%   \item[\meta{indexstyle}] 見出しの目次用スタイルを設定するコマンドです。
+%   \item[\meta{mainstyle}] 見出しの本文用スタイルを設定するコマンドです。
+% \end{description}
+%
+% まず、番号を付けるかどうかを\meta{level}を用いて判定します。
+%    \begin{macrocode}
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+  \ifnum #2>\c@secnumdepth
+    \let\@svsec\@empty
+  \else
+    \refstepcounter{#1}%
+    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+  \fi
+  \@tempskipa #5\relax
+%    \end{macrocode}
+% \meta{afterskip}が$0$に等しい、
+% あるいは$0$より大きいかどうかで処理を分岐します。
+% |\ifdem|には``greater than or equal''が使えないので、
+% \TeX の最小単位であるSP（スケールド・ポイント）を用いています。
+% つまり、ここで\meta{afterskip}（|\@tempskipa|）が
+% -0.5spなどということはありえません。
+%
+% \begin{macro}{\@hangform}
+% \begin{macro}{\hangindent}
+% |\@hangfrom|は\file{latex.ltx}で次のように定義されています。
+%
+%    \begin{macrocode}
+% \def\@hangfrom#1{\setbox\@tempboxa\hbox{{#1}}%
+%      \hangindent \wd\@tempboxa\noindent\box\@tempboxa}
+%    \end{macrocode}
+%
+% \TeX のプリミティブである|\hangindent|は次のような意味です。
+% 
+% \begin{description}
+%   \item[|\string\hangindent| \meta{indent}]
+%     \meta{indent}が正の値の時、\emph{左}余白を\meta{indent}に設定します。
+%     \meta{indent}が負の値である時、\emph{右}余白を-\meta{indent}に設定します。
+% \end{description}
+%
+% つまり|\@hangfrom|は第一引数の横幅（|\wd\@tempboxa|）と同じ幅の左余白を設定し、
+% その後第一引数の内容を出力します。
+%
+% \end{macro}
+% \end{macro}
+%
+% 従って、|\@hangfrom|を用いて\meta{indent}の分だけ左へインデントしたことになります。
+% さらに|\interlinepenalty|に|\@M|（10000を表わす定数）を入れて、改行や改ページを禁止します。
+% また、|\@@par|とは\TeX プリミティブの|\par|のことで、ここでは|\par|が再定義された時に備えています。
+%
+%    \begin{macrocode}
+  \ifdim \@tempskipa>-1sp
+    \begingroup
+      #6{%
+        \@hangfrom{\hskip #3\relax\@svsec}%
+        \@nameuse{@head@prefix@#1}%
+          \interlinepenalty \@M #8\@@par%
+        \@nameuse{@head@postfix@#1}}%
+    \endgroup
+    \csname #1mark\endcsname{#7}%
+    \addcontentsline{toc}{#1}{%
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
+      #7}%
+%    \end{macrocode}
+% \meta{afterskip}が負であった時のことは考えてません。
+%    \begin{macrocode}
+  \else
+    \def\@svsechd{%
+      #6{\hskip #3\relax
+      \@svsec #8}%
+      \csname #1mark\endcsname{#7}%
+      \addcontentsline{toc}{#1}{%
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}}%
+  \fi
+  \@xsect{#5}}
+%    \end{macrocode}
+% \end{macro}
+
 % \subsubsection{partレベル}
 %
 % \begin{macro}{\part}
 % このコマンドは、新しいパート（部）をはじめます。
-%
-% articleクラスの場合は、簡単です。
-%
-% 新しい段落を開始し、小さな空白を入れ、段落後のインデントをしないようにし、
-% |\secdef|で作成します。
-%    \begin{macrocode}
-%<*article>
-\newcommand{\part}{\par\addvspace{4ex}%
-  \@afterindenttrue
-  \secdef\@part\@spart}
-%</article>
-%    \end{macrocode}
-% reportとbookスタイルの場合は、少し複雑です。
+% ただ|\part|は現在のWORDでは使っていません。
 %
 % まず、右ページからはじまるように改ページをします。
 % そして、部扉のページスタイルを\pstyle{empty}にします。
-% ２段組の場合でも、１段組で作成しますが、後ほど２段組に戻すために、
+% 2段組の場合でも、1段組で作成しますが、後ほど２段組に戻すために、
 % |\@restonecol|スイッチを使います。
-% \changes{v1.1}{1997/01/15}{\cs{part}を\LaTeX\ の定義に修正}
 %    \begin{macrocode}
-%<*report|book>
 \newcommand{\part}{%
   \if@openright \cleardoublepage \else \clearpage \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
   \secdef\@part\@spart}
-%</report|book>
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@part}
 % このマクロが実際に部レベルの見出しを作成します。
-% このマクロも文書クラスによって定義が異なります。
 %
-% articleクラスの場合は、\Lcount{secnumdepth}が$-1$よりも大きいとき、
-% 見出し番号を付けます。このカウンタが$-1$以下の場合には付けません。
-%    \begin{macrocode}
-%<*article>
-\def\@part[#1]#2{%
-  \ifnum \c@secnumdepth >\m@ne
-    \refstepcounter{part}%
-    \addcontentsline{toc}{part}{%
-       \prepartname\thepart\postpartname\hspace{1zw}#1}%
-  \else
-    \addcontentsline{toc}{part}{#1}%
-  \fi
-  \markboth{}{}%
-  {\parindent\z@\raggedright
-   \interlinepenalty\@M\reset@font
-   \ifnum \c@secnumdepth >\m@ne
-     \Large\bfseries\prepartname\thepart\postpartname
-     \par\nobreak
-   \fi
-   \huge\bfseries#2\par}%
-  \nobreak\vskip3ex\@afterheading}
-%</article>
-%    \end{macrocode}
-%
-% reportとbookクラスの場合は、\Lcount{secnumdepth}が$-2$よりも大きいときに、
+% \Lcount{secnumdepth}が$-2$よりも大きいときに、
 % 見出し番号を付けます。$-2$以下では付けません。
 %
 %    \begin{macrocode}
-%<*report|book>
 \def\@part[#1]#2{%
   \ifnum \c@secnumdepth >-2\relax
     \refstepcounter{part}%
@@ -1424,31 +1530,24 @@
    \fi
    \Huge\bfseries#2\par}%
    \@endpart}
-%</report|book>
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@spart}
 % このマクロは、番号を付けないときの体裁です。
 %    \begin{macrocode}
-%<*article>
 \def\@spart#1{{%
   \parindent\z@\raggedright
   \interlinepenalty\@M\reset@font
   \huge\bfseries#1\par}%
   \nobreak\vskip3ex\@afterheading}
-%</article>
 %    \end{macrocode}
-% \changes{v1.1k}{1998/03/23}{reportとbookクラスで番号を付けない見出しの
-%   ペナルティが\cs{M@}だったのを\cs{@M}に修正}
 %    \begin{macrocode}
-%<*report|book>
 \def\@spart#1{{%
   \centering
   \interlinepenalty\@M\reset@font
   \Huge\bfseries#1\par}%
   \@endpart}
-%</report|book>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1457,14 +1556,12 @@
 % 両面印刷モードのときは、白ページを追加します。
 % 二段組モードのときには、これ以降のページを二段組に戻します。
 %    \begin{macrocode}
-%<*report|book>
 \def\@endpart{\vfil\newpage
    \if@twoside\null\thispagestyle{empty}\newpage\fi
 %    \end{macrocode}
 % 二段組文書のとき、スイッチを二段組モードに戻す必要があります。
 %    \begin{macrocode}
    \if@tempswa\twocolumn\fi}
-%</report|book>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1478,36 +1575,40 @@
 % なお、縦組の場合でも右ページからはじまるように、
 % フォーマットファイルで|\clerdoublepage|が定義されています。
 %
-% 章見出しが出力されるページのスタイルは、\pstyle{jpl@in}になります。
-% \pstyle{jpl@in}は、\pstyle{headnomble}か\pstyle{footnomble}のいずれかです。
-% 詳細は、第\ref{sec:pagestyle}節を参照してください。
+% WORDでは|\chapter|が記事のタイトルとなります。
+%
+% 章見出しが出力されるページのスタイルは、|\ps@headings|になります。
+% |\ps@headings|の詳細は、第\ref{sec:pagestyle}節を参照してください。
 %
 % また、|\@topnum|をゼロにして、
 % 章見出しの上にトップフロートが置かれないようにしています。
 %    \begin{macrocode}
-%<*report|book>
 \newcommand{\chapter}{%
   \if@openright\cleardoublepage\else\clearpage\fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
-  \secdef\@chapter\@schapter}
+  \secdef\@schapter\@chapter}
 %    \end{macrocode}
+% 
+% WORDのスタイルではchapterが各記事のタイトルという役割を果たすので、
+% |\chapter|は番号が付かず、|\chapter*|で番号を付けるようにしています。 
+%
 % \end{macro}
 %
 % \begin{macro}{\@chapter}
 % このマクロは、章見出しに番号を付けるときに呼び出されます。
 % \Lcount{secnumdepth}が$-1$よりも大きく、
-% |\@mainmatter|が真（bookクラスの場合）のときに、番号を出力します。
+% |\@mainmatter|が真のときに、番号を出力します。
 %    \begin{macrocode}
 \def\@chapter[#1]#2{%
   \ifnum \c@secnumdepth >\m@ne
-%<book>    \if@mainmatter
-    \refstepcounter{chapter}%
-    \typeout{\@chapapp\space\thechapter\space\@chappos}%
-    \addcontentsline{toc}{chapter}%
+    \if@mainmatter
+      \refstepcounter{chapter}%
+      \typeout{\@chapapp\space\thechapter\space\@chappos}%
+      \addcontentsline{toc}{chapter}%
       {\protect\numberline{\@chapapp\thechapter\@chappos}#1}%
-%<book>    \else\addcontentsline{toc}{chapter}{#1}\fi
+    \else\addcontentsline{toc}{chapter}{#1}\fi
   \else
     \addcontentsline{toc}{chapter}{#1}%
   \fi
@@ -1520,10 +1621,7 @@
 %
 % \begin{macro}{\@makechapterhead}
 % このマクロが実際に章見出しを組み立てます。
-% \changes{v1.1o}{1998/12/24}{secnumdepthカウンタを$-1$以下にすると、
-%   見出し文字列も消えてしまうのを修正}
-% \changes{v1.2}{2001/09/04}{\cs{chapter}の出力位置がアスタリスク形式と
-%   そうでないときと違うのを修正(ありがとう、鈴木＠津さん)}
+% 
 %    \begin{macrocode}
 \def\@makechapterhead#1{\hbox{}%
   \vskip2\Cvs
@@ -1532,44 +1630,47 @@
    \reset@font\huge\bfseries
    \leavevmode
    \ifnum \c@secnumdepth >\m@ne
-     \setlength\@tempdima{\linewidth}%
-%<book>    \if@mainmatter
-     \setbox\z@\hbox{\@chapapp\thechapter\@chappos\hskip1zw}%
-     \addtolength\@tempdima{-\wd\z@}%
-     \unhbox\z@\nobreak
-%<book>    \fi
-     \vtop{\hsize\@tempdima#1}%
+     \if@mainmatter
+       \setbox\z@\hbox{\@chapapp\thechapter\@chappos\hskip1zw}%
+       \addtolength\@tempdima{-\wd\z@}%
+       \unhbox\z@\nobreak
+     \else 
+       \setlength\@tempdima{\linewidth}%
+	   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}%
+     \fi
    \else
      #1\relax
-   \fi}\nobreak\vskip3\Cvs}
+   \fi}\nobreak\vskip\Cvs
+   \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
+   \vskip.5\Cvs}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@schapter}
 % このマクロは、章見出しに番号を付けないときに呼び出されます。
+%
 %    \begin{macrocode}
 \def\@schapter#1{%
-%<article>  \if@twocolumn\@topnewpage[\@makeschapterhead{#1}]\else
   \@makeschapterhead{#1}\@afterheading
-%<article>  \fi
 }
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@makeschapterhead}
 % 番号を付けない場合の形式です。
-% \changes{v1.2}{2001/09/04}{\cs{chapter}の出力位置がアスタリスク形式と
-%   そうでないときと違うのを修正(ありがとう、鈴木＠津さん)}
+% WORDではchapterに|\@author|と|\@authormark|を表示します。
+%
 %    \begin{macrocode}
 \def\@makeschapterhead#1{\hbox{}%
-  \vskip2\Cvs
   {\parindent\z@
    \raggedright
    \reset@font\huge\bfseries
    \leavevmode
    \setlength\@tempdima{\linewidth}%
-   \vtop{\hsize\@tempdima#1}}\vskip3\Cvs}
-%</report|book>
+   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}}
+   \nobreak\vskip\Cvs
+   \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
+   \vskip\Cvs}
 %    \end{macrocode}
 % \end{macro}
 %

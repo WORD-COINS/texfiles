@@ -43,13 +43,13 @@
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{word.dtx}
-\usepackage[dvipdfmx]{hyperref}
+\usepackage[dvipdfmx, colorlinks]{hyperref}
 \usepackage{pxjahyper}
 \def\fileversion{v1.0}
 \def\filedate{2013/12/27}
-\title{WORDの標準クラス\space\fileversion}
+\title{WORD Standard Class\space\fileversion}
 \author{Hikaru \sc{Yoshimura}}
-\date{作成日：\filedate}
+\date{\filedate}
 \begin{document}
   \maketitle
   \tableofcontents
@@ -149,15 +149,6 @@
 % \end{macro}
 %
 % \section{オプションの宣言}
-%
-% \subsection{組方向オプション}
-% このオプションが指定されると、縦組で組版をします。
-%    \begin{macrocode}
-\DeclareOption{tate}{%
-  \AtBeginDocument{\tate\message{《縦組モード》}%
-                   \adjustbaseline}%
-}
-%    \end{macrocode}
 %
 % \subsection{両面、片面オプション}
 % twosideオプションが指定されると、両面印字出力に適した整形を行ないます。

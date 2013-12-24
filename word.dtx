@@ -48,7 +48,7 @@
 \def\fileversion{v1.0}
 \def\filedate{2013/12/27}
 \title{WORD Standard Class\space\fileversion}
-\author{Hikaru \sc{Yoshimura}}
+\author{Hikaru \sc{Yoshimura}\and Kazuhiko \sc{Sakaguchi}}
 \date{\filedate}
 \begin{document}
   \maketitle
@@ -517,7 +517,7 @@
 % \LaTeXe{}では、|\maxdepth|$+$|\topskip|を基本サイズの1.5倍にしたいので、
 % |\maxdepth|を|\topskip|の半分の値で設定します。
 %    \begin{macrocode}
-  \setlength\maxdepth{.5\topskip}
+\setlength\maxdepth{.5\topskip}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1728,24 +1728,7 @@
 % \subsubsection{付録}
 %
 % \begin{macro}{\appendix}
-% articleクラスの場合、|\appendix|コマンドは次のことを行ないます。
-%
-% \begin{itemize}
-% \item \Lcount{section}と\Lcount{subsection}カウンタをリセットする。
-% \item |\thesection|を英小文字で出力するように再定義する。
-% \end{itemize}
-%
-%    \begin{macrocode}
-%<*article>
-\newcommand{\appendix}{\par
-  \setcounter{section}{0}%
-  \setcounter{subsection}{0}%
-%<tate>  \renewcommand{\thesection}{\rensuji{\@Alph\c@section}}}
-%<yoko>  \renewcommand{\thesection}{\@Alph\c@section}}
-%</article>
-%    \end{macrocode}
-%
-% reportとbookクラスの場合、|\appendix|コマンドは次のことを行ないます。
+% |\appendix|コマンドは次のことを行ないます。
 %
 % \begin{itemize}
 % \item \Lcount{chapter}と\Lcount{section}カウンタをリセットする。
@@ -1755,15 +1738,12 @@
 % \end{itemize}
 %
 %    \begin{macrocode}
-%<*report|book>
 \newcommand{\appendix}{\par
   \setcounter{chapter}{0}%
   \setcounter{section}{0}%
   \renewcommand{\@chapapp}{\appendixname}%
   \renewcommand{\@chappos}\space%
-%<tate>  \renewcommand{\thechapter}{\rensuji{\@Alph\c@chapter}}}
-%<yoko>  \renewcommand{\thechapter}{\@Alph\c@chapter}}
-%</report|book>
+  \renewcommand{\thechapter}{\@Alph\c@chapter}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1776,7 +1756,7 @@
 %
 % まず、|\rigtmargin|, |\listparindent|, |\itemindent|をゼロにします。
 % そして、K番目のレベルのリストは|\@listK|で示されるマクロが呼び出されます。
-% ここで`K'は小文字のローマ数字で示されます。たとえば、３番目のレベルのリスト
+% ここで`K'は小文字のローマ数字で示されます。たとえば、3番目のレベルのリスト
 % として|\@listiii|が呼び出されます。
 % |\@listK|は|\leftmargin|を|\leftmarginK|に設定します。
 %
@@ -1795,7 +1775,7 @@
   \setlength\leftmargini {2.5em}
 \fi
 %    \end{macrocode}
-% 次の３つの値は、|\labelsep|とデフォルトラベル（`(m)', `vii.', `M.'）の
+% 次の3つの値は、|\labelsep|とデフォルトラベル（`(m)', `vii.', `M.'）の
 % 幅の合計よりも大きくしてあります。
 %    \begin{macrocode}
 \setlength\leftmarginii  {2.2em}
@@ -1848,9 +1828,7 @@
 % リスト環境の前に空行がある場合、|\parskip|と|\topsep|に|\partopsep|が
 % 加えられた値の縦方向の空白が取られます。
 %    \begin{macrocode}
-%<10pt>\setlength\partopsep{2\p@ \@plus 1\p@ \@minus 1\p@}
-%<11pt>\setlength\partopsep{3\p@ \@plus 1\p@ \@minus 1\p@}
-%<12pt>\setlength\partopsep{3\p@ \@plus 2\p@ \@minus 2\p@}
+%<geometry>\setlength\partopsep{2\p@ \@plus 1\p@ \@minus 1\p@}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1864,23 +1842,11 @@
 % このため、|\normalsize|がすべてのパラメータを戻せるように、
 % |\@listI|は|\@listi|のコピーを保存するように定義されています。
 %    \begin{macrocode}
-%<*10pt|11pt|12pt>
+%<*geometry>
 \def\@listi{\leftmargin\leftmargini
-%<*10pt>
   \parsep 4\p@ \@plus2\p@ \@minus\p@
   \topsep 8\p@ \@plus2\p@ \@minus4\p@
   \itemsep4\p@ \@plus2\p@ \@minus\p@}
-%</10pt>
-%<*11pt>
-  \parsep 4.5\p@ \@plus2\p@ \@minus\p@
-  \topsep 9\p@   \@plus3\p@ \@minus5\p@
-  \itemsep4.5\p@ \@plus2\p@ \@minus\p@}
-%</11pt>
-%<*12pt>
-  \parsep 5\p@  \@plus2.5\p@ \@minus\p@
-  \topsep 10\p@ \@plus4\p@   \@minus6\p@
-  \itemsep5\p@  \@plus2.5\p@ \@minus\p@}
-%</12pt>
 \let\@listI\@listi
 %    \end{macrocode}
 % ここで、パラメータを初期化しますが、厳密には必要ありません。
@@ -1903,24 +1869,12 @@
 %    \begin{macrocode}
 \def\@listii{\leftmargin\leftmarginii
    \labelwidth\leftmarginii \advance\labelwidth-\labelsep
-%<*10pt>
    \topsep  4\p@ \@plus2\p@ \@minus\p@
    \parsep  2\p@ \@plus\p@  \@minus\p@
-%</10pt>
-%<*11pt>
-   \topsep  4.5\p@ \@plus2\p@ \@minus\p@
-   \parsep  2\p@   \@plus\p@  \@minus\p@
-%</11pt>
-%<*12pt>
-   \topsep  5\p@   \@plus2.5\p@ \@minus\p@
-   \parsep  2.5\p@ \@plus\p@  \@minus\p@
-%</12pt>
    \itemsep\parsep}
 \def\@listiii{\leftmargin\leftmarginiii
    \labelwidth\leftmarginiii \advance\labelwidth-\labelsep
-%<10pt>   \topsep 2\p@  \@plus\p@\@minus\p@
-%<11pt>   \topsep 2\p@  \@plus\p@\@minus\p@
-%<12pt>   \topsep 2.5\p@\@plus\p@\@minus\p@
+   \topsep 2\p@  \@plus\p@\@minus\p@
    \parsep\z@
    \partopsep \p@ \@plus\z@ \@minus\p@
    \itemsep\topsep}
@@ -1933,7 +1887,7 @@
 \def\@listvi {\leftmargin\leftmarginvi
               \labelwidth\leftmarginvi
               \advance\labelwidth-\labelsep}
-%</10pt|11pt|12pt>
+%</geometry>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1953,19 +1907,11 @@
 % 出力する番号の書式を設定します。
 % これらは、すでに\file{ltlists.dtx}で定義されています。
 %    \begin{macrocode}
-%<*article|report|book>
-%<*tate>
-\renewcommand{\theenumi}{\rensuji{\@arabic\c@enumi}}
-\renewcommand{\theenumii}{\rensuji{(\@alph\c@enumii)}}
-\renewcommand{\theenumiii}{\rensuji{\@roman\c@enumiii}}
-\renewcommand{\theenumiv}{\rensuji{\@Alph\c@enumiv}}
-%</tate>
-%<*yoko>
+%<*book>
 \renewcommand{\theenumi}{\@arabic\c@enumi}
 \renewcommand{\theenumii}{\@alph\c@enumii}
 \renewcommand{\theenumiii}{\@roman\c@enumiii}
 \renewcommand{\theenumiv}{\@Alph\c@enumiv}
-%</yoko>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1979,18 +1925,10 @@
 % enumerate環境のそれぞれの項目のラベルは、
 % |\labelenumi| \ldots\ |\labelenumiv|で生成されます。
 %    \begin{macrocode}
-%<*tate>
-\newcommand{\labelenumi}{\theenumi}
-\newcommand{\labelenumii}{\theenumii}
-\newcommand{\labelenumiii}{\theenumiii}
-\newcommand{\labelenumiv}{\theenumiv}
-%</tate>
-%<*yoko>
 \newcommand{\labelenumi}{\theenumi.}
 \newcommand{\labelenumii}{(\theenumii)}
 \newcommand{\labelenumiii}{\theenumiii.}
 \newcommand{\labelenumiv}{\theenumiv.}
-%</yoko>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2012,7 +1950,6 @@
 % \end{macro}
 %
 % \begin{environment}{enumerate}
-% \changes{v1.1q}{1999/05/18}{縦組時のみに設定するようにした}
 % トップレベルで使われたときに、最初と最後に半行分のスペースを開けるように、
 % 変更します。この環境は、\file{ltlists.dtx}で定義されています。
 %
@@ -2046,7 +1983,6 @@
 % \begin{macro}{\labelitemiv}
 % itemize環境のそれぞれの項目のラベルは、
 % |\labelenumi| \ldots\ |\labelenumiv|で生成されます。
-% \changes{v1.1a}{1997/01/28}{Bug fix: \cs{labelitemii}.}
 %    \begin{macrocode}
 \newcommand{\labelitemi}{\textbullet}
 \newcommand{\labelitemii}{%
@@ -2065,7 +2001,6 @@
 % \end{macro}
 %
 % \begin{environment}{itemize}
-% \changes{v1.0e}{1996/03/14}{縦組時のみに設定するようにした}
 % トップレベルで使われたときに、最初と最後に半行分のスペースを開けるように、
 % 変更します。この環境は、\file{ltlists.dtx}で定義されています。
 %    \begin{macrocode}
@@ -2093,10 +2028,8 @@
 % \subsubsection{description環境}
 %
 % \begin{environment}{description}
-% \changes{v1.0e}{1996/03/14}{\cs{topskip}や\cs{parkip}などの値を縦組時のみに
-%        設定するようにした}
 % description環境を定義します。
-% 縦組時には、インデントが３字分だけ深くなります。
+% 縦組時には、インデントが3字分だけ深くなります。
 %    \begin{macrocode}
 \newenvironment{description}
   {\list{}{\labelwidth\z@ \itemindent-\leftmargin
@@ -2194,26 +2127,13 @@
 % \begin{macro}{\c@figure}
 % \begin{macro}{\thefigure}
 % 図番号です。
+% \file{jbook.cls}などでは図番号が章番号|\thechapter|とセットになっていますが、
+% WORDでは記事について一つの|\chapter|しか使わないので、
+% 図番号と章番号の関連は削りました。
+%
 %    \begin{macrocode}
-%<article>\newcounter{figure}
-%<report|book>\newcounter{figure}[chapter]
-%<*tate>
-%<article>\renewcommand{\thefigure}{\rensuji{\@arabic\c@figure}}
-%    \end{macrocode}
-% \changes{v1.1d}{1997/02/14}{\cs{ifnum}文の構文エラーを訂正。}
-%    \begin{macrocode}
-%<*report|book>
-\renewcommand{\thefigure}{%
-  \ifnum\c@chapter>\z@\thechapter{}・\fi\rensuji{\@arabic\c@figure}}
-%</report|book>
-%</tate>
-%<*yoko>
-%<article>\renewcommand{\thefigure}{\@arabic\c@figure}
-%<*report|book>
-\renewcommand{\thefigure}{%
-  \ifnum\c@chapter>\z@\thechapter.\fi\@arabic\c@figure}
-%</report|book>
-%</yoko>
+\newcounter{figure}
+\renewcommand{\thefigure}{\@arabic\c@figure}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2227,8 +2147,7 @@
 \def\fps@figure{tbp}
 \def\ftype@figure{1}
 \def\ext@figure{lof}
-%<tate>\def\fnum@figure{\figurename\thefigure}
-%<yoko>\def\fnum@figure{\figurename~\thefigure}
+\def\fnum@figure{\figurename~\thefigure}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2254,27 +2173,11 @@
 %
 % \begin{macro}{\c@table}
 % \begin{macro}{\thetable}
-% \changes{v1.1n}{1998/10/13}
-%    {report, bookクラスでchapterカウンタを考慮していなかったのを修正。
-%     ありがとう、平川＠慶應大さん。}
 % 表番号です。
+% 図番号と同様に、これらもchapterとの関連付けは行ないません。
 %    \begin{macrocode}
-%<article>\newcounter{table}
-%<report|book>\newcounter{table}[chapter]
-%<*tate>
-%<article>\renewcommand{\thetable}{\rensuji{\@arabic\c@table}}
-%<*report|book>
-\renewcommand{\thetable}{%
-  \ifnum\c@chapter>\z@\thechapter{}・\fi\rensuji{\@arabic\c@table}}
-%</report|book>
-%</tate>
-%<*yoko>
-%<article>\renewcommand{\thetable}{\@arabic\c@table}
-%<*report|book>
-\renewcommand{\thetable}{%
-  \ifnum\c@chapter>\z@\thechapter.\fi\@arabic\c@table}
-%</report|book>
-%</yoko>
+\newcounter{table}
+\renewcommand{\thetable}{\@arabic\c@table}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2288,8 +2191,7 @@
 \def\fps@table{tbp}
 \def\ftype@table{2}
 \def\ext@table{lot}
-%<tate>\def\fnum@table{\tablename\thetable}
-%<yoko>\def\fnum@table{\tablename~\thetable}
+\def\fnum@table{\tablename~\thetable}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2298,7 +2200,7 @@
 %
 % \begin{environment}{table}
 % \begin{environment}{table*}
-% |*|形式は２段抜きのフロートとなります。
+% |*|形式は2段抜きのフロートとなります。
 %    \begin{macrocode}
 \newenvironment{table}
                {\@float{table}}
@@ -2452,12 +2354,6 @@
 % |\mathmc|と|\mathgt|に対してエラーを出すだけのダミーの定義を
 % 与える設定のみが行われます。
 %
-%   \textbf{変更}
-%
-% \changes{v1.6}{2006/06/27}{フォントコマンドを修正。ありがとう、ymtさん。}
-%    p\LaTeX{} 2.09
-%    compatibility mode では和文数式フォントfam が2重定義されていた
-%    ので、その部分を変更しました。
 %    \begin{macrocode}
 \if@enablejfam
   \if@compatibility\else
@@ -2592,8 +2488,7 @@
 % \begin{macro}{\c@tocdepth}
 % \Lcount{tocdepth}は、目次ページに出力をする見出しレベルです。
 %    \begin{macrocode}
-%<article>\setcounter{tocdepth}{3}
-%<!article>\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{2}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2625,8 +2520,7 @@
 % デフォルトはゼロとなっています。縦組のとき、スペースを少し広げます。
 %    \begin{macrocode}
 \newdimen\toclineskip
-%<yoko>\setlength\toclineskip{\z@}
-%<tate>\setlength\toclineskip{2\p@}
+\setlength\toclineskip{\z@}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2698,17 +2592,15 @@
 %
 % \begin{macro}{\tableofcontents}
 % 目次を生成します。
+% |\chapter*|ではなく|\section*|を用いるようにしています。
 %    \begin{macrocode}
 \newcommand{\tableofcontents}{%
-%<*report|book>
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-%</report|book>
-%<article>  \section*{\contentsname
-%<!article>  \chapter*{\contentsname
+  \section*{\contentsname
     \@mkboth{\contentsname}{\contentsname}%
   }\@starttoc{toc}%
-%<report|book>  \if@restonecol\twocolumn\fi
+  \if@restonecol\twocolumn\fi
 }
 %    \end{macrocode}
 % \end{macro}
@@ -2718,22 +2610,19 @@
 %    \begin{macrocode}
 \newcommand*{\l@part}[2]{%
   \ifnum \c@tocdepth >-2\relax
-%<article>    \addpenalty{\@secpenalty}%
-%<!article>    \addpenalty{-\@highpenalty}%
+    \addpenalty{-\@highpenalty}%
     \addvspace{2.25em \@plus\p@}%
     \begingroup
-    \parindent\z@\rightskip\@pnumwidth
-    \parfillskip-\@pnumwidth
-    {\leavevmode\large\bfseries
-     \setlength\@lnumwidth{4zw}%
-     #1\hfil\nobreak
-     \hbox to\@pnumwidth{\hss#2}}\par
-    \nobreak
-%<article>    \if@compatibility
-    \global\@nobreaktrue
-    \everypar{\global\@nobreakfalse\everypar{}}%
-%<article>    \fi
-     \endgroup
+      \parindent\z@\rightskip\@pnumwidth
+      \parfillskip-\@pnumwidth
+      {\leavevmode\large\bfseries
+       \setlength\@lnumwidth{4zw}%
+       #1\hfil\nobreak
+       \hbox to\@pnumwidth{\hss#2}}\par
+      \nobreak
+      \global\@nobreaktrue
+      \everypar{\global\@nobreakfalse\everypar{}}%
+    \endgroup
   \fi}
 %    \end{macrocode}
 % \end{macro}
@@ -2741,7 +2630,6 @@
 % \begin{macro}{\l@chapter}
 % chapterレベルの目次です。
 %    \begin{macrocode}
-%<*report|book>
 \newcommand*{\l@chapter}[2]{%
   \ifnum \c@tocdepth >\m@ne
     \addpenalty{-\@highpenalty}%
@@ -2755,14 +2643,12 @@
       \penalty\@highpenalty
     \endgroup
   \fi}
-%</report|book>
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\l@section}
 % sectionレベルの目次です。
 %    \begin{macrocode}
-%<*article>
 \newcommand*{\l@section}[2]{%
   \ifnum \c@tocdepth >\z@
     \addpenalty{\@secpenalty}%
@@ -2775,14 +2661,10 @@
       #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
     \endgroup
   \fi}
-%</article>
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-%<*report|book>
-%<tate>\newcommand*{\l@section}{\@dottedtocline{1}{1zw}{4zw}}
-%<yoko>\newcommand*{\l@section}{\@dottedtocline{1}{1.5em}{2.3em}}
-%</report|book>
+\newcommand*{\l@section}{\@dottedtocline{1}{1.5em}{2.3em}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2792,34 +2674,10 @@
 % \begin{macro}{\l@subparagraph}
 % 下位レベルの目次項目の体裁です。
 %    \begin{macrocode}
-%<*tate>
-%<*article>
-\newcommand*{\l@subsection}   {\@dottedtocline{2}{1zw}{4zw}}
-\newcommand*{\l@subsubsection}{\@dottedtocline{3}{2zw}{6zw}}
-\newcommand*{\l@paragraph}    {\@dottedtocline{4}{3zw}{8zw}}
-\newcommand*{\l@subparagraph} {\@dottedtocline{5}{4zw}{9zw}}
-%</article>
-%<*report|book>
-\newcommand*{\l@subsection}   {\@dottedtocline{2}{2zw}{6zw}}
-\newcommand*{\l@subsubsection}{\@dottedtocline{3}{3zw}{8zw}}
-\newcommand*{\l@paragraph}    {\@dottedtocline{4}{4zw}{9zw}}
-\newcommand*{\l@subparagraph} {\@dottedtocline{5}{5zw}{10zw}}
-%</report|book>
-%</tate>
-%<*yoko>
-%<*article>
-\newcommand*{\l@subsection}   {\@dottedtocline{2}{1.5em}{2.3em}}
-\newcommand*{\l@subsubsection}{\@dottedtocline{3}{3.8em}{3.2em}}
-\newcommand*{\l@paragraph}    {\@dottedtocline{4}{7.0em}{4.1em}}
-\newcommand*{\l@subparagraph} {\@dottedtocline{5}{10em}{5em}}
-%</article>
-%<*report|book>
 \newcommand*{\l@subsection}   {\@dottedtocline{2}{3.8em}{3.2em}}
 \newcommand*{\l@subsubsection}{\@dottedtocline{3}{7.0em}{4.1em}}
 \newcommand*{\l@paragraph}    {\@dottedtocline{4}{10em}{5em}}
 \newcommand*{\l@subparagraph} {\@dottedtocline{5}{12em}{6em}}
-%</report|book>
-%</yoko>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2833,15 +2691,12 @@
 % 図の一覧を作成します。
 %    \begin{macrocode}
 \newcommand{\listoffigures}{%
-%<*report|book>
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listfigurename
-%</report|book>
-%<article>    \section*{\listfigurename
+  \section*{\listfigurename
   \@mkboth{\listfigurename}{\listfigurename}}%
   \@starttoc{lof}%
-%<report|book>  \if@restonecol\twocolumn\fi
+  \if@restonecol\twocolumn\fi
 }
 %    \end{macrocode}
 % \end{macro}
@@ -2849,8 +2704,7 @@
 % \begin{macro}{\l@figure}
 % 図目次の体裁です。
 %    \begin{macrocode}
-%<tate>\newcommand*{\l@figure}{\@dottedtocline{1}{1zw}{4zw}}
-%<yoko>\newcommand*{\l@figure}{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand*{\l@figure}{\@dottedtocline{1}{1.5em}{2.3em}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2859,15 +2713,12 @@
 % 表の一覧を作成します。
 %    \begin{macrocode}
 \newcommand{\listoftables}{%
-%<*report|book>
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listtablename
-%</report|book>
-%<article>    \section*{\listtablename
+  \section*{\listtablename
   \@mkboth{\listtablename}{\listtablename}}%
   \@starttoc{lot}%
-%<report|book>  \if@restonecol\twocolumn\fi
+  \if@restonecol\twocolumn\fi
 }
 %    \end{macrocode}
 % \end{macro}
@@ -2899,10 +2750,12 @@
 %
 % \begin{environment}{thebibliography}
 % 参考文献や関連図書のリストを作成します。
+% WORDクラスファイルは一太郎との互換性維持のため、
+% マークを全てサブタイトルとします。
+%
 %    \begin{macrocode}
 \newenvironment{thebibliography}[1]
-%<article>{\section*{\refname\@mkboth{\refname}{\refname}}%
-%<report|book>{\chapter*{\bibname\@mkboth{\bibname}{\bibname}}%
+{\section*{\refname\@mkboth{\@subtitle}{\@subtitle}}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -2912,9 +2765,6 @@
          \let\p@enumiv\@empty
          \renewcommand\theenumiv{\@arabic\c@enumiv}}%
    \sloppy
-%    \end{macrocode}
-% \changes{v1.1a}{1997/01/23}{\LaTeX\ \texttt{!<1996/12/01!>}に合わせて修正}
-%    \begin{macrocode}
    \clubpenalty4000
    \@clubpenalty\clubpenalty
    \widowpenalty4000%
@@ -2960,8 +2810,7 @@
 \newenvironment{theindex}
   {\if@twocolumn\@restonecolfalse\else\@restonecoltrue\fi
    \columnseprule\z@ \columnsep 35\p@
-%<article>   \twocolumn[\section*{\indexname}]%
-%<report|book>   \twocolumn[\@makeschapterhead{\indexname}]%
+   \twocolumn[\section*{\indexname}]%
    \@mkboth{\indexname}{\indexname}%
    \thispagestyle{jpl@in}\parindent\z@
    \parskip\z@ \@plus .3\p@\relax
@@ -3006,24 +2855,26 @@
 % \begin{macro}{\c@footnote}
 % reportとbookクラスでは、chapterレベルでリセットされます。
 %    \begin{macrocode}
-%<!article>\@addtoreset{footnote}{chapter}
+\@addtoreset{footnote}{chapter}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@makefntext}
 % このマクロにしたがって脚注が組まれます。
+% WORDクラスファイルは本文の行間を広く取るので、
+% 脚注領域では行間を小さくしています。
 %
+% \begin{macro}{\@makefnmark}
 % |\@makefnmark|は脚注記号を組み立てるマクロです。
+%
 %    \begin{macrocode}
-%<*tate>
-\newcommand\@makefntext[1]{\parindent 1zw
-  \noindent\hbox to 2zw{\hss\@makefnmark}#1}
-%</tate>
-%<*yoko>
+\renewcommand{\@makefnmark}{%
+  \raise.85pt\hbox{*}\textsuperscript{\@thefnmark}\hskip-.01\Cwd}
 \newcommand\@makefntext[1]{\parindent 1em
+  \baselineskip = 0.75\baselineskip
   \noindent\hbox to 1.8em{\hss\@makefnmark}#1}
-%</yoko>
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 %
@@ -3101,8 +2952,8 @@
 %    \begin{macrocode}
 \newcommand{\prepartname}{第}
 \newcommand{\postpartname}{部}
-%<report|book>\newcommand{\prechaptername}{第}
-%<report|book>\newcommand{\postchaptername}{章}
+\newcommand{\prechaptername}{第}
+\newcommand{\postchaptername}{章}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -3125,8 +2976,7 @@
 % \begin{macro}{\bibname}
 % \begin{macro}{\indexname}
 %    \begin{macrocode}
-%<article>\newcommand{\refname}{参考文献}
-%<report|book>\newcommand{\bibname}{関連図書}
+\newcommand{\bibname}{関連図書}
 \newcommand{\indexname}{索 引}
 %    \end{macrocode}
 % \end{macro}
@@ -3146,17 +2996,13 @@
 % \begin{macro}{\abstractname}
 %    \begin{macrocode}
 \newcommand{\appendixname}{付 録}
-%<article|report>\newcommand{\abstractname}{概 要}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
-% \changes{v1.0d}{1996/02/29}{articleとreportのデフォルトを
-%                              \pstyle{plain}に修正}
-% \changes{v1.4}{2002/04/09}{縦組スタイルで\cs{flushbottom}しないようにした}
+% 基本のスタイルは|\ps@headings|となる。
 %    \begin{macrocode}
-%<book>\pagestyle{headings}
-%<!book>\pagestyle{plain}
+\pagestyle{headings}
 \pagenumbering{arabic}
 \raggedbottom
 \if@twocolumn
@@ -3175,21 +3021,12 @@
 % |\reversemarginpar|とすると本文の上側に出力されます。
 % ただし、二段組の場合は、つねに隣接するテキスト側のマージンに出力されます。
 %    \begin{macrocode}
-%<*tate>
-\normalmarginpar
-\@mparswitchfalse
-%</tate>
-%<*yoko>
 \if@twoside
   \@mparswitchtrue
 \else 
   \@mparswitchfalse
 \fi
-%</yoko>
-%</article|report|book>
+%</book>
 %    \end{macrocode}
-%
-%
-%
 %
 \endinput

@@ -251,7 +251,8 @@
 %
 % ここでは、\LaTeX{}のフォントサイズコマンドの定義をしています。
 % フォントサイズコマンドの定義は、次のコマンドを用います。
-% またWORDクラスはOTFパッケージを読み込むことを前提としているため、
+% またWORDクラスは\pstyle{OTF}パッケージ\footnote{\url{http://www.ctan.org/pkg/japanese-otf}}
+% を読み込むことを前提としているため、
 % TFMファイルを拡大・縮小するといったことはしていません。
 %
 % |\@setfontsize||\size|\meta{font-size}\meta{baselineskip}
@@ -1481,7 +1482,7 @@
 %
 % \begin{macro}{\part}
 % このコマンドは、新しいパート（部）をはじめます。
-% ただ|\part|は現在のWORDでは使っていません。
+% ただ|\part|は現在のWORDの組版では使っていません。
 %
 % まず、右ページからはじまるように改ページをします。
 % そして、部扉のページスタイルを\pstyle{empty}にします。
@@ -1639,6 +1640,7 @@
 %
 % \begin{macro}{\@schapter}
 % このマクロは、章見出しに番号を付けないときに呼び出されます。
+% WORDでは基本的にこちらが呼び出されることになります。
 %
 %    \begin{macrocode}
 \def\@schapter#1{%
@@ -1650,6 +1652,7 @@
 % \begin{macro}{\@makeschapterhead}
 % 番号を付けない場合の形式です。
 % WORDではchapterに|\@author|と|\@authormark|を表示します。
+% |\@authormark|には``編集部''など入ります。
 %
 %    \begin{macrocode}
 \def\@makeschapterhead#1{\hbox{}%
@@ -1668,42 +1671,42 @@
 % \subsubsection{下位レベルの見出し}
 %
 % \begin{macro}{\section}
-% 見出しの前後に空白を付け、|\Large\bfseries|で出力をします。
+% |\LARGE\bfseries|で出力をします。
 %    \begin{macrocode}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
-   {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
-   {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\Large\bfseries}}
+   {\Cvs}%
+   {\z@}%
+   {\reset@font\LARGE\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\subsection}
-% 見出しの前後に空白を付け、|\large\bfseries|で出力をします。
+% |\Large\bfseries|で出力をします。
 %    \begin{macrocode}
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-   {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
-   {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\large\bfseries}}
+   {\z@}%
+   {\z@}%
+   {\reset@font\Large\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\subsubsection}
-% 見出しの前後に空白を付け、|\normalsize\bfseries|で出力をします。
+% |\large\bfseries|で出力をします。
 %    \begin{macrocode}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-   {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
-   {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\normalsize\bfseries}}
+   {\z@}%
+   {\z@}%
+   {\reset@font\large\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\paragraph}
-% 見出しの前に空白を付け、|\normalsize\bfseries|で出力をします。
+% |\normalsize\bfseries|で出力をします。
 % 見出しの後ろで改行されません。
 %    \begin{macrocode}
 \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-   {3.25ex \@plus 1ex \@minus .2ex}%
-   {-1em}%
+   {\z@}%
+   {\z@}%
    {\reset@font\normalsize\bfseries}}
 %    \end{macrocode}
 % \end{macro}

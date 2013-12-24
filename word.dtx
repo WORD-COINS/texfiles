@@ -82,6 +82,13 @@
 % \section{オプションスイッチ}
 % ここでは、後ほど使用するいくつかのコマンドやスイッチを定義しています。
 %
+% \begin{macro}{\if@restonecol}
+% 二段組時に用いるテンポラリスイッチです。
+%    \begin{macrocode}
+\newif\if@restonecol
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\if@openright}
 % chapterレベルを奇数ページからはじめるかどうかのスイッチです。
 % デフォルトは、``no''です。
@@ -237,13 +244,6 @@
 \DeclareOption{pagenum}{%
 	\@pagenumbertrue
 }
-%    \end{macrocode}
-%
-% \subsection{サイズクラスのロード}
-% サイズクラスのロードを行ないます。
-%    \begin{macrocode}
-\ProcessOptions\relax
-\input{word.clo}
 %</book>
 %    \end{macrocode}
 %
@@ -394,8 +394,8 @@
 % \begin{macro}{\paperwidth}
 %    \begin{macrocode}
 %<*book>
+\newcounter{@paper}
 \setcounter{@paper}{4}
-\@stysizetrue
 \setlength\paperheight {257mm}
 \setlength\paperwidth  {182mm}
 %    \end{macrocode}
@@ -413,6 +413,12 @@
 % \end{macro}
 % \end{macro}
 %
+% \subsection{サイズクラスのロード}
+% サイズクラスのロードを行ないます。
+%    \begin{macrocode}
+\ProcessOptions\relax
+\input{word.clo}
+%    \end{macrocode}
 % \subsection{段落の形}
 %
 % \begin{macro}{\lineskip}
@@ -531,7 +537,7 @@
 %
 %    \begin{macrocode}
 %\setlength\textwidth{150mm}
-\setlength\textwidth{48\Chs}
+\setlength\textwidth{48\Cwd}
 \@settopoint\textwidth
 %    \end{macrocode}
 % \end{macro}
@@ -958,7 +964,7 @@
       \@header@thepage%
       \hfil\@subtitle}
     \vskip.05\Cvs
-    \hrule}}
+    \hrule}}}
 %    \end{macrocode}
 % これは両方とも小口側に|\@subtitle|を表示し、|\if@pagenumber|によりノド側に
 % ページ番号を表示するかどうかを決めるマクロ|\@header@thepage|を実行します。
@@ -1330,7 +1336,7 @@
 %
 %    \begin{macrocode}
 \def\@seccntformat#1{%
-   \@nameuse{@seccnt@#1}
+   \@nameuse{@seccnt@#1}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1448,13 +1454,14 @@
 % また、|\@@par|とは\TeX プリミティブの|\par|のことで、ここでは|\par|が再定義された時に備えています。
 %
 %    \begin{macrocode}
-  \ifdim \@tempskipa>-1sp
+  \ifdim \@tempskipa>\z@
     \begingroup
       #6{%
-        \@hangfrom{\hskip #3\relax\@svsec}%
         \@nameuse{@head@prefix@#1}%
-          \interlinepenalty \@M #8\@@par%
-        \@nameuse{@head@postfix@#1}}%
+        \@hangfrom{\hskip #3\relax\@svsec}%
+        \interlinepenalty \@M%
+        \@nameuse{@head@postfix@#1} #8%
+        \@@par}%
     \endgroup
     \csname #1mark\endcsname{#7}%
     \addcontentsline{toc}{#1}{%
@@ -1463,17 +1470,20 @@
       \fi
       #7}%
 %    \end{macrocode}
-% \meta{afterskip}が負であった時のことは考えてません。
+% \meta{afterskip}が負であった時。
 %    \begin{macrocode}
   \else
     \def\@svsechd{%
-      #6{\hskip #3\relax
-      \@svsec #8}%
+      #6{
+        \@nameuse{@head@prefix@#1}%
+	    \hskip #3\relax
+        \@nameuse{@head@postfix@#1}%
+        \@svsec #8}
       \csname #1mark\endcsname{#7}%
       \addcontentsline{toc}{#1}{%
-        \ifnum #2>\c@secnumdepth \else
-          \protect\numberline{\csname the#1\endcsname}%
-        \fi
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
         #7}}%
   \fi
   \@xsect{#5}}
@@ -2579,8 +2589,7 @@
 \def\addcontentsline#1#2#3{%
   \protected@write\@auxout
     {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble
-%<tate>\@temptokena{\rensuji{\thepage}}}%
-%<yoko>\@temptokena{\thepage}}%
+\@temptokena{\thepage}}%
     {\string\@writefile{#1}%
        {\protect\contentsline{#2}{#3}{\the\@temptokena}}}%
 }
@@ -2649,18 +2658,18 @@
 % \begin{macro}{\l@section}
 % sectionレベルの目次です。
 %    \begin{macrocode}
-\newcommand*{\l@section}[2]{%
-  \ifnum \c@tocdepth >\z@
-    \addpenalty{\@secpenalty}%
-    \addvspace{1.0em \@plus\p@}%
-    \begingroup
-      \parindent\z@ \rightskip\@pnumwidth \parfillskip-\rightskip
-      \leavevmode\bfseries
-      \setlength\@lnumwidth{1.5em}%
-      \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
-    \endgroup
-  \fi}
+% \newcommand*{\l@section}[2]{%
+%   \ifnum \c@tocdepth >\z@
+%     \addpenalty{\@secpenalty}%
+%     \addvspace{1.0em \@plus\p@}%
+%     \begingroup
+%       \parindent\z@ \rightskip\@pnumwidth \parfillskip-\rightskip
+%       \leavevmode\bfseries
+%       \setlength\@lnumwidth{1.5em}%
+%       \advance\leftskip\@lnumwidth \hskip-\leftskip
+%       #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
+%     \endgroup
+%   \fi}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -2998,6 +3007,12 @@
 \newcommand{\appendixname}{付 録}
 %    \end{macrocode}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@authormark}
+%    \begin{macrocode}
+\newcommand{\@authormark}{文 編集部}
+%    \end{macrocode}
 % \end{macro}
 %
 % 基本のスタイルは|\ps@headings|となる。

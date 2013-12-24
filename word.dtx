@@ -287,7 +287,7 @@
 %    \begin{macrocode}
 %<*geometry>
 \renewcommand{\normalsize}{%
-  \@setfontsize\normalsize{8.5}{18}%
+  \@setfontsize\normalsize{8}{18}%
   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
   \abovedisplayshortskip \z@ \@plus3\p@
   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
@@ -366,12 +366,12 @@
 % だけで、リスト環境とディスプレイ数式のパラメータは変更しません。
 %    \begin{macrocode}
 \newcommand{\scriptsize}{\@setfontsize\scriptsize\@vpt\@viiipt}
-\newcommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
-\newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
-\newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
-\newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
+\newcommand{\tiny}{\@setfontsize\tiny{3.5}\@vipt}
+\newcommand{\large}{\@setfontsize\large{9.5}{17}}
+\newcommand{\Large}{\@setfontsize\Large{10.5}{21}}
+\newcommand{\LARGE}{\@setfontsize\LARGE{13}{25}}
+\newcommand{\huge}{\@setfontsize\huge{18}{28}}
+\newcommand{\Huge}{\@setfontsize\Huge\@xxpt{33}}
 %</geometry>
 %    \end{macrocode}
 % \end{macro}
@@ -546,8 +546,7 @@
 % 基本組の行数です。
 %
 %    \begin{macrocode}
-%\setlength\textheight{210mm}
-\setlength\textheight{40\Cvs}
+\setlength\textheight{33\Cvs}
 \addtolength\textheight{\topskip}
 \@settopoint\textheight
 %    \end{macrocode}
@@ -1187,7 +1186,7 @@
 %    \begin{macrocode}
 \newcounter{part}
 \newcounter{chapter}
-\newcounter{section}[chapter]
+\newcounter{section}
 \newcounter{subsection}[section]
 \newcounter{subsubsection}[subsection]
 \newcounter{paragraph}[subsubsection]
@@ -1230,7 +1229,7 @@
 %    \begin{macrocode}
 \renewcommand{\thepart}{\@Roman\c@part}
 \renewcommand{\thechapter}{\@arabic\c@chapter}
-\renewcommand{\thesection}{\thechapter.\@arabic\c@section}
+\renewcommand{\thesection}{\@arabic\c@section}
 \renewcommand{\thesubsection}{\thesection.\@arabic\c@subsection}
 \renewcommand{\thesubsubsection}{%
    \thesubsection.\@arabic\c@subsubsection}
@@ -1321,9 +1320,9 @@
 % これらの初期値はそれぞれ|\thesection|、|\thesubsection|、|\thesubsubsection|に
 % スペースを付与したものとなっています。
 %    \begin{macrocode}
-\def\@seccnt@section{\thesection}
-\def\@seccnt@subsection{\thesubsection \hspace \Cwd}
-\def\@seccnt@subsubsection{\thesubsubsection \hspace \Cwd}
+\def\@seccnt@section{\thesection.}
+\def\@seccnt@subsection{\thesubsection. \hspace \Cwd}
+\def\@seccnt@subsubsection{\thesubsubsection. \hspace \Cwd}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1371,9 +1370,9 @@
 %
 % 見出しコマンドは通常、|\@startsection|と6つの引数で定義されています。
 %
+% \begin{macro}{\secdef}
 % |\secdef|マクロは、
 % 見出しコマンドを|\@startsection|を用いないで定義するときに使います。
-% このマクロは、2つの引数を持ちます。
 %
 % |\secdef|\meta{unstarcmds}\meta{starcmds}
 %
@@ -1388,6 +1387,14 @@
 %    \def\CMDA    [#1]#2{....} % \chapter[...]{...} の定義
 %    \def\CMDB    #1{....}     % \chapter*{...} の定義
 % \end{verbatim}
+%
+% |\secdef|は2つの引数を持ち、\file{latex.ltx}で次のように定義されています。
+%    \begin{macrocode}
+% \long\def\@xdblarg#1#2{#1[{#2}]{#2}}
+% \long\def\@dblarg#1{\kernel@ifnextchar[{#1}{\@xdblarg{#1}}}
+% \def\secdef#1#2{\@ifstar{#2}{\@dblarg{#1}}}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\@sect}
 % WORDクラスファイルでは、|\@startsection|が内部で呼び出している
@@ -1419,12 +1426,7 @@
   \fi
   \@tempskipa #5\relax
 %    \end{macrocode}
-% \meta{afterskip}が$0$に等しい、
-% あるいは$0$より大きいかどうかで処理を分岐します。
-% |\ifdem|には``greater than or equal''が使えないので、
-% \TeX の最小単位であるSP（スケールド・ポイント）を用いています。
-% つまり、ここで\meta{afterskip}（|\@tempskipa|）が
-% -0.5spなどということはありえません。
+% \meta{afterskip}が$0$より大きいかどうかで処理を分岐します。
 %
 % \begin{macro}{\@hangform}
 % \begin{macro}{\hangindent}
@@ -1470,7 +1472,7 @@
       \fi
       #7}%
 %    \end{macrocode}
-% \meta{afterskip}が負であった時。
+% \meta{afterskip}が負であった時の処理です。
 %    \begin{macrocode}
   \else
     \def\@svsechd{%
@@ -1592,11 +1594,12 @@
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
-  \secdef\@schapter\@chapter}
+  \@ifstar\@chapter\@schapter}
 %    \end{macrocode}
 % 
 % WORDのスタイルではchapterが各記事のタイトルという役割を果たすので、
 % |\chapter|は番号が付かず、|\chapter*|で番号を付けるようにしています。 
+% この時、|\|
 %
 % \end{macro}
 %
@@ -1670,7 +1673,7 @@
 \def\@makeschapterhead#1{\hbox{}%
   {\parindent\z@
    \raggedright
-   \reset@font\huge\bfseries
+   \reset@font\huge\gt\bfseries
    \leavevmode
    \setlength\@tempdima{\linewidth}%
    \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}}

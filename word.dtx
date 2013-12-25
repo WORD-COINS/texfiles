@@ -391,8 +391,7 @@
 %
 % \section{レイアウト}
 %
-% \subsection{用紙サイズの決定}
-%
+% \subsection{用紙サイズ}
 % 用紙サイズを指定します。
 % WORDはJIS B5を用います。
 % \begin{macro}{\paperheight}
@@ -401,12 +400,24 @@
 %<*book>
 \newcounter{@paper}
 \setcounter{@paper}{4}
+%</book>
+%<*geometry>
 \setlength\paperheight {257mm}
 \setlength\paperwidth  {182mm}
+%</geometry>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
+% \subsection{サイズクラスのロード}
+% サイズクラスのロードを行ないます。
+%    \begin{macrocode}
+%<*book>
+\ProcessOptions\relax
+\input{word.clo}
+%    \end{macrocode}
+%
+% \subsection{段落の形}
 % \begin{macro}{\columnsep}
 % \begin{macro}{\columnseprule}
 % |\columnsep|は、二段組のときの、左右（あるいは上下）の段間の幅です。
@@ -417,14 +428,6 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
-%
-% \subsection{サイズクラスのロード}
-% サイズクラスのロードを行ないます。
-%    \begin{macrocode}
-\ProcessOptions\relax
-\input{word.clo}
-%    \end{macrocode}
-% \subsection{段落の形}
 %
 % \begin{macro}{\lineskip}
 % \begin{macro}{\normallineskip}

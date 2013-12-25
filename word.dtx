@@ -1347,6 +1347,7 @@
 % クラスファイル定義の、この部分では、|\@startsection|と|\secdef|の
 % 二つの内部マクロを使います。これらの構文を次に示します。
 %
+% \begin{macro}{\@startsection}
 % |\@startsection|マクロは6つの引数と1つのオプション引数`*'を取ります。
 %
 %    |\@startsection|\meta{name}\meta{level}\meta{indent}^^A
@@ -1375,6 +1376,28 @@
 % 見出しコマンドは通常、|\@startsection|とこの6つの引数で定義されています。
 % |\@startsection|は内部で``|\section|''のように後に``*''が続かない場合と、
 % ``|\section*|''とでそれぞれ|\@sect|と|\@ssect|に分岐します。
+%
+%    \begin{macrocode}
+\def\@startsection#1#2#3#4#5#6{%
+  \if@noskipsec \leavevmode \fi
+  \par
+  \@tempskipa #4\relax
+  \@afterindenttrue
+  \ifdim \@tempskipa <\z@
+    \@tempskipa -\@tempskipa \@afterindentfalse
+  \fi
+  \if@nobreak
+    \everypar{}%
+  \else
+    \addpenalty\@secpenalty\addvspace\@tempskipa
+  \fi
+  \@ifstar
+    {\@ssect{#1}{#3}{#4}{#5}{#6}}%
+    {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+%    \end{macrocode}
+% 見出し修飾のため、\meta{name}も|\@ssect|へ渡すことにしています。
+%
+% \end{macro}
 %
 % \begin{macro}{\secdef}
 % |\secdef|マクロは、
@@ -1495,6 +1518,32 @@
         #7}}%
   \fi
   \@xsect{#5}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\@ssect}
+% これは|\section*|のように、
+% 見出し番号を付けない場合に呼び出されるマクロです。
+%
+%    \begin{macrocode}
+\def\@ssect#1#2#3#4#5#6{%
+  \@tempskipa #4\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      #5{%
+        \@nameuse{@head@prefix@#1}%
+        \@hangfrom{\hskip #2}%
+        \interlinepenalty \@M%
+        \@nameuse{@head@postfix@#1} #6%
+		\@@par}%
+    \endgroup
+  \else
+    \def\@svsechd{#5{%
+      \@nameuse{@head@prefix@#1}%
+      \hskip #2\relax%
+      \@nameuse{@head@postfix@#1} #6}}%
+  \fi
+  \@xsect{#4}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1694,7 +1743,7 @@
 %    \begin{macrocode}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
    {\Cvs}%
-   {-10pt}%
+   {10pt}%
    {\reset@font\LARGE\bfseries}}
 %    \end{macrocode}
 % \end{macro}

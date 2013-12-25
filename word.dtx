@@ -160,6 +160,7 @@
 % \subsection{両面、片面オプション}
 % twosideオプションが指定されると、両面印字出力に適した整形を行ないます。
 %    \begin{macrocode}
+\@twosidetrue
 \DeclareOption{oneside}{\@twosidefalse}
 \DeclareOption{twoside}{\@twosidetrue}
 %    \end{macrocode}
@@ -167,6 +168,7 @@
 % \subsection{表題ページオプション}
 % |@titlepage|が真の場合、表題を独立したページに出力します。
 %    \begin{macrocode}
+\@titlepagefalse
 \DeclareOption{titlepage}{\@titlepagetrue}
 \DeclareOption{notitlepage}{\@titlepagefalse}
 %    \end{macrocode}

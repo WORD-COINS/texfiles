@@ -1257,11 +1257,10 @@
 %
 % |\@chappos|の初期値は`|\postchaptername|'です。
 %
-% \begin{macro}{\prechaptername}
-% \begin{macro}{\postchaptername}
-% それぞれ|\chaptermark|の前と後に入る文字列です。
-% \end{macro}
-% \end{macro}
+%    \begin{macrocode}
+\newcommand{\@chapapp}{\prechaptername}
+\newcommand{\@chappos}{\postchaptername}
+%    \end{macrocode}
 %
 % \end{macro}
 % \end{macro}
@@ -1373,7 +1372,9 @@
 % \item[\meta{heading}] 新しい見出しの文字列です。
 % \end{description}
 %
-% 見出しコマンドは通常、|\@startsection|と6つの引数で定義されています。
+% 見出しコマンドは通常、|\@startsection|とこの6つの引数で定義されています。
+% |\@startsection|は内部で``|\section|''のように後に``*''が続かない場合と、
+% ``|\section*|''とでそれぞれ|\@sect|と|\@ssect|に分岐します。
 %
 % \begin{macro}{\secdef}
 % |\secdef|マクロは、
@@ -1496,7 +1497,7 @@
   \@xsect{#5}}
 %    \end{macrocode}
 % \end{macro}
-
+%
 % \subsubsection{partレベル}
 %
 % \begin{macro}{\part}
@@ -1599,12 +1600,11 @@
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
-  \@ifstar\@chapter\@schapter}
+  \@ifstar{\@dblarg{\@chapter}}{\@schapter}}
 %    \end{macrocode}
 % 
 % WORDのスタイルではchapterが各記事のタイトルという役割を果たすので、
 % |\chapter|は番号が付かず、|\chapter*|で番号を付けるようにしています。 
-% この時、|\|
 %
 % \end{macro}
 %
@@ -1636,20 +1636,19 @@
 % 
 %    \begin{macrocode}
 \def\@makechapterhead#1{\hbox{}%
-  \vskip2\Cvs
   {\parindent\z@
    \raggedright
-   \reset@font\huge\bfseries
+   \reset@font\huge\gt\bfseries
    \leavevmode
    \ifnum \c@secnumdepth >\m@ne
+     \setlength\@tempdima{\linewidth}%
      \if@mainmatter
        \setbox\z@\hbox{\@chapapp\thechapter\@chappos\hskip1zw}%
        \addtolength\@tempdima{-\wd\z@}%
-       \unhbox\z@\nobreak
-     \else 
-       \setlength\@tempdima{\linewidth}%
-	   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}%
-     \fi
+	 \else
+	   \setbox\z@\hbox{}%
+	 \fi
+	 \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss\unhbox\z@\nobreak#1\hss}}%
    \else
      #1\relax
    \fi}\nobreak\vskip\Cvs
@@ -1695,7 +1694,7 @@
 %    \begin{macrocode}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
    {\Cvs}%
-   {\z@}%
+   {-10pt}%
    {\reset@font\LARGE\bfseries}}
 %    \end{macrocode}
 % \end{macro}

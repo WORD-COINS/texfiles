@@ -364,13 +364,16 @@
 % \begin{macro}{\Huge}
 % これらは先ほどのマクロよりも簡単です。これらはフォントサイズを変更する
 % だけで、リスト環境とディスプレイ数式のパラメータは変更しません。
+%
+% |\tiny|が|\normalsize|の半分、|\LARGE|が1.5倍、
+% |\huge|が2倍となるようにしてある。
 %    \begin{macrocode}
 \newcommand{\scriptsize}{\@setfontsize\scriptsize\@vpt\@viiipt}
-\newcommand{\tiny}{\@setfontsize\tiny{3.5}\@vipt}
+\newcommand{\tiny}{\@setfontsize\tiny{4}\@vipt}
 \newcommand{\large}{\@setfontsize\large{9.5}{17}}
 \newcommand{\Large}{\@setfontsize\Large{10.5}{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE{13}{25}}
-\newcommand{\huge}{\@setfontsize\huge{18}{28}}
+\newcommand{\LARGE}{\@setfontsize\LARGE{12}{25}}
+\newcommand{\huge}{\@setfontsize\huge{16}{28}}
 \newcommand{\Huge}{\@setfontsize\Huge\@xxpt{33}}
 %</geometry>
 %    \end{macrocode}
@@ -1679,7 +1682,7 @@
    \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}}
    \nobreak\vskip\Cvs
    \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
-   \vskip\Cvs}
+   \vskip.5\Cvs}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -3014,7 +3017,7 @@
 %
 % \begin{macro}{\@authormark}
 %    \begin{macrocode}
-\newcommand{\@authormark}{文 編集部}
+\newcommand{\@authormark}{文　編集部}
 %    \end{macrocode}
 % \end{macro}
 %

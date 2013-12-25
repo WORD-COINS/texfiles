@@ -1298,6 +1298,8 @@
 % \begin{macro}{\@head@postfix@subsection}
 % \begin{macro}{\@head@prefix@subsubsection}
 % \begin{macro}{\@head@postfix@subsubsection}
+% \begin{macro}{\@head@prefix@paragraph}
+% \begin{macro}{\@head@postfix@paragraph}
 % これらは見出しの前後の修飾です。
 % \pstyle{pretfix}が前を表わし、\pstyle{postfix}が後を表わします。
 % WORDクラスファイルは、一太郎との互換性を維持するため特に修飾を行いません。
@@ -1310,7 +1312,11 @@
 \let\@head@prefix@subsubsection\@empty
 \let\@head@prefix@subsubsection\@empty
 \let\@head@postfix@subsubsection\@empty
+\let\@head@prefix@paragraph\@empty
+\let\@head@postfix@paragraph\@empty
 %    \end{macrocode}
+% \end{macro}
+% \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}
@@ -1321,13 +1327,16 @@
 % \begin{macro}{\@seccnt@section}
 % \begin{macro}{\@seccnt@subsection}
 % \begin{macro}{\@seccnt@subsubsection}
+% \begin{macro}{\@seccnt@paragraph}
 % これらの初期値はそれぞれ|\thesection|、|\thesubsection|、|\thesubsubsection|に
 % スペースを付与したものとなっています。
 %    \begin{macrocode}
 \def\@seccnt@section{\thesection.}
 \def\@seccnt@subsection{\thesubsection. \hspace \Cwd}
 \def\@seccnt@subsubsection{\thesubsubsection. \hspace \Cwd}
+\def\@seccnt@paragraph\@empty
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}

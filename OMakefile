@@ -15,7 +15,7 @@ $(DOCUMENT) : % : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 	$(DVIPDFM) $*
 
-.DEFAULT: $(TARGETS) $(DOCUMENT)
+.DEFAULT: $(TARGETS)
 
 .PHONY: clean
 

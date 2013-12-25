@@ -1686,6 +1686,9 @@
 %
 % また、|\@topnum|をゼロにして、
 % 章見出しの上にトップフロートが置かれないようにしています。
+%
+% WORDのスタイルではchapterが各記事のタイトルという役割を果たすので、
+% |\chapter|は番号が付かず、|\chapter*|で番号を付けるようにしています。 
 %    \begin{macrocode}
 \newcommand{\chapter}{%
   \if@openright\cleardoublepage\else\clearpage\fi
@@ -1694,10 +1697,6 @@
   \@afterindenttrue
   \@ifstar{\@dblarg{\@chapter}}{\@schapter}}
 %    \end{macrocode}
-% 
-% WORDのスタイルではchapterが各記事のタイトルという役割を果たすので、
-% |\chapter|は番号が付かず、|\chapter*|で番号を付けるようにしています。 
-%
 % \end{macro}
 %
 % \begin{macro}{\@chapter}

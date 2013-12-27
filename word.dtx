@@ -1781,12 +1781,12 @@
 % \subsubsection{下位レベルの見出し}
 %
 % \begin{macro}{\section}
-% |\LARGE\bfseries|で出力をします。
+% |\LARGE\gt\bfseries|で出力をします。
 %    \begin{macrocode}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
-   {\Cvs}%
    {\z@}%
-   {\reset@font\LARGE\bfseries}}
+   {\z@}%
+   {\reset@font\LARGE\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1796,28 +1796,28 @@
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
    {\z@}%
    {\z@}%
-   {\reset@font\Large\bfseries}}
+   {\reset@font\Large\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\subsubsection}
-% |\large\bfseries|で出力をします。
+% |\large\gt\bfseries|で出力をします。
 %    \begin{macrocode}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
    {\z@}%
    {\z@}%
-   {\reset@font\large\bfseries}}
+   {\reset@font\large\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\paragraph}
-% |\normalsize\bfseries|で出力をします。
+% |\normalsize\gt\bfseries|で出力をします。
 % 見出しの後ろで改行されません。
 %    \begin{macrocode}
 \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
    {\z@}%
    {\z@}%
-   {\reset@font\normalsize\bfseries}}
+   {\reset@font\normalsize\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %

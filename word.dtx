@@ -1856,8 +1856,10 @@
    \raggedright
    \reset@font\huge\gt\bfseries
    \leavevmode
+   \setbox\z@\vtop{%
+     \setlength\baselineskip{.7\baselineskip} #1}%
    \setlength\@tempdima{\linewidth}%
-   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}}
+   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss \box\z@\hss}}}
    \par \nobreak \vskip\Cvs
    \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
    \vskip.5\Cvs}

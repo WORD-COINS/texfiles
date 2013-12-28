@@ -1839,8 +1839,7 @@
 %
 %    \begin{macrocode}
 \def\@schapter#1{%
-  \@makeschapterhead{#1}\@afterheading
-}
+  \@makeschapterhead{#1}\@afterheading}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1857,7 +1856,7 @@
    \leavevmode
    \setlength\@tempdima{\linewidth}%
    \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss #1\hss}}}
-   \nobreak\vskip\Cvs
+   \par \nobreak \vskip\Cvs
    \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
    \vskip.5\Cvs}
 %    \end{macrocode}

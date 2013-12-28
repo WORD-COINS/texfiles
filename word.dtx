@@ -3042,7 +3042,7 @@
 %    \begin{macrocode}
 \renewcommand{\footnoterule}{%
   \kern-3\p@
-  \hrule width .4\columnwidth
+  \hrule width\textwidth
   \kern 2.6\p@}
 %    \end{macrocode}
 % \end{macro}
@@ -3064,7 +3064,7 @@
 %
 %    \begin{macrocode}
 \renewcommand{\@makefnmark}{%
-  \raise.85pt\hbox{*}\textsuperscript{\@thefnmark}\hskip-.01\Cwd}
+  \raise.15\Cht\hbox{*}\textsuperscript{\@thefnmark}\hskip.1\Cwd}
 \newcommand\@makefntext[1]{\parindent 1em
   \baselineskip = 0.75\baselineskip
   \noindent\hbox to 1.8em{\hss\@makefnmark}#1}

@@ -246,10 +246,32 @@
 \DeclareOption{pagenum}{%
   \@pagenumbertrue
 }
+%    \end{macrocode}
+%
+%
+%
+% \section{フォント}
+%
+% \subsection{OTFパッケージ}
+% OTFパッケージをロードします。
+% ここで予め読んでおくことで、|\Cht|などの大きさを正確しにします。
+%
+%    \begin{macrocode}
+\ProcessOptions\relax
+\RequirePackage[multi, deluxe, bold]{otf}
+%    \end{macrocode}
+%
+% \subsection{Timesフォントの使用}
+% WORDでは英字にTimesフォントを用います。
+% そのため予め\pstyle{txfonts}パッケージをロードします。
+%
+%    \begin{macrocode}
+\RequirePackage{txfonts}
+\RequirePackage[T1]{fontenc}
 %</book>
 %    \end{macrocode}
 %
-% \section{フォント}
+% \subsection{フォントサイズ}
 %
 % ここでは、\LaTeX{}のフォントサイズコマンドの定義をしています。
 % フォントサイズコマンドの定義は、次のコマンドを用います。
@@ -413,7 +435,6 @@
 % サイズクラスのロードを行ないます。
 %    \begin{macrocode}
 %<*book>
-\ProcessOptions\relax
 \input{word.clo}
 %    \end{macrocode}
 %

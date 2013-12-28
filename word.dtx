@@ -1383,10 +1383,52 @@
 % 多段組などでもベースラインを維持する出来ます。
 %
 % \begin{macro}{\linespace}
-% |\linespace|は2つの引数\meta{number}と\meta{body}を受け取り、
+% |\linespace|は次のように用います。
+%
+% |\linespace|[\meta{number}]\meta{body}
+%
+% |\linespace|は2つの引数\meta{number}（省略可能）と\meta{body}を受け取り、
 % 行送りの\meta{number}倍のボックスを確保し、
 % 縦のスペースを上下均等にしてその中に\meta{body}を挿入します。
 %
+% \meta{number}が省略された場合は、
+% \meta{body}が入る最小の行取りを行います。
+%
+%    \begin{macrocode}
+\newcount\c@linespace
+\def\linespace{%
+  \@ifnextchar[%
+    {\@linespace}%
+    {\begingroup
+      \c@linespace = 1%
+      \@linespace@auto}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@linespace@auto}
+% \meta{number}が省略された場合は1から順に、
+% \meta{body}が入る大きさまで行取りを行います。
+% 入る大きさが確保された所で、|\@linespace|へその行送りを渡します。
+%
+%    \begin{macrocode}
+\def\@linespace@auto#1{%
+  \setbox\@tempboxa\vbox{\noindent#1}
+  \setlength\@tempdima\Cvs%
+  \multiply\@tempdima\c@linespace%
+  \setlength\@tempdimb{\ht\@tempboxa}
+  \addtolength\@tempdimb{\dp\@tempboxa}
+
+  \ifdim \@tempdima>\@tempdimb%
+    \@linespace[\c@linespace]{#1}%
+    \endgroup%
+  \else%
+    \advance\c@linespace1%
+    \expandafter\@linespace@auto\expandafter{#1\expandafter}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@linespace}
 % まず現在の段落を終了し、
 % |\@tempdima|に行送りの\meta{number}倍した長さを代入します。
 %
@@ -1421,7 +1463,7 @@
 %
 % という内訳です。
 %    \begin{macrocode}
-\long\def\linespace#1#2{%
+\long\def\@linespace[#1]#2{%
   \par\noindent%
   \setlength\@tempdima\Cvs%
   \multiply\@tempdima#1%

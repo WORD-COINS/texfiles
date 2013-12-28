@@ -1413,28 +1413,30 @@
 % なので|\vtop|の外、つまり本文部分には一切のスペースがありません。
 % このスペースは\meta{number}分の行送りから2行分引いた量に等しくなります。
 % 2行とは、
+%
 % \begin{itemize}
 %   \item マクロ実行時に挿入よる改段落
 %   \item マクロ終了時に挿入する改段落
 % \end{itemize}
+%
 % という内訳です。
 %    \begin{macrocode}
 \long\def\linespace#1#2{%
   \par\noindent%
   \setlength\@tempdima\Cvs%
-  \multiply\@tempdima by #1%
-  \advance\@tempdima by -\Cvs%
-  \advance\@tempdima by -\Cht%
-  \advance\@tempdima by \Cdp%
+  \multiply\@tempdima#1%
+  \advance\@tempdima-\Cvs%
+  \advance\@tempdima-\Cht%
+  \advance\@tempdima\Cdp%
   \setbox\z@\vbox{\noindent #2}%
-  \advance\@tempdima by -\ht\z@%
-  \advance\@tempdima by -\dp\z@%
+  \advance\@tempdima-\ht\z@%
+  \advance\@tempdima-\dp\z@%
   \vtop to\z@{%
     \vskip.5\@tempdima%
     \box\z@\vss}
   \setlength\@tempdima\Cvs%
-  \multiply\@tempdima by #1%
-  \advance\@tempdima by -2\Cvs%
+  \multiply\@tempdima#1%
+  \advance\@tempdima-2\Cvs%
   \vspace\@tempdima%
   \par\nobreak}
 %    \end{macrocode}

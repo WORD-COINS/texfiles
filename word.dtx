@@ -1376,6 +1376,70 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsubsection{行取り}
+% 多段組にした時などに|\normalsize|以外の大きさが出現してしまうと、
+% 各段組のベースラインが揃わなくなってしまいます。
+% そこで``行取り''といって、行送りの整数倍の高さにすることで、
+% 多段組などでもベースラインを維持する出来ます。
+%
+% \begin{macro}{\linespace}
+% |\linespace|は2つの引数\meta{number}と\meta{body}を受け取り、
+% 行送りの\meta{number}倍のボックスを確保し、
+% 縦のスペースを上下均等にしてその中に\meta{body}を挿入します。
+%
+% まず現在の段落を終了し、
+% |\@tempdima|に行送りの\meta{number}倍した長さを代入します。
+%
+% ここでは取るべき余白について考えます。
+% 単純に行送りの\meta{number}倍ではなく、正確には
+% 行送りの$\meta{number} - 1$倍と最後のベースラインから
+% 次の行の頭までの距離を足したものとなります。
+% それを次のように計算します。
+%
+% これで本文\meta{number}行分のスペースが正しく得られます。
+% 次に、表示する\meta{body}の高さを求めて、
+% それを先ほどの計算で求めたスペースから引くことで、
+% 余白が求められます。
+%
+% |\vtop|は\TeX{}のプリミティブです。
+% |\vbox|は末尾の行（箱）のベースラインを外側の箱のベースラインに合せるので、
+% 箱が上へ伸びてゆきます。
+% 逆に|\vtop|は箱の先頭の行（箱）のベースラインを外側の箱のベースラインに合わせるので、
+% 箱が下へ伸びてゆきます。
+% 今回は|\vskip|で箱の上余白を確保し、
+% \meta{body}を下へ伸ばしてゆきます。
+%
+% 今まで計算で求めた余白は、全て|\vtop|の中で消化されました。
+% なので|\vtop|の外、つまり本文部分には一切のスペースがありません。
+% このスペースは\meta{number}分の行送りから2行分引いた量に等しくなります。
+% 2行とは、
+% \begin{itemize}
+%   \item マクロ実行時に挿入よる改段落
+%   \item マクロ終了時に挿入する改段落
+% \end{itemize}
+% という内訳です。
+%    \begin{macrocode}
+\long\def\linespace#1#2{%
+  \par\noindent%
+  \setlength\@tempdima\Cvs%
+  \multiply\@tempdima by #1%
+  \advance\@tempdima by -\Cvs%
+  \advance\@tempdima by -\Cht%
+  \advance\@tempdima by \Cdp%
+  \setbox\z@\vbox{\noindent #2}%
+  \advance\@tempdima by -\ht\z@%
+  \advance\@tempdima by -\dp\z@%
+  \vtop to\z@{%
+    \vskip.5\@tempdima%
+    \box\z@\vss}
+  \setlength\@tempdima\Cvs%
+  \multiply\@tempdima by #1%
+  \advance\@tempdima by -2\Cvs%
+  \vspace\@tempdima%
+  \par\nobreak}
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsubsection{ボックスの組み立て}
 % クラスファイル定義の、この部分では、|\@startsection|と|\secdef|の
 % 二つの内部マクロを使います。これらの構文を次に示します。

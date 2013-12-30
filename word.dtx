@@ -1413,7 +1413,7 @@
 
   \setlength\@tempdima{\ht\@tempboxa}
   \addtolength\@tempdima{\dp\@tempboxa}
-  \def\@ret{%
+  \def\@rec{%
     \setlength\@tempdimb\Cvs%
     \multiply\@tempdimb\c@linespace%
 
@@ -1421,10 +1421,10 @@
       \def\@k{\@linespace[\c@linespace]{\box\@tempboxa}}
     \else
       \advance\c@linespace1%
-      \def\@k{\@ret}
+      \def\@k{\@rec}
     \fi
     \@k}
-  \@ret%
+  \@rec%
 }
 
 %    \end{macrocode}

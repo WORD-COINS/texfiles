@@ -1395,13 +1395,8 @@
 % \meta{body}が入る最小の行取りを行います。
 %
 %    \begin{macrocode}
-\newcount\c@linespace
 \def\linespace{%
-  \@ifnextchar[%
-    {\@linespace}%
-    {\begingroup
-      \c@linespace = 1%
-      \@linespace@auto}}
+  \@ifnextchar[\@linespace\@linespace@auto}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1411,20 +1406,27 @@
 % 入る大きさが確保された所で、|\@linespace|へその行送りを渡します。
 %
 %    \begin{macrocode}
+\newcount\c@linespace
 \long\def\@linespace@auto#1{%
-  \setbox\@tempboxa\vbox{\noindent#1}
-  \setlength\@tempdima\Cvs%
-  \multiply\@tempdima\c@linespace%
-  \setlength\@tempdimb{\ht\@tempboxa}
-  \addtolength\@tempdimb{\dp\@tempboxa}
+  \c@linespace = 1%
+  \setbox\@tempboxa\vbox{#1}
 
-  \ifdim \@tempdima>\@tempdimb%
-    \@linespace[\c@linespace]{#1}%
-    \endgroup%
-  \else%
-    \advance\c@linespace1%
-    \expandafter\@linespace@auto\expandafter{#1\expandafter}%
-  \fi}
+  \setlength\@tempdima{\ht\@tempboxa}
+  \addtolength\@tempdima{\dp\@tempboxa}
+  \def\@ret{%
+    \setlength\@tempdimb\Cvs%
+    \multiply\@tempdimb\c@linespace%
+
+    \ifdim \@tempdimb>\@tempdima%
+      \def\@k{\@linespace[\c@linespace]{\box\@tempboxa}}
+    \else
+      \advance\c@linespace1%
+      \def\@k{\@ret}
+    \fi
+    \@k}
+  \@ret%
+}
+
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1470,7 +1472,7 @@
   \advance\@tempdima-\Cvs%
   \advance\@tempdima-\Cht%
   \advance\@tempdima\Cdp%
-  \setbox\z@\vbox{\noindent #2}%
+  \setbox\z@\vbox{#2}%
   \advance\@tempdima-\ht\z@%
   \advance\@tempdima-\dp\z@%
   \vtop to\z@{%

@@ -1411,7 +1411,7 @@
 % 入る大きさが確保された所で、|\@linespace|へその行送りを渡します。
 %
 %    \begin{macrocode}
-\def\@linespace@auto#1{%
+\long\def\@linespace@auto#1{%
   \setbox\@tempboxa\vbox{\noindent#1}
   \setlength\@tempdima\Cvs%
   \multiply\@tempdima\c@linespace%

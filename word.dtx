@@ -1900,10 +1900,12 @@
    \raggedright
    \reset@font\huge\gt\bfseries
    \leavevmode
-   \setbox\z@\vtop{%
-     \setlength\baselineskip{.7\baselineskip} #1}%
    \setlength\@tempdima{\linewidth}%
-   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss \box\z@\hss}}}
+   \setbox\z@\vtop{\centering
+     \setlength\baselineskip{.7\baselineskip} #1}%
+   \vtop{\hsize\@tempdima
+     \centering
+     \box\z@}}
    \par \nobreak \vskip\Cvs
    \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
    \vskip.5\Cvs}

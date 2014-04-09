@@ -7,6 +7,10 @@ DOCUMENT = word.pdf
 TEXDTX = word.dtx
 TEXINS = word.ins
 
+.DEFAULT: $(TARGETS)
+
+.PHONY: clean all
+
 $(TARGETS) : % : $(TEXINS) $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 
@@ -15,9 +19,8 @@ $(DOCUMENT) : % : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 	$(DVIPDFM) $*
 
-.DEFAULT: $(TARGETS)
+all: $(TARGETS) $(DOCUMENT)
 
-.PHONY: clean
 
 clean:
 	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out

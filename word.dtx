@@ -46,7 +46,7 @@
 \usepackage[dvipdfmx, colorlinks]{hyperref}
 \usepackage{pxjahyper}
 \def\fileversion{v1.0}
-\def\filedate{2013/12/27}
+\def\filedate{\today}
 \title{WORD Standard Class\space\fileversion}
 \author{Hikaru \sc{Yoshimura}\and Kazuhiko \sc{Sakaguchi}}
 \date{\filedate}
@@ -1410,23 +1410,22 @@
 %    \begin{macrocode}
 \newcount\c@linespace
 \long\def\@linespace@auto#1{%
-  \c@linespace = 1%
-  \setbox\@tempboxa\vbox{#1}
-
-  \setlength\@tempdima{\ht\@tempboxa}
-  \addtolength\@tempdima{\dp\@tempboxa}
+  \c@linespace = 1
+  \setbox\@tempboxa\vbox{#1}%
+  \setlength\@tempdima{\ht\@tempboxa}%
+  \addtolength\@tempdima{\dp\@tempboxa}%
   \def\@rec{%
-    \setlength\@tempdimb\Cvs%
-    \multiply\@tempdimb\c@linespace%
+    \setlength\@tempdimb\Cvs
+    \multiply\@tempdimb\c@linespace
 
-    \ifdim \@tempdimb>\@tempdima%
-      \def\@k{\@linespace[\c@linespace]{\box\@tempboxa}}
+    \ifdim \@tempdimb>\@tempdima
+      \def\@k{\@linespace[\c@linespace]{\box\@tempboxa}}%
     \else
-      \advance\c@linespace1%
-      \def\@k{\@rec}
+      \advance\c@linespace1
+      \def\@k{\@rec}%
     \fi
-    \@k}
-  \@rec%
+    \@k}%
+  \@rec
 }
 
 %    \end{macrocode}
@@ -1468,22 +1467,44 @@
 % という内訳です。
 %    \begin{macrocode}
 \long\def\@linespace[#1]#2{%
-  \par\noindent%
-  \setlength\@tempdima\Cvs%
-  \multiply\@tempdima#1%
-  \advance\@tempdima-\Cvs%
-  \advance\@tempdima-\Cht%
-  \advance\@tempdima\Cdp%
+  \par
+%    \end{macrocode}
+% まず、行取りに必要な長さを計算します。
+%    \begin{macrocode}
+  \setlength\@tempdima\Cvs
+  \multiply\@tempdima#1
+  \advance\@tempdima-\Cvs
+  \advance\@tempdima-\Cht
+  \advance\@tempdima\Cdp
   \setbox\z@\vbox{#2}%
-  \advance\@tempdima-\ht\z@%
-  \advance\@tempdima-\dp\z@%
+  \advance\@tempdima-\ht\z@
+  \advance\@tempdima-\dp\z@
+%    \end{macrocode}
+% この後、|\ht\z@|+|\dp\z@|の分だけ|\vspace|してから
+% |\allowbreak|して、|#2|が現在のページに収まらない場合に対処します。
+% そして、-|\ht\z@|-|\dp\z@|だけ|\vspace|して先ほどの
+% |\vspace|を打ち消します。
+%    \begin{macrocode}
+  \vspace{\ht\z@}%
+  \vspace{\dp\z@}%
+  \allowbreak
+  \vspace{-\ht\z@}%
+  \vspace{-\dp\z@}%
+%    \end{macrocode}
+% コンテンツを表示します。
+% このとき、|\vtop|の後に|\quad|を使って
+% 水平モードへ移行します。
+%    \begin{macrocode}
   \vtop to\z@{%
-    \vskip.5\@tempdima%
-    \box\z@\vss}
-  \setlength\@tempdima\Cvs%
-  \multiply\@tempdima#1%
-  \advance\@tempdima-2\Cvs%
-  \vspace\@tempdima%
+    \vskip.5\@tempdima
+    \box\z@\vss}\quad
+%    \end{macrocode}
+% 行取り分の全体を計算して、その分を|\vspace|で移動します。
+%    \begin{macrocode}
+  \setlength\@tempdima\Cvs
+  \multiply\@tempdima#1
+  \advance\@tempdima-2\Cvs
+  \vspace\@tempdima
   \par\nobreak}
 %    \end{macrocode}
 % \end{macro}

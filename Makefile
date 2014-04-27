@@ -1,20 +1,28 @@
 LATEX     = platex
 LATEXFLAG = --kanji=utf8
-DVIPDFM = dvipdfmx
+DVIPDFM   = dvipdfmx
+MAKE      = make
 
-DOCUMENT = word.pdf
-TARGETS  = word.cls word.clo
+SRC = word
 
-TEXDTX = word.dtx
-TEXINS = word.ins
+TARGETS  = $(addsuffix .cls, $(SRC)) $(addsuffix .clo, $(SRC))
+DOCUMENT = $(addsuffix .pdf, $(SRC))
+TEXDTX   = $(addsuffix .dtx, $(SRC))
+TEXINS   = $(addsuffix .ins, $(SRC))
 
-$(TARGETS) : % : $(TEXINS) $(TEXDTX)
+.PHONY: all clean
+
+all:
+	$(MAKE) $(TARGETS)
+	$(MAKE) $(DOCUMENT)
+
+$(TARGETS) : $(TEXINS) $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 
-$(DOCUMENT) : % : $(TEXDTX)
+$(DOCUMENT) : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 	$(LATEX) $(LATEXFLAG) $<
-	$(DVIPDFM) $*
+	$(DVIPDFM) $(SRC)
 
 clean:
 	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out *.fls

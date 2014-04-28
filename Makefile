@@ -22,7 +22,7 @@ $(TARGETS) : $(TEXINS) $(TEXDTX)
 $(DOCUMENT) : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 	$(LATEX) $(LATEXFLAG) $<
-	$(DVIPDFM) $(SRC)
+	$(DVIPDFM) $*
 
 clean:
 	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out *.fls

@@ -2,6 +2,7 @@ LATEX     = platex
 LATEXFLAG = --kanji=utf8
 DVIPDFM   = dvipdfmx
 MAKE      = make
+YES       = yes
 
 SRC = word
 
@@ -13,8 +14,8 @@ TEXINS   = $(addsuffix .ins, $(SRC))
 .PHONY: all clean
 
 all:
-	$(MAKE) $(TARGETS)
-	$(MAKE) $(DOCUMENT)
+	$(YES) | $(MAKE) $(TARGETS)
+	$(YES) | $(MAKE) $(DOCUMENT)
 
 $(TARGETS) : $(TEXINS) $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<

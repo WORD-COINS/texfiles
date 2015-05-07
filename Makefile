@@ -1,7 +1,11 @@
 LATEX    ?= platex
 ifeq ($(LATEX), platex)
 LATEXFLAG ?= --kanji=utf8
+else
+LATEXFLAG =
 endif
+LATEXFLAG += -halt-on-error
+
 
 DVIPDFM   = dvipdfmx
 MAKE      = make

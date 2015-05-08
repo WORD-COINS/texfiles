@@ -1,4 +1,12 @@
-\input docstrip
-\generate{\file{word-lua.cls}{\from{word-lua.dtx}{book}}}
-\generate{\file{word-lua.clo}{\from{word-lua.dtx}{geometry}}}
+%
+% ltjsclasses.ins
+%
+
+\input docstrip.tex
+\keepsilent
+% \generateFile{ltjsarticle.cls}{f}{\from{word-lua.dtx}{article}}
+\generateFile{word-lua.cls}{f}{\from{word-lua.dtx}{book}}
+% \generateFile{ltjspf.cls}{f}{\from{word-lua.dtx}{jspf}}
+% \generateFile{ltjskiyou.cls}{f}{\from{word-lua.dtx}{kiyou}}
+
 \endbatchfile

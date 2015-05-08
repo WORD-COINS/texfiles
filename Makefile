@@ -23,7 +23,7 @@ TEXINS   = $(addsuffix .ins, $(SRC))
 
 all:
 	$(YES) | $(MAKE) $(TARGETS)
-	$(YES) | $(MAKE) $(DOCUMENT)
+#	$(YES) | $(MAKE) $(DOCUMENT)
 
 $(TARGETS) : $(TEXINS) $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<

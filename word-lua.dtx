@@ -38,7 +38,7 @@
 %<*driver>
 \documentclass{ltjsarticle}
 \usepackage{doc}
-\usepackage[kozuka-pr6n]{luatexja-preset}
+\usepackage{luatexja-preset}
 \usepackage{unicode-math}
 \setmathfont{Latin Modern Math}
 \usepackage[unicode]{hyperref}
@@ -46,6 +46,10 @@
 	unicode,%
 	colorlinks=true,%
 	pdftitle={WORD LuaLaTeX}
+}
+\newcommand{\WORD}{%
+	{{V\kern-.45emV}}\kern-.1em■%
+	\kern-.81em{{\textcolor{white}{O}RD}}%
 }
 \addtolength{\textwidth}{-1in}
 \addtolength{\evensidemargin}{1in}
@@ -64,7 +68,7 @@
 %    \end{macrocode}
 %
 % \fi
-% \title{WORD Lua\LaTeX{} Class\space\fileversion}
+% \title{\WORD{} Lua\LaTeX{} Class\space\fileversion}
 % \author{Satoru \sc{Kawahara}}
 %
 % \date{\filedate}
@@ -155,74 +159,14 @@
 %
 % \paragraph{用紙サイズ}
 %
-% JISやISOのA0判は面積 $1\,\mathrm{m}^2$，縦横比 $1:\sqrt{2}$
-% の長方形の辺の長さを mm 単位に切り捨てたものです。
-% これを基準として順に半截しては mm 単位に切り捨てたものがA1，A2，…です。
+% 用紙サイズを指定します｡
 %
-% B判はJISとISOで定義が異なります。
-% JISではB0判の面積が $1.5\,\mathrm{m}^2$ ですが，
-% ISOではB1判の辺の長さがA0判とA1判の辺の長さの幾何平均です。
-% したがってISOのB0判は $1000\,\mathrm{mm} \times 1414\,\mathrm{mm}$ です。
-% このため，\LaTeXe の \texttt{b5paper}
-% は $250\,\mathrm{mm} \times 176\,\mathrm{mm}$ ですが，
-% \pLaTeXe の \texttt{b5paper}
-% は $257\,\mathrm{mm} \times 182\,\mathrm{mm}$ になっています。
-% ここでは\pLaTeXe にならってJISに従いました。
-% 
-% WORDは \texttt{b5j} です。
-%
-% \texttt{b5var}（B5変形，182mm×230mm），
-% \texttt{a4var}（A4変形，210mm×283mm）を追加しました。
+% WORDは \texttt{JIS B5} です。
 %
 %    \begin{macrocode}
-\DeclareOption{a3paper}{%
-  \setlength\paperheight {420mm}%
-  \setlength\paperwidth  {297mm}}
-\DeclareOption{a4paper}{%
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5paper}{%
-  \setlength\paperheight {210mm}%
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{a6paper}{%
-  \setlength\paperheight {148mm}%
-  \setlength\paperwidth  {105mm}}
-\DeclareOption{b4paper}{%
-  \setlength\paperheight {364mm}%
-  \setlength\paperwidth  {257mm}}
-\DeclareOption{b5paper}{%
-  \setlength\paperheight {257mm}%
-  \setlength\paperwidth  {182mm}}
-\DeclareOption{b6paper}{%
-  \setlength\paperheight {182mm}%
-  \setlength\paperwidth  {128mm}}
-\DeclareOption{a4j}{%
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5j}{%
-  \setlength\paperheight {210mm}%
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{b4j}{%
-  \setlength\paperheight {364mm}%
-  \setlength\paperwidth  {257mm}}
 \DeclareOption{b5j}{%
   \setlength\paperheight {257mm}%
   \setlength\paperwidth  {182mm}}
-\DeclareOption{a4var}{%
-  \setlength\paperheight {283mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{b5var}{%
-  \setlength\paperheight {230mm}%
-  \setlength\paperwidth  {182mm}}
-\DeclareOption{letterpaper}{%
-  \setlength\paperheight {11in}%
-  \setlength\paperwidth  {8.5in}}
-\DeclareOption{legalpaper}{%
-  \setlength\paperheight {14in}%
-  \setlength\paperwidth  {8.5in}}
-\DeclareOption{executivepaper}{%
-  \setlength\paperheight {10.5in}%
-  \setlength\paperwidth  {7.25in}}
 %    \end{macrocode}
 %
 % \paragraph{横置き}
@@ -353,7 +297,7 @@
 % \texttt{openany} で偶数ページからでも始まるようになります。
 %
 %    \begin{macrocode}
-%<book>\DeclareOption{openright}{\@openrighttrue}
+%<book>\DeclareOption{openright}{\@openrightfalse}
 %<book>\DeclareOption{openany}{\@openrightfalse}
 %    \end{macrocode}
 %
@@ -1333,93 +1277,32 @@
 % ことにしました。
 %
 %    \begin{macrocode}
-\setlength\topskip{10\p@}
-\if@slide
-  \setlength\headheight{0\p@}
-\else
-  \setlength\headheight{2\topskip}
-\fi
+\setlength\topskip{\Cht}
+  \setlength\headheight{20\p@}
 %    \end{macrocode}
 % \end{macro}
-% \end{macro}
-%
-% \begin{macro}{\footskip}
-%
-% |\footskip| は本文領域下端とフッタ下端との距離です。
-% 標準クラスファイルでは，book で0.35in（約8.89mm），
-% book 以外で30pt（約10.54mm）となっていましたが，
-% ここではA4判のときちょうど1cmとなるように，
-% |\paperheight| の0.03367倍（最小 |\baselineskip|）としました。
-% 書籍については，フッタは使わないことにして，ゼロにしました。
-%
-%    \begin{macrocode}
-%<*article|kiyou>
-\if@slide
-  \setlength\footskip{0pt}
-\else
-  \setlength\footskip{0.03367\paperheight}
-  \ifdim\footskip<\baselineskip
-    \setlength\footskip{\baselineskip}
-  \fi
-\fi
-%</article|kiyou>
-%<jspf>\setlength\footskip{9mm}
-%<*book>
-\if@report
-  \setlength\footskip{0.03367\paperheight}
-  \ifdim\footskip<\baselineskip
-    \setlength\footskip{\baselineskip}
-  \fi
-\else
-  \setlength\footskip{0pt}
-\fi
-%</book>
-%    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\headsep}
 %
 % |\headsep| はヘッダ下端と本文領域上端との距離です。
-% 元は book で18pt（約6.33mm），
-% それ以外で25pt（約8.79mm）になっていました。
-% ここでは article は |\footskip| $-$ |\topskip| としました。
 %
 %    \begin{macrocode}
-%<*article>
-\if@slide
-  \setlength\headsep{0\p@}
-\else
-  \setlength\headsep{\footskip}
-  \addtolength\headsep{-\topskip}
-\fi
-%</article>
-%<*book>
-\if@report
-  \setlength\headsep{\footskip}
-  \addtolength\headsep{-\topskip}
-\else
-  \setlength\headsep{6mm}
-\fi
-%</book>
-%<*jspf>
-\setlength\headsep{9mm}
-\addtolength\headsep{-\topskip}
-%</jspf>
-%<*kiyou>
-\setlength\headheight{0\p@}
-\setlength\headsep{0\p@}
-%</kiyou>
+  \setlength\headsep{5mm}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\footskip}
+% |\footskip|は、本文領域の下端とフッタの下端との距離です。
+% フッタのボックスの高さを示す、|\footheight|は削除されました。
+%    \begin{macrocode}
+\setlength\footskip{\Cvs}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\maxdepth}
 %
-% |\maxdepth| は本文最下行の最大の深さで，
-% plain \TeX や\LaTeX~2.09では4ptに固定でした。
-% \LaTeX2e では |\maxdepth| $+$ |\topskip| を本文フォントサイズ
-% の1.5倍にしたいのですが，|\topskip| は本文フォントサイズ
-% （ここでは10pt）に等しいので，結局 |\maxdepth| は |\topskip|
-% の半分の値（具体的には5pt）にします。
+% |\maxdepth| は本文最下行の最大の深さです｡
 %
 %    \begin{macrocode}
 \setlength\maxdepth{.5\topskip}
@@ -1452,16 +1335,6 @@
 % 某学会誌スタイルでは|50\zw|（25文字×2段）＋段間8mmとします。
 %
 %    \begin{macrocode}
-%<*article>
-\if@slide
-  \setlength\fullwidth{0.9\paperwidth}
-\else
-  \setlength\fullwidth{0.76\paperwidth}
-\fi
-\if@twocolumn \@tempdima=2\zw \else \@tempdima=1\zw \fi
-\divide\fullwidth\@tempdima \multiply\fullwidth\@tempdima
-\setlength\textwidth{\fullwidth}
-%</article>
 %<*book>
 \if@report
   \setlength\fullwidth{0.76\paperwidth}
@@ -1480,16 +1353,6 @@
   \fi
 \fi
 %</book>
-%<*jspf>
-\setlength\fullwidth{50\zw}
-\addtolength\fullwidth{8mm}
-\setlength\textwidth{\fullwidth}
-%</jspf>
-%<*kiyou>
-\setlength\fullwidth{48\zw}
-\addtolength\fullwidth{\columnsep}
-\setlength\textwidth{\fullwidth}
-%</kiyou>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1914,10 +1777,10 @@
   \let\@evenfoot\@empty
   \def\@evenhead{%
     \if@mparswitch \hss \fi
-    \hbox to \fullwidth{\textbf{\thepage}\hfil}%
+    \underline{\hbox to \fullwidth{\@subtitle\hfil}}%
     \if@mparswitch\else \hss \fi}%
   \def\@oddhead{%
-    \hbox to \fullwidth{\hfil\textbf{\thepage}}\hss}}
+    \underline{\hbox to \fullwidth{\hfil\@subtitle}\hss}}}
 %<book>\if@report \let\ps@plain\ps@plainfoot \else \let\ps@plain\ps@plainhead \fi
 %<!book>\let\ps@plain\ps@plainfoot
 %    \end{macrocode}
@@ -1977,10 +1840,10 @@
   \def\@evenhead{%
     \if@mparswitch \hss \fi
     \underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        {\@subtitle}\hfil\leftmark}}%
+        \@subtitle\hfil\leftmark}}%
     \if@mparswitch\else \hss \fi}%
   \def\@oddhead{\underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        {\if@twoside\rightmark\else\leftmark\fi}\hfil{\@subtitle}}}\hss}%
+        \hfil\@subtitle}}\hss}%
   \let\@mkboth\markboth
   \def\chaptermark##1{\markboth{%
     \ifnum \c@secnumdepth >\m@ne
@@ -2448,8 +2311,7 @@
 %    \begin{macrocode}
 \newcounter{part}
 %<book>\newcounter{chapter}
-%<book>\newcounter{section}[chapter]
-%<!book>\newcounter{section}
+%<book>\newcounter{section}
 \newcounter{subsection}[section]
 \newcounter{subsubsection}[subsection]
 \newcounter{paragraph}[subsubsection]
@@ -2492,7 +2354,7 @@
 %<!book>\renewcommand{\thesubsection}{\@arabic\c@section.\@arabic\c@subsection}
 %<*book>
 \renewcommand{\thechapter}{\@arabic\c@chapter}
-\renewcommand{\thesection}{\thechapter.\@arabic\c@section}
+\renewcommand{\thesection}{\@arabic\c@section}
 \renewcommand{\thesubsection}{\thesection.\@arabic\c@subsection}
 %</book>
 \renewcommand{\thesubsubsection}{%
@@ -2766,14 +2628,13 @@
 %<*book>
 \newcommand{\chapter}{%
   \if@openright\cleardoublepage\else\clearpage\fi
-  \plainifnotempty % 元: \thispagestyle{plain}
+  \thispagestyle{plain}
   \global\@topnum\z@
-  \if@english \@afterindentfalse \else \@afterindenttrue \fi
-  \secdef
-    {\@omit@numberfalse\@chapter}%
-    {\@omit@numbertrue\@schapter}}
+  \@afterindenttrue
+  \@ifstar{\@dblarg{\@chapter}}{\@schapter}}
 %    \end{macrocode}
 % \end{macro}
+%
 %
 % \begin{macro}{\@chapter}
 %
@@ -2845,12 +2706,19 @@
 %
 %    \begin{macrocode}
 \def\@makeschapterhead#1{%
-  \vspace*{2\Cvs}% 欧文は50pt
-  {\parindent \z@ \raggedright
-    \normalfont
-    \interlinepenalty\@M
-    \Huge \headfont #1\par\nobreak
-    \vskip 3\Cvs}} % 欧文は40pt
+  {\parindent\z@
+   \raggedright
+   \reset@font\huge\gt\bfseries
+   \leavevmode
+   \setlength\@tempdima{\linewidth}%
+   \setbox\z@\vtop{\centering
+     \setlength\baselineskip{.7\baselineskip} #1}%
+   \vtop{\hsize\@tempdima
+     \centering
+     \box\z@}}
+   \par \nobreak \vskip\Cvs
+   \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
+   \vskip.5\Cvs}
 %</book>
 %    \end{macrocode}
 % \end{macro}
@@ -2953,29 +2821,27 @@
 % \end{macro}
 %
 % \subsection{リスト環境}
+% ここではリスト環境について説明をしています。
+%
+% リスト環境のデフォルトは次のように設定されます。
 %
 % 第 $k$ レベルのリストの初期化をするのが |\@list|$k$ です
 % （$k = \mathtt{i}, \mathtt{ii}, \mathtt{iii}, \mathtt{iv}$）。
 % |\@list|$k$ は |\leftmargin| を |\leftmargin|$k$ に設定します。
 %
 % \begin{macro}{\leftmargini}
+% まず、|\rigtmargin|, |\listparindent|, |\itemindent|をゼロにします。
+% そして、K番目のレベルのリストは|\@listK|で示されるマクロが呼び出されます。
+% ここで`K'は小文字のローマ数字で示されます。たとえば、3番目のレベルのリスト
+% として|\@listiii|が呼び出されます。
+% |\@listK|は|\leftmargin|を|\leftmarginK|に設定します。
 %
-% 二段組であるかないかに応じてそれぞれ 2em，2.5em でしたが，
-% ここでは全角幅の2倍にしました。
-%
-% [2002-05-11] |3\zw| に変更しました。
-%
-% [2005-03-19] 二段組は |2\zw| に戻しました。
 %
 %    \begin{macrocode}
-\if@slide
-  \setlength\leftmargini{1\zw}
+\if@twocolumn
+  \setlength\leftmargini {2em}
 \else
-  \if@twocolumn
-    \setlength\leftmargini{2\zw}
-  \else
-    \setlength\leftmargini{3\zw}
-  \fi
+  \setlength\leftmargini {2.5em}
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -2986,23 +2852,19 @@
 % \begin{macro}{\leftmarginv}
 % \begin{macro}{\leftmarginvi}
 %
-%    |ii|，|iii|，|iv| は |\labelsep| と
-%    それぞれ `(m)'，`vii.'，`M.' の幅との和より大きくする
-%    ことになっています。ここでは全角幅の整数倍に丸めました。
+% 次の3つの値は、|\labelsep|とデフォルトラベル（`(m)', `vii.', `M.'）の
+% 幅の合計よりも大きくしてあります。
 %
 %    \begin{macrocode}
-\if@slide
-  \setlength\leftmarginii {1\zw}
-  \setlength\leftmarginiii{1\zw}
-  \setlength\leftmarginiv {1\zw}
-  \setlength\leftmarginv  {1\zw}
-  \setlength\leftmarginvi {1\zw}
+\setlength\leftmarginii  {2.2em}
+\setlength\leftmarginiii {1.87em}
+\setlength\leftmarginiv  {1.7em}
+\if@twocolumn
+  \setlength\leftmarginv {.5em}
+  \setlength\leftmarginvi{.5em}
 \else
-  \setlength\leftmarginii {2\zw}
-  \setlength\leftmarginiii{2\zw}
-  \setlength\leftmarginiv {2\zw}
-  \setlength\leftmarginv  {1\zw}
-  \setlength\leftmarginvi {1\zw}
+  \setlength\leftmarginv {1em}
+  \setlength\leftmarginvi{1em}
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -3013,37 +2875,21 @@
 %
 % \begin{macro}{\labelsep}
 % \begin{macro}{\labelwidth}
-%
-%    |\labelsep| はラベルと本文の間の距離です。
-%    |\labelwidth| はラベルの幅です。
-%    これは二分に変えました。
-%
+% |\labelsep|はラベルとテキストの項目の間の距離です。
+% |\labelwidth|はラベルの幅です。
 %    \begin{macrocode}
-\setlength  \labelsep  {0.5\zw} % .5em
+\setlength  \labelsep  {.5em}
 \setlength  \labelwidth{\leftmargini}
 \addtolength\labelwidth{-\labelsep}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\partopsep}
-%
-%    リスト環境の前に空行がある場合，
-%    |\parskip| と |\topsep| に |\partopsep| を
-%    加えた値だけ縦方向の空白ができます。
-%    0 に改変しました。
-%
-%    \begin{macrocode}
-\setlength\partopsep{\z@} % {2\p@ \@plus 1\p@ \@minus 1\p@}
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\@beginparpenalty}
 % \begin{macro}{\@endparpenalty}
+% これらのペナルティは、リストや段落環境の前後に挿入されます。
 % \begin{macro}{\@itempenalty}
-%
-%    リストや段落環境の前後，リスト項目間に挿入されるペナルティです。
-%
+% このペナルティは、リスト項目の間に挿入されます。
 %    \begin{macrocode}
 \@beginparpenalty -\@lowpenalty
 \@endparpenalty   -\@lowpenalty
@@ -3055,32 +2901,22 @@
 %
 % \begin{macro}{\@listi}
 % \begin{macro}{\@listI}
+% |\@listi|は、|\leftmargin|, |\parsep|, |\topsep|, |\itemsep|などの
+% トップレベルの定義をします。
+% この定義は、フォントサイズコマンドによって変更されます（たとえば、
+% |\small|の中では``小さい''リストパラメータになります）。
 %
-%    |\@listi| は |\leftmargin|，|\parsep|，|\topsep|，|\itemsep| などの
-%    トップレベルの定義をします。
-%    この定義は，フォントサイズコマンドによって変更されます
-%    （たとえば |\small| の中では小さい値に設定されます）。
-%    このため，|\normalsize| がすべてのパラメータを戻せるように，
-%    |\@listI| で |\@listi| のコピーを保存します。
-%    元の値はかなり複雑ですが，ここでは簡素化してしまいました。
-%    特に最初と最後に行送りの半分の空きが入るようにしてあります。
-%    アスキーの標準スタイルでは
-%    トップレベルの |itemize|，|enumerate| 環境でだけ
-%    最初と最後に行送りの半分の空きが入るようになっていました。
-%
-%    [2004-09-27] |\topsep| のグルー $_{-0.1}^{+0.2}$ |\baselineskip|
-%    を思い切って外しました。
-%
+% このため、|\normalsize|がすべてのパラメータを戻せるように、
+% |\@listI|は|\@listi|のコピーを保存するように定義されています。
 %    \begin{macrocode}
+%<*geometry>
 \def\@listi{\leftmargin\leftmargini
-  \parsep \z@
-  \topsep 0.5\baselineskip
-  \itemsep \z@ \relax}
+  \parsep 2\p@ \@plus2\p@ \@minus\p@
+  \topsep 6\p@ \@plus2\p@ \@minus4\p@
+  \itemsep2\p@ \@plus2\p@ \@minus\p@}
 \let\@listI\@listi
 %    \end{macrocode}
-%
-%    念のためパラメータを初期化します（実際には不要のようです）。
-%
+% ここで、パラメータを初期化しますが、厳密には必要ありません。
 %    \begin{macrocode}
 \@listi
 %    \end{macrocode}
@@ -3092,20 +2928,23 @@
 % \begin{macro}{\@listiv}
 % \begin{macro}{\@listv}
 % \begin{macro}{\@listvi}
-%
-%    第2〜6レベルのリスト環境のパラメータの設定です。
-%
+% 下位レベルのリスト環境のパラメータの設定です。
+% これらは保存用のバージョンを持たないことと、
+% フォントサイズコマンドによって変更されないことに注意をしてください。
+% 言い換えれば、このクラスは、本文サイズが
+% |\normalsize|で現れるリストの入れ子についてだけ考えています。
 %    \begin{macrocode}
 \def\@listii{\leftmargin\leftmarginii
-  \labelwidth\leftmarginii \advance\labelwidth-\labelsep
-  \topsep \z@
-  \parsep \z@
-  \itemsep\parsep}
+   \labelwidth\leftmarginii \advance\labelwidth-\labelsep
+   \topsep  4\p@ \@plus2\p@ \@minus\p@
+   \parsep  2\p@ \@plus\p@  \@minus\p@
+   \itemsep\parsep}
 \def\@listiii{\leftmargin\leftmarginiii
-  \labelwidth\leftmarginiii \advance\labelwidth-\labelsep
-  \topsep \z@
-  \parsep \z@
-  \itemsep\parsep}
+   \labelwidth\leftmarginiii \advance\labelwidth-\labelsep
+   \topsep 2\p@  \@plus\p@\@minus\p@
+   \parsep\z@
+   \partopsep \p@ \@plus\z@ \@minus\p@
+   \itemsep\topsep}
 \def\@listiv {\leftmargin\leftmarginiv
               \labelwidth\leftmarginiv
               \advance\labelwidth-\labelsep}
@@ -3115,6 +2954,7 @@
 \def\@listvi {\leftmargin\leftmarginvi
               \labelwidth\leftmarginvi
               \advance\labelwidth-\labelsep}
+%</geometry>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -4961,6 +4801,25 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+%
+% \begin{macro}{\@authormark}
+%    \begin{macrocode}
+\newcommand{\@authormark}{文\kern1\zw{}編集部}
+%    \end{macrocode}
+% \end{macro}
+%
+% 基本のスタイルは|\ps@headings|となる。
+%    \begin{macrocode}
+\pagestyle{headings}
+\pagenumbering{arabic}
+\raggedbottom
+\if@twocolumn
+  \twocolumn
+  \sloppy
+\else
+  \onecolumn
+\fi
+%    \end{macrocode}
 %
 % \paragraph{今日の日付}
 %

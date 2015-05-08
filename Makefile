@@ -1,13 +1,9 @@
 LATEX    ?= platex
-ifeq ($(LATEX), platex)
 LATEXFLAG ?= --kanji=utf8
-else
-LATEXFLAG =
-endif
 LATEXFLAG += -halt-on-error
 
 
-DVIPDFM   = dvipdfmx
+DVIPDFM  ?= dvipdfmx
 MAKE      = make
 YES       = yes
 
@@ -23,7 +19,7 @@ TEXINS   = $(addsuffix .ins, $(SRC))
 
 all:
 	$(YES) | $(MAKE) $(TARGETS)
-	# $(YES) | $(MAKE) $(DOCUMENT)
+	$(YES) | $(MAKE) $(DOCUMENT)
 
 $(TARGETS) : $(TEXINS) $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
@@ -31,12 +27,10 @@ $(TARGETS) : $(TEXINS) $(TEXDTX)
 $(DOCUMENT) : $(TEXDTX)
 	$(LATEX) $(LATEXFLAG) $<
 	$(LATEX) $(LATEXFLAG) $<
-ifeq ($(LATEX), platex)
 	$(DVIPDFM) $(SRC)
-endif
 
 lua:
-	$(MAKE) LATEX=lualatex SRC=word-lua
+	$(MAKE) LATEX=lualatex SRC=word-lua LATEXFLAG= DVIPDFM=:
 
 
 lua-test:$(SRC)

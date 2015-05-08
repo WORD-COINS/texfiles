@@ -1,11 +1,12 @@
 % \iffalse meta-comment
 %% File: word-lua.dtx
 %  -----------------------------------------
-%  Original: ltjsclasses.dtx git:tags/20150307.0
+%  Original: ltjsclasses.dtx tag/20150307.0
+%
+%  -----------------------------------------
 %
 % \fi
-%
-% \CheckSum{4478}
+% \CheckSum{5210}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -21,32 +22,26 @@
 %%   Right bracket \]     Circumflex    \^     Underscore    \_
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
-%%
-%
-% \setcounter{StandardModuleDepth}{1}
-% \StopEventually{}
 %
 % \iffalse
 %
-%<book>\NeedsTeXFormat{LaTeX2e}
+%    \begin{macrocode}
+%<article|book|jspf|kiyou>\NeedsTeXFormat{LaTeX2e}
+%<article>\ProvidesClass{ltjsarticle}
 %<book>\ProvidesClass{word-lua}
+%<jspf>\ProvidesClass{ltjspf}
+%<kiyou>\ProvidesClass{ltjskiyou}
 %<*driver>
 \ProvidesFile{word-lua.dtx}
 %</driver>
-  [2015/05/07 v0.0
-	WORD LuaLaTeX Class]
+  [2015/05/07 v0.0 ]
 %<*driver>
 \documentclass{ltjsarticle}
 \usepackage{doc}
-\usepackage{luatexja-preset}
+\usepackage[kozuka-pr6n]{luatexja-preset}
 \usepackage{unicode-math}
-\usepackage{metalogo}
 \setmathfont{Latin Modern Math}
 \usepackage[unicode]{hyperref}
-\newcommand{\WORD}{%
-	{{V\kern-.45emV}}\kern-.1em■%
-	\kern-.81em{{\textcolor{white}{O}RD}}%
-}
 \hypersetup{%
 	unicode,%
 	colorlinks=true,%
@@ -66,17 +61,33 @@
 \DocInput{word-lua.dtx}
 \end{document}
 %</driver>
-% \fi
+%    \end{macrocode}
 %
-% \title{\WORD{} \LuaLaTeX{} Class\space\fileversion}
+% \fi
+% \title{WORD Lua\LaTeX{} Class\space\fileversion}
 % \author{Satoru \sc{Kawahara}}
+%
 % \date{\filedate}
 % \maketitle
 % \tableofcontents
 %
 % \MakeShortVerb{\|}
 %
-% これは |ltjsclasses.dtx| を\WORD{}用に改変したものです。
+% \section{はじめに}
+%
+% これは|ltjsclasses.dtx|をWORD用に改変したものです｡
+% 次のドキュメントクラス（スタイルファイル）を生成します。
+% \begin{quote}
+%   \begin{tabular}{lll}
+%     $\langle$\textsf{article}$\rangle$ & \texttt{ltjsarticle.cls}  & 論文・レポート用 \\
+%     $\langle$\textsf{word-lua}$\rangle$    & \texttt{word-lua.cls}     & WORD用 \\
+%     $\langle$\textsf{jspf}$\rangle$    & \texttt{ltjspf.cls}       & 某学会誌用 \\
+%     $\langle$\textsf{kiyou}$\rangle$   & \texttt{ltjskiyou.cls}      & 某紀要用
+%   \end{tabular}
+% \end{quote}
+%
+% 以下では実際のコードに即して説明します。
+% \section{Lua\TeX-jaの読み込み}
 %
 % まず，|luatexja| を読み込みます。
 %    \begin{macrocode}
@@ -113,7 +124,7 @@
 % \begin{macro}{\if@openright}
 %
 % |\chapter|，|\part| を奇数ページ起こしにするかどうかです。
-% 書籍では真が標準です。
+% デフォルトでは``no''です｡
 %
 %    \begin{macrocode}
 %<book>\newif\if@openright
@@ -143,13 +154,75 @@
 % 以下で各オプションを宣言します。
 %
 % \paragraph{用紙サイズ}
-% 用紙サイズを指定します｡
-% \WORD{}はJIS B5を用います｡
+%
+% JISやISOのA0判は面積 $1\,\mathrm{m}^2$，縦横比 $1:\sqrt{2}$
+% の長方形の辺の長さを mm 単位に切り捨てたものです。
+% これを基準として順に半截しては mm 単位に切り捨てたものがA1，A2，…です。
+%
+% B判はJISとISOで定義が異なります。
+% JISではB0判の面積が $1.5\,\mathrm{m}^2$ ですが，
+% ISOではB1判の辺の長さがA0判とA1判の辺の長さの幾何平均です。
+% したがってISOのB0判は $1000\,\mathrm{mm} \times 1414\,\mathrm{mm}$ です。
+% このため，\LaTeXe の \texttt{b5paper}
+% は $250\,\mathrm{mm} \times 176\,\mathrm{mm}$ ですが，
+% \pLaTeXe の \texttt{b5paper}
+% は $257\,\mathrm{mm} \times 182\,\mathrm{mm}$ になっています。
+% ここでは\pLaTeXe にならってJISに従いました。
+% 
+% WORDは \texttt{b5j} です。
+%
+% \texttt{b5var}（B5変形，182mm×230mm），
+% \texttt{a4var}（A4変形，210mm×283mm）を追加しました。
 %
 %    \begin{macrocode}
+\DeclareOption{a3paper}{%
+  \setlength\paperheight {420mm}%
+  \setlength\paperwidth  {297mm}}
+\DeclareOption{a4paper}{%
+  \setlength\paperheight {297mm}%
+  \setlength\paperwidth  {210mm}}
+\DeclareOption{a5paper}{%
+  \setlength\paperheight {210mm}%
+  \setlength\paperwidth  {148mm}}
+\DeclareOption{a6paper}{%
+  \setlength\paperheight {148mm}%
+  \setlength\paperwidth  {105mm}}
+\DeclareOption{b4paper}{%
+  \setlength\paperheight {364mm}%
+  \setlength\paperwidth  {257mm}}
+\DeclareOption{b5paper}{%
+  \setlength\paperheight {257mm}%
+  \setlength\paperwidth  {182mm}}
+\DeclareOption{b6paper}{%
+  \setlength\paperheight {182mm}%
+  \setlength\paperwidth  {128mm}}
+\DeclareOption{a4j}{%
+  \setlength\paperheight {297mm}%
+  \setlength\paperwidth  {210mm}}
+\DeclareOption{a5j}{%
+  \setlength\paperheight {210mm}%
+  \setlength\paperwidth  {148mm}}
+\DeclareOption{b4j}{%
+  \setlength\paperheight {364mm}%
+  \setlength\paperwidth  {257mm}}
 \DeclareOption{b5j}{%
   \setlength\paperheight {257mm}%
   \setlength\paperwidth  {182mm}}
+\DeclareOption{a4var}{%
+  \setlength\paperheight {283mm}%
+  \setlength\paperwidth  {210mm}}
+\DeclareOption{b5var}{%
+  \setlength\paperheight {230mm}%
+  \setlength\paperwidth  {182mm}}
+\DeclareOption{letterpaper}{%
+  \setlength\paperheight {11in}%
+  \setlength\paperwidth  {8.5in}}
+\DeclareOption{legalpaper}{%
+  \setlength\paperheight {14in}%
+  \setlength\paperwidth  {8.5in}}
+\DeclareOption{executivepaper}{%
+  \setlength\paperheight {10.5in}%
+  \setlength\paperwidth  {7.25in}}
 %    \end{macrocode}
 %
 % \paragraph{横置き}
@@ -365,7 +438,7 @@
 %
 % \paragraph{数式フォントとして和文フォントを登録しないオプション}
 %
-% \pTeX では数式中では16通りのフォントしか使えませんでしたが，\LuaTeX では
+% p\TeX では数式中では16通りのフォントしか使えませんでしたが，Lua\TeX では
 % Omega拡張が取り込まれていて256通りのフォントが使えます。
 % ただし，\LaTeXe カーネルでは未だに数式ファミリの数は16個に制限されているので，
 % 実際に使用可能な数式ファミリの数を増やすためには |lualatex-math| パッケージを
@@ -391,7 +464,7 @@
 % ここではOTFパッケージのメトリックを元とした，|jfm-ujis.lua| メトリックを標準で使います。
 % 古い\texttt{min10}，\texttt{goth10}互換のメトリックを使いたいときは\texttt{mingoth}
 % というオプションを指定します。
-% \pTeX でよく利用される\texttt{jis}フォントメトリックと互換のメトリックを使いたい場合は，
+% p\TeX でよく利用される\texttt{jis}フォントメトリックと互換のメトリックを使いたい場合は，
 % \texttt{ptexjis}というオプションを指定します。
 % \texttt{winjis}メトリックは用済みのため，\texttt{winjis}オプションは無視されます。
 %
@@ -450,10 +523,10 @@
 % |multicols| や |url| を |\RequirePackage| するのはやめました。
 %
 %    \begin{macrocode}
-%<article>\ExecuteOptions{b5j,oneside,onecolumn,notitlepage,final}
+%<article>\ExecuteOptions{a4paper,oneside,onecolumn,notitlepage,final}
 %<book>\ExecuteOptions{b5j,twoside,onecolumn,titlepage,openright,final}
-%<jspf>\ExecuteOptions{b5j,twoside,twocolumn,notitlepage,fleqn,final}
-%<kiyou>\ExecuteOptions{b5j,twoside,twocolumn,notitlepage,final}
+%<jspf>\ExecuteOptions{a4paper,twoside,twocolumn,notitlepage,fleqn,final}
+%<kiyou>\ExecuteOptions{a4paper,twoside,twocolumn,notitlepage,final}
 \ProcessOptions
 %    \end{macrocode}
 %
@@ -615,7 +688,7 @@
 % \texttt{min10}やJISフォントメトリックでは「公称10ポイントの和文フォントは，
 % 実際には9.62216ptで出力される（メトリック側で0.962216倍される）」という
 % 仕様になっています。
-% 一方，\LuaTeX{}-jaの提供するメトリックでは，そのようなことはありません。
+% 一方，Lua\TeX-jaの提供するメトリックでは，そのようなことはありません。
 % 公称10ポイントの和文フォントは，10ポイントで出力されます。
 %
 % この |ltjsclasses| でも，派生元の |jsclasses| と同じように，
@@ -627,8 +700,6 @@
 % 設定に対応しました。この2つの命令の値はユーザが日々の利用でその都度指定するものではなく、
 % 何らかの理由で非埋め込みフォントが正しく利用できない場合にのみ |luatexja.cfg| によって
 % セットされるものです。
-%
-% [2014-07-26 LTJ] なお，現状のところ，縦組用JFMは |jfm-ujisv.lua| しか準備していません．
 %
 %    \begin{macrocode}
 %<*!jspf>
@@ -652,6 +723,28 @@
 % 約9.25ポイント，
 % DTPで使う単位（1/72インチ）では9.21ポイントということになり，
 % 公称10ポイントといっても実は9ポイント強になります。
+%
+% 某学会誌では，
+% 和文フォントをPostScriptの9ポイントにするために，
+% $0.9*72.27/72 \simeq 0.903375$ 倍します。
+%
+%    \begin{macrocode}
+%<*jspf>
+\expandafter\let\csname JY3/mc/m/n/10\endcsname\relax
+\ifmingoth
+  \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=min}{}
+  \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=min}{}
+\else
+  \ifptexjis
+    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=jis}{}
+    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=jis}{}
+  \else
+    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=ujis}{}
+    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=ujis}{}
+  \fi
+\fi
+%</jspf>
+%    \end{macrocode}
 %
 % 和文でイタリック体，斜体，サンセリフ体，
 % タイプライタ体の代わりにゴシック体を使うことにします。
@@ -702,9 +795,9 @@
          \romanfamily\ttdefault\kanjifamily\jttdefault\selectfont}
 %    \end{macrocode}
 %%
-		 % \LuaTeX{}-jaでは和文組版に伴うグルーはノードベースで挿入するようになり，また
+% Lua\TeX-jaでは和文組版に伴うグルーはノードベースで挿入するようになり，また
 % 欧文・和文間のグルーとイタリック補正は干渉しないようになりました。
-		 % まだ「和文の斜体」については\LuaLaTeX{}カーネル側でまともな対応がされていませんが，
+% まだ「和文の斜体」についてはLua\LaTeX カーネル側でまともな対応がされていませんが，
 % |jsclasses.dtx| で行われていた |\textmc|, |\textgt| の再定義は不要のように思われます。
 %
 % |jsclasses.dtx| 中で行われていた |\reDeclareMathAlphabet| の再定義は削除。
@@ -736,7 +829,7 @@
 %
 % アスキーの \texttt{kinsoku.dtx} では「’」「“」「”」前後のペナルティが5000に
 % なっていたので，\texttt{jsclasses.dtx} ではそれを 10000 に補正していました。
-  % しかし，\LuaTeX{}-jaでは最初からこれらのパラメータは 10000 なので，
+% しかし，Lua\TeX-jaでは最初からこれらのパラメータは 10000 なので，
 % もはや補正する必要はありません。
 %
 % 「\TeX！」「〒515」の記号と数字の間に四分アキが入らないようにします。
@@ -754,8 +847,8 @@
 \ltjsetparameter{alxspmode={`\%,3}}
 %    \end{macrocode}
 %
-% \texttt{jsclasses.dtx} では80～ffの文字の |\xspcode| を全て3にしていましたが，
-% \LuaTeX{}-jaでは同様の内容が最初から設定されていますので，対応する部分は削除。
+% \texttt{jsclasses.dtx} では80〜ffの文字の |\xspcode| を全て3にしていましたが，
+% Lua\TeX-jaでは同様の内容が最初から設定されていますので，対応する部分は削除。
 %
 % \begin{macro}{\@}
 %
@@ -813,6 +906,16 @@
 %
 % |\parindent| については，0（以下）でなければ全角幅（|1\zw|）に直します。
 %
+% [2008-02-18] |english| オプションで |\parindent| を 1em にしました。
+%
+% [2014-05-14 LTJ] |\ltjsetparameter|の実行は時間がかかるので，
+% |\ltjsetkanjiskip| と |\ltjsetxkanjiskip|（両者とも，
+% 実行前には |\ltj@setpar@global| の実行が必要）にしました．
+%
+% [2014-12-24 LTJ] |jsclasses| では，|\@setfontsize| 中で |xkanjiskip| を
+% 設定するのは現在の和欧文間空白の自然長が正の場合だけでした．
+% |ltjsclasses| では最初からこの判定が抜けてしまっていたので，復活させます．
+%
 %    \begin{macrocode}
 \def\@setfontsize#1#2#3{%
 % \@nomath#1%
@@ -828,11 +931,14 @@
     \fi
   \fi
   \ltj@setpar@global
-  \ltjsetkanjiskip{0pt plus .1\zw minus .01\zw}
-  \if@slide 
-    \ltjsetxkanjiskip{0.1em} 
-  \else
-    \ltjsetxkanjiskip{0.25em plus 0.15em minus 0.06em}
+  \ltjsetkanjiskip{\z@ plus .1\zw minus .01\zw}
+  \@tempskipa=\ltjgetparameter{xkanjiskip}
+  \ifdim\@tempskipa>\z@
+    \if@slide 
+      \ltjsetxkanjiskip{0.1em}
+    \else
+      \ltjsetxkanjiskip{0.25em plus 0.15em minus 0.06em}
+    \fi
   \fi}
 %    \end{macrocode}
 % \end{macro}
@@ -858,9 +964,6 @@
 % [2008-02-18] |english| オプションで最初の段落のインデントをしないようにしました。
 %
 % TODO: Hasumiさん [qa:54539] のご指摘は考慮中です。
-%
-% [2015-01-07 LTJ] 遅くなりましたが，
-% \url{http://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=1005} にあったZRさんのパッチを取り込みました．
 %
 %    \begin{macrocode}
 \newif\ifnarrowbaselines
@@ -1243,8 +1346,8 @@
 % \begin{macro}{\footskip}
 %
 % |\footskip| は本文領域下端とフッタ下端との距離です。
-% 標準クラスファイルでは，\WORD{} で0.35in（約8.89mm），
-% \WORD{} 以外で30pt（約10.54mm）となっていましたが，
+% 標準クラスファイルでは，book で0.35in（約8.89mm），
+% book 以外で30pt（約10.54mm）となっていましたが，
 % ここではA4判のときちょうど1cmとなるように，
 % |\paperheight| の0.03367倍（最小 |\baselineskip|）としました。
 % 書籍については，フッタは使わないことにして，ゼロにしました。
@@ -1277,7 +1380,7 @@
 % \begin{macro}{\headsep}
 %
 % |\headsep| はヘッダ下端と本文領域上端との距離です。
-% 元は \WORD{} で18pt（約6.33mm），
+% 元は book で18pt（約6.33mm），
 % それ以外で25pt（約8.79mm）になっていました。
 % ここでは article は |\footskip| $-$ |\topskip| としました。
 %
@@ -1340,10 +1443,25 @@
 % この |\fullwidth| は article では紙幅 |\paperwidth|の0.76倍を超えない
 % 全角幅の整数倍（二段組では全角幅の偶数倍）にします。0.76倍という数値は
 % A4縦置きの場合に紙幅から約2インチを引いた値になるように選びました。
-% \WORD{} では紙幅から36ミリを引いた値にしました。
+% book では紙幅から36ミリを引いた値にしました。
 %
 % \begin{macro}{\textwidth}
+%
+% 書籍以外では本文領域の幅 |\textwidth| は |\fullwidth| と等しくします。
+% |article| ではA4縦置きで49文字となります。
+% 某学会誌スタイルでは|50\zw|（25文字×2段）＋段間8mmとします。
+%
 %    \begin{macrocode}
+%<*article>
+\if@slide
+  \setlength\fullwidth{0.9\paperwidth}
+\else
+  \setlength\fullwidth{0.76\paperwidth}
+\fi
+\if@twocolumn \@tempdima=2\zw \else \@tempdima=1\zw \fi
+\divide\fullwidth\@tempdima \multiply\fullwidth\@tempdima
+\setlength\textwidth{\fullwidth}
+%</article>
 %<*book>
 \if@report
   \setlength\fullwidth{0.76\paperwidth}
@@ -1353,7 +1471,7 @@
 \fi
 \if@twocolumn \@tempdima=2\zw \else \@tempdima=1\zw \fi
 \divide\fullwidth\@tempdima \multiply\fullwidth\@tempdima
-\setlength\textwidth{48\Cwd}
+\setlength\textwidth{\fullwidth}
 \if@report \else
   \if@twocolumn \else
     \ifdim \fullwidth>40\zw
@@ -1362,6 +1480,16 @@
   \fi
 \fi
 %</book>
+%<*jspf>
+\setlength\fullwidth{50\zw}
+\addtolength\fullwidth{8mm}
+\setlength\textwidth{\fullwidth}
+%</jspf>
+%<*kiyou>
+\setlength\fullwidth{48\zw}
+\addtolength\fullwidth{\columnsep}
+\setlength\textwidth{\fullwidth}
+%</kiyou>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1389,11 +1517,15 @@
 %
 %    \begin{macrocode}
 %<*article|book>
-\setlength{\textheight}{33\Cvs}
-\addtolength{\textheight}{\topskip}
-% \addtolength{\textheight}{-\headsep}
-% \addtolength{\textheight}{-\footskip}
-% \addtolength{\textheight}{-\topskip}
+\if@slide
+  \setlength{\textheight}{0.95\paperheight}
+\else
+  \setlength{\textheight}{0.83\paperheight}
+\fi
+\addtolength{\textheight}{-\topskip}
+\addtolength{\textheight}{-\headsep}
+\addtolength{\textheight}{-\footskip}
+\addtolength{\textheight}{-\topskip}
 \divide\textheight\baselineskip
 \multiply\textheight\baselineskip
 %</article|book>
@@ -1428,7 +1560,7 @@
 % はトンボの内側に |1in| のスペース（|1truein| ではなく）を挿入するので，
 % 場合分けしています。
 %
-% [2011-10-03 LTJ] \LuaTeX{}{} (pdf\TeX？) では |1truein| ではなく
+% [2011-10-03 LTJ] Lua\TeX{} (pdf\TeX？) では |1truein| ではなく
 % |1in| になるようです。
 %
 %    \begin{macrocode}
@@ -1466,17 +1598,31 @@
 % \end{macro}
 %
 % \begin{macro}{\topmargin}
-% |\topmargin|は、``印字可能領域''---用紙の上端から1インチ内側---%
-% の上端からヘッダ部分の上端までの距離です。
-% WORDでは12mmとなっています。
+%
+% 上マージン（紙の上端とヘッダ上端の距離）
+% から1インチ引いた値です。
+%
+% [2003-06-26] |\headheight| を |\topskip| に直しました。
+% 以前はこの二つは値が同じであったので，変化はないはずです。
+%
+% [2011-10-03 LTJ] ここも |\oddsidemargin| のときと同様に |-\inv@mag in| ではなく
+% |-1in| にします。
 %
 %    \begin{macrocode}
-\setlength\topmargin{-1.0in}
-\addtolength\topmargin{12mm}
-\@settopoint\topmargin
+\setlength\topmargin{\paperheight}
+\addtolength\topmargin{-\textheight}
+\if@slide
+  \addtolength\topmargin{-\headheight}
+\else
+  \addtolength\topmargin{-\topskip}
+\fi
+\addtolength\topmargin{-\headsep}
+\addtolength\topmargin{-\footskip}
+\setlength\topmargin{0.5\topmargin}
+%<kiyou>\setlength\topmargin{81truebp}
+\addtolength\topmargin{-1in}
 %    \end{macrocode}
 % \end{macro}
-%
 %
 % \paragraph{脚注}
 %
@@ -1756,12 +1902,24 @@
 % |plain| は |book| では |plainhead|，それ以外では |plainfoot| になります。
 %
 %    \begin{macrocode}
-\def\ps@plain{\let\@mkboth\@gobbletwo
-   \let\ps@jpl@in\ps@plain
-   \let\@oddhead\@empty
-   \def\@oddfoot{\reset@font\hfil\thepage\hfil}%
-   \let\@evenhead\@empty
-   \let\@evenfoot\@oddfoot}
+\def\ps@plainfoot{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddhead\@empty
+  \def\@oddfoot{\normalfont\hfil\thepage\hfil}%
+  \let\@evenhead\@empty
+  \let\@evenfoot\@oddfoot}
+\def\ps@plainhead{%
+  \let\@mkboth\@gobbletwo
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+  \def\@evenhead{%
+    \if@mparswitch \hss \fi
+    \hbox to \fullwidth{\textbf{\thepage}\hfil}%
+    \if@mparswitch\else \hss \fi}%
+  \def\@oddhead{%
+    \hbox to \fullwidth{\hfil\textbf{\thepage}}\hss}}
+%<book>\if@report \let\ps@plain\ps@plainfoot \else \let\ps@plain\ps@plainhead \fi
+%<!book>\let\ps@plain\ps@plainfoot
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1772,10 +1930,43 @@
 % |headings| スタイルはヘッダに見出しとページ番号を出力します。
 % ここではヘッダにアンダーラインを引くようにしてみました。
 %
+% まず article の場合です。
 %
-% 次は \WORD{} の場合です。
-% [2011-05-10] しっぽ愛好家さん [qa:6370] のパッチを取り込ませていただきました
-% （北見さん [qa:55896] のご指摘ありがとうございます）。
+%    \begin{macrocode}
+%<*article|kiyou>
+\if@twoside
+  \def\ps@headings{%
+    \let\@oddfoot\@empty
+    \let\@evenfoot\@empty
+    \def\@evenhead{\if@mparswitch \hss \fi
+      \underline{\hbox to \fullwidth{\textbf{\thepage}\hfil\leftmark}}%
+      \if@mparswitch\else \hss \fi}%
+    \def\@oddhead{%
+      \underline{%
+        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
+    \let\@mkboth\markboth
+    \def\sectionmark##1{\markboth{%
+       \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
+       ##1}{}}%
+    \def\subsectionmark##1{\markright{%
+       \ifnum \c@secnumdepth >\@ne \thesubsection \hskip1\zw\fi
+       ##1}}%
+  }
+\else % if not twoside
+  \def\ps@headings{%
+    \let\@oddfoot\@empty
+    \def\@oddhead{%
+      \underline{%
+        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
+    \let\@mkboth\markboth
+    \def\sectionmark##1{\markright{%
+        \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
+        ##1}}}
+\fi
+%</article|kiyou>
+%    \end{macrocode}
+%
+% 次は book の場合です。
 %
 %    \begin{macrocode}
 %<*book>
@@ -1786,10 +1977,10 @@
   \def\@evenhead{%
     \if@mparswitch \hss \fi
     \underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        \textbf{\thepage}\hfil\leftmark}}%
+        {\@subtitle}\hfil\leftmark}}%
     \if@mparswitch\else \hss \fi}%
   \def\@oddhead{\underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        {\if@twoside\rightmark\else\leftmark\fi}\hfil\textbf{\thepage}}}\hss}%
+        {\if@twoside\rightmark\else\leftmark\fi}\hfil{\@subtitle}}}\hss}%
   \let\@mkboth\markboth
   \def\chaptermark##1{\markboth{%
     \ifnum \c@secnumdepth >\m@ne
@@ -1805,6 +1996,19 @@
     ##1}}}%
 %</book>
 %    \end{macrocode}
+%
+% 最後は学会誌の場合です。
+%
+%    \begin{macrocode}
+%<*jspf>
+\def\ps@headings{%
+  \def\@oddfoot{\normalfont\hfil\thepage\hfil}
+  \def\@evenfoot{\normalfont\hfil\thepage\hfil}
+  \def\@oddhead{\normalfont\hfil \@title \hfil}
+  \def\@evenhead{\normalfont\hfil プラズマ・核融合学会誌\hfil}}
+%</jspf>
+%    \end{macrocode}
+%
 % \end{macro}
 %
 % \begin{macro}{\ps@myheadings}
@@ -1850,6 +2054,14 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\subtitle}
+% ヘッダに表示されるサブタイトル|\@subtitle|を定義します。初期値は|\@empty|です。
+%	 \begin{macrocode}
+\def\subtitle#1{\gdef\@subtitle{#1}}
+\let\@subtitle\@empty
+%    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\etitle}
@@ -1993,91 +2205,26 @@
 % \begin{macro}{\@maketitle}
 %
 % 独立した表題ページを作らない場合の表題の出力形式です。
-%
 %    \begin{macrocode}
-  \def\@maketitle{%
-    \newpage\null
-    \vskip 2em
-    \begin{center}%
-      \let\footnote\thanks
-      {\LARGE \@title \par}%
-      \vskip 1.5em
-      {\large
-        \lineskip .5em
-        \begin{tabular}[t]{c}%
-          \@author
-        \end{tabular}\par}%
-      \vskip 1em
-      {\large \@date}%
-    \end{center}%
-    \par\vskip 1.5em
-%<article|kiyou>    \ifvoid\@abstractbox\else\centerline{\box\@abstractbox}\vskip1.5em\fi
-  }
-\fi
-%</article|book|kiyou>
-%<*jspf>
-\newcommand{\maketitle}{\par
-  \begingroup
-    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
-    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
-    \long\def\@makefntext##1{\advance\leftskip 3\zw
-      \parindent 1\zw\noindent
-      \llap{\@textsuperscript{\normalfont\@thefnmark}\hskip0.3\zw}##1}%
-      \twocolumn[\@maketitle]%
-    \plainifnotempty
-    \@thanks
-  \endgroup
-  \setcounter{footnote}{0}%
-  \global\let\thanks\relax
-  \global\let\maketitle\relax
-  \global\let\@thanks\@empty
-  \global\let\@author\@empty
-  \global\let\@date\@empty
-% \global\let\@title\@empty % \@title は柱に使う
-  \global\let\title\relax
-  \global\let\author\relax
-  \global\let\date\relax
-  \global\let\and\relax
-  \ifx\authors@mail\@undefined\else{%
-    \def\@makefntext{\advance\leftskip 3\zw \parindent -3\zw}%
-    \footnotetext[0]{\itshape\authors@mail}%
-  }\fi
-  \global\let\authors@mail\@undefined}
 \def\@maketitle{%
-  \newpage\null
-  \vskip 6em % used to be 2em
-  \begin{center}
-    \let\footnote\thanks
-    \ifx\@title\@undefined\else{\LARGE\headfont\@title\par}\fi
-    \lineskip .5em
-    \ifx\@author\@undefined\else
-      \vskip 1em
-      \begin{tabular}[t]{c}%
-        \@author
-      \end{tabular}\par
-    \fi
-    \ifx\@etitle\@undefined\else
-      \vskip 1em
-      {\large \@etitle \par}%
-    \fi
-    \ifx\@eauthor\@undefined\else
-      \vskip 1em
-      \begin{tabular}[t]{c}%
-        \@eauthor
-      \end{tabular}\par
-    \fi
-    \vskip 1em
-    \@date
-  \end{center}
-  \vskip 1.5em
-  \centerline{\box\@abstractbox}
-  \ifx\@keywords\@undefined\else
-    \vskip 1.5em
-    \centerline{\parbox{157mm}{\textsf{Keywords:}\\ \small\@keywords}}
-  \fi
-  \vskip 1.5em}
-%</jspf>
+\newpage\null
+\vskip 2em%
+\begin{center}%
+  \let\footnote\thanks
+{\LARGE \@title \par}%
+\vskip 1.5em%
+{\large
+  \lineskip .5em%
+  \begin{tabular}[t]{c}%
+	\@author
+  \end{tabular}\par}%
+\vskip 1em%
+{\large \@date}%
+\end{center}%
+\par\vskip 1.5em}
+\fi
 %    \end{macrocode}
+%
 % \end{macro}
 %
 % \subsection{章・節}
@@ -2199,7 +2346,7 @@
 % 二つ挿入した |\everyparhook| のうち後者が |\paragraph| 類の後で2回実行され，
 % それ以降は前者が実行されます。
 %
-% [2011-10-05 LTJ] \LuaTeX{}-jaでは |\everyparhook| は不要なので削除。
+% [2011-10-05 LTJ] Lua\TeX-jaでは |\everyparhook| は不要なので削除。
 %
 %    \begin{macrocode}
 \def\@xsect#1{%
@@ -2688,13 +2835,7 @@
 % |\chaptermark| を補いました。
 %
 %    \begin{macrocode}
-\def\@schapter#1{%
-  \chaptermark{#1}%
-  \if@twocolumn
-    \@topnewpage[\@makeschapterhead{#1}]%
-  \else
-    \@makeschapterhead{#1}\@afterheading
-  \fi}
+\def\@schapter#1{\@makeschapterhead{#1}\@afterheading}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2952,7 +3093,7 @@
 % \begin{macro}{\@listv}
 % \begin{macro}{\@listvi}
 %
-%    第2～6レベルのリスト環境のパラメータの設定です。
+%    第2〜6レベルのリスト環境のパラメータの設定です。
 %
 %    \begin{macrocode}
 \def\@listii{\leftmargin\leftmarginii
@@ -4124,17 +4265,8 @@
 % 参考文献リストを出力します。
 %
 %    \begin{macrocode}
-\newenvironment{thebibliography}[1]{%
-  \global\let\presectionname\relax
-  \global\let\postsectionname\relax
-%<article|jspf>  \section*{\refname}\@mkboth{\refname}{\refname}%
-%<*kiyou>
-  \vspace{1.5\baselineskip}
-  \subsubsection*{\refname}\@mkboth{\refname}{\refname}%
-  \vspace{0.5\baselineskip}
-%</kiyou>
-%<book>  \chapter*{\bibname}\@mkboth{\bibname}{}%
-%<book>  \addcontentsline{toc}{chapter}{\bibname}%
+\newenvironment{thebibliography}[1]
+{\section*{\refname\@mkboth{\@subtitle}{\@subtitle}}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -4143,7 +4275,6 @@
          \usecounter{enumiv}%
          \let\p@enumiv\@empty
          \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-%<kiyou>   \small
    \sloppy
    \clubpenalty4000
    \@clubpenalty\clubpenalty
@@ -4230,7 +4361,7 @@
 %
 % \begin{environment}{theindex}
 %
-% 2～3段組の索引を作成します。
+% 2〜3段組の索引を作成します。
 % 最後が偶数ページのときにマージンがずれる現象を直しました（Thanks: 藤村さん）。
 %
 %    \begin{macrocode}
@@ -4347,13 +4478,6 @@
 % |\@xfootnotenext| と合わせて，
 % もし脚注番号が空なら記号も出力しないようにしてあります。
 %
-% [2002-04-09] インプリメントの仕方を変えたため消しました。
-%
-% [2013-04-23] 新しい\pTeX では脚注番号のまわりにスペースが入りすぎることを防ぐため，
-% 北川さんのパッチ [qa:57090] を取り込みました。
-%
-% [2013-05-14] plcore.ltx に倣った形に書き直しました（Thanks: 北川さん）。
-%
 %    \begin{macrocode}
 \renewcommand\@makefnmark{\hbox{}\hbox{%
   \ifydir \@textsuperscript{\normalfont\@thefnmark}%
@@ -4366,11 +4490,8 @@
 % 脚注番号に * 印が付くようにしました。
 % ただし，番号がゼロのときは * 印も脚注番号も付きません。
 %
-% [2003-08-15] |\textasteriskcentered| ではフォントによって
-% 下がりすぎるので変更しました。
-%
 %    \begin{macrocode}
-\def\thefootnote{\ifnum\c@footnote>\z@\leavevmode\lower.5ex\hbox{*}\@arabic\c@footnote\fi}
+\def\thefootnote{\ifnum\c@footnote>\z@\leavevmode\lower.6ex\hbox{*}\@arabic\c@footnote\fi}
 %    \end{macrocode}
 %
 % 「注1」の形式にするには次のようにしてください。

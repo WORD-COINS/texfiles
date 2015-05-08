@@ -24,11 +24,8 @@
 % \iffalse
 %
 %    \begin{macrocode}
-%<book|jspf|kiyou>\NeedsTeXFormat{LaTeX2e}
-%<article>\ProvidesClass{ltjsarticle}
+%<book>\NeedsTeXFormat{LaTeX2e}
 %<book>\ProvidesClass{word-lua}
-%<jspf>\ProvidesClass{ltjspf}
-%<kiyou>\ProvidesClass{ltjskiyou}
 %<*driver>
 \ProvidesFile{word-lua.dtx}
 %</driver>
@@ -392,7 +389,7 @@
 % ここではOTFパッケージのメトリックを元とした，|jfm-ujis.lua| メトリックを標準で使います。
 % 古い\texttt{min10}，\texttt{goth10}互換のメトリックを使いたいときは\texttt{mingoth}
 % というオプションを指定します。
-% p\TeX でよく利用される\texttt{jis}フォントメトリックと互換のメトリックを使いたい場合は，
+% \pTeX でよく利用される\texttt{jis}フォントメトリックと互換のメトリックを使いたい場合は，
 % \texttt{ptexjis}というオプションを指定します。
 % \texttt{winjis}メトリックは用済みのため，\texttt{winjis}オプションは無視されます。
 %
@@ -654,28 +651,6 @@
 % DTPで使う単位（1/72インチ）では9.21ポイントということになり，
 % 公称10ポイントといっても実は9ポイント強になります。
 %
-% 某学会誌では，
-% 和文フォントをPostScriptの9ポイントにするために，
-% $0.9*72.27/72 \simeq 0.903375$ 倍します。
-%
-%    \begin{macrocode}
-%<*jspf>
-\expandafter\let\csname JY3/mc/m/n/10\endcsname\relax
-\ifmingoth
-  \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=min}{}
-  \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=min}{}
-\else
-  \ifptexjis
-    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=jis}{}
-    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=jis}{}
-  \else
-    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=ujis}{}
-    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=ujis}{}
-  \fi
-\fi
-%</jspf>
-%    \end{macrocode}
-%
 % 和文でイタリック体，斜体，サンセリフ体，
 % タイプライタ体の代わりにゴシック体を使うことにします。
 %
@@ -835,16 +810,6 @@
 % 空けなくても同じ出力になります。
 %
 % |\parindent| については，0（以下）でなければ全角幅（|1\zw|）に直します。
-%
-% [2008-02-18] |english| オプションで |\parindent| を 1em にしました。
-%
-% [2014-05-14 LTJ] |\ltjsetparameter|の実行は時間がかかるので，
-% |\ltjsetkanjiskip| と |\ltjsetxkanjiskip|（両者とも，
-% 実行前には |\ltj@setpar@global| の実行が必要）にしました．
-%
-% [2014-12-24 LTJ] |jsclasses| では，|\@setfontsize| 中で |xkanjiskip| を
-% 設定するのは現在の和欧文間空白の自然長が正の場合だけでした．
-% |ltjsclasses| では最初からこの判定が抜けてしまっていたので，復活させます．
 %
 %    \begin{macrocode}
 \def\@setfontsize#1#2#3{%
@@ -1376,22 +1341,7 @@
 % \WORD{} では紙幅から36ミリを引いた値にしました。
 %
 % \begin{macro}{\textwidth}
-%
-% 書籍以外では本文領域の幅 |\textwidth| は |\fullwidth| と等しくします。
-% |article| ではA4縦置きで49文字となります。
-% 某学会誌スタイルでは|50\zw|（25文字×2段）＋段間8mmとします。
-%
 %    \begin{macrocode}
-%<*article>
-\if@slide
-  \setlength\fullwidth{0.9\paperwidth}
-\else
-  \setlength\fullwidth{0.76\paperwidth}
-\fi
-\if@twocolumn \@tempdima=2\zw \else \@tempdima=1\zw \fi
-\divide\fullwidth\@tempdima \multiply\fullwidth\@tempdima
-\setlength\textwidth{\fullwidth}
-%</article>
 %<*book>
 \if@report
   \setlength\fullwidth{0.76\paperwidth}
@@ -1410,16 +1360,6 @@
   \fi
 \fi
 %</book>
-%<*jspf>
-\setlength\fullwidth{50\zw}
-\addtolength\fullwidth{8mm}
-\setlength\textwidth{\fullwidth}
-%</jspf>
-%<*kiyou>
-\setlength\fullwidth{48\zw}
-\addtolength\fullwidth{\columnsep}
-\setlength\textwidth{\fullwidth}
-%</kiyou>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1465,13 +1405,14 @@
 %
 % \begin{macro}{\marginparsep}
 % \begin{macro}{\marginparpush}
-%
-% |\marginparsep| は欄外の書き込みと本文との間隔です。
-% |\marginparpush| は欄外の書き込みどうしの最小の間隔です。
-%
+% |\marginparsep|は、本文と傍注の間にあけるスペースの幅です。
+% 横組では本文の左（右）端と傍注、
+% 縦組では本文の下（上）端と傍注の間になります。
+% |\marginparpush|は、傍注と傍注との間のスペースの幅です。
+% WORDでは傍注を使わないので、|\z@|（0）とします
 %    \begin{macrocode}
-\setlength\marginparsep{\columnsep}
-\setlength\marginparpush{\baselineskip}
+\setlength\marginparsep{\z@}
+\setlength\marginparpush{\z@}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1524,31 +1465,17 @@
 % \end{macro}
 %
 % \begin{macro}{\topmargin}
-%
-% 上マージン（紙の上端とヘッダ上端の距離）
-% から1インチ引いた値です。
-%
-% [2003-06-26] |\headheight| を |\topskip| に直しました。
-% 以前はこの二つは値が同じであったので，変化はないはずです。
-%
-% [2011-10-03 LTJ] ここも |\oddsidemargin| のときと同様に |-\inv@mag in| ではなく
-% |-1in| にします。
+% |\topmargin|は、``印字可能領域''---用紙の上端から1インチ内側---%
+% の上端からヘッダ部分の上端までの距離です。
+% WORDでは12mmとなっています。
 %
 %    \begin{macrocode}
-\setlength\topmargin{\paperheight}
-\addtolength\topmargin{-\textheight}
-\if@slide
-  \addtolength\topmargin{-\headheight}
-\else
-  \addtolength\topmargin{-\topskip}
-\fi
-\addtolength\topmargin{-\headsep}
-\addtolength\topmargin{-\footskip}
-\setlength\topmargin{0.5\topmargin}
-%<kiyou>\setlength\topmargin{81truebp}
-\addtolength\topmargin{-1in}
+\setlength\topmargin{-1.0in}
+\addtolength\topmargin{12mm}
+\@settopoint\topmargin
 %    \end{macrocode}
 % \end{macro}
+%
 %
 % \paragraph{脚注}
 %
@@ -1752,32 +1679,51 @@
 %
 % \section{ページスタイル}\label{sec:pagestyle}
 %
-% ページスタイルとして，\LaTeXe （欧文版）の標準クラス
-% では |empty|，|plain|，|headings|，|myheadings| があります。
-% このうち |empty|，|plain| スタイルは\LaTeXe 本体
-% で定義されています。 
+% WORDクラスファイルでは、つぎの3種類のページスタイルを使用できます。
+% \pstyle{empty}は\file{latex.dtx}で定義されています。 
 %
-% アスキーのクラスファイルでは |headnombre|，|footnombre|，
-% |bothstyle|，|jpl@in| が追加されていますが，
-% ここでは欧文標準のものだけにしました。
+% \begin{tabular}{ll}
+% empty      & ヘッダにもフッタにも出力しない\\
+% plain      & フッタにページ番号のみを出力する\\
+% headings   & ヘッダに見出しとページ番号を出力する\\
+% \end{tabular}
+% 
+% ただし、WORDではページ番号を赤入れの時にしか使わないので、
+% |\if@pagenumber|が\pstyle{true}の時のみページ番号を表示します。
+% |\if@pagenumber|はオプションに\pstyle{draft}か\pstyle{pagenum}を指定した時に
+% \pstyle{true}になります。
 %
-% ページスタイルは |\ps@...| の形のマクロで定義されています。
+% ページスタイル\pstyle{foo}は、|\ps@foo|コマンドとして定義されます。
+% WORDでは次のように使います。
+%
+% \begin{tabular}{ll}
+% empty      & 通常は使わない\\
+% plain      & 通常は使わない\\
+% headings   & これを使う\\
+% \end{tabular}
 %
 % \begin{macro}{\@evenhead}
 % \begin{macro}{\@oddhead}
 % \begin{macro}{\@evenfoot}
 % \begin{macro}{\@oddfoot}
+% これらは|\ps@...|から呼び出され、ヘッダとフッタを出力するマクロです。
 %
-% |\@oddhead|，|\@oddfoot|，|\@evenhead|，|\@evenfoot| は
-% 偶数・奇数ページの柱（ヘッダ，フッタ）を出力する命令です。
-% これらは |\fullwidth| 幅の |\hbox| の中で呼び出されます。
-% |\ps@...| の中で定義しておきます。
+% \DeleteShortVerb{\|}
+% \begin{tabular}{ll}
+% |\@oddhead| & 奇数ページのヘッダを出力\\
+% |\@oddfoot| & 奇数ページのフッタを出力\\
+% |\@evenhead| & 偶数ページのヘッダを出力\\
+% |\@evenfoot| & 偶数ページのフッタを出力\\
+% \end{tabular}
+% \MakeShortVerb{\|}
 %
+% これらの内容は、横組の場合は|\textwidth|の幅を持つ|\hbox|に入れられ、
+% 縦組の場合は|\textheight|の幅を持つ|\hbox|に入れられます。
 % \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}
-%
+
 % 柱の内容は，|\chapter| が呼び出す |\chaptermark{何々}|，
 % |\section| が呼び出す |\sectionmark{何々}| で設定します。
 % 柱を扱う命令には次のものがあります。
@@ -1828,24 +1774,12 @@
 % |plain| は |book| では |plainhead|，それ以外では |plainfoot| になります。
 %
 %    \begin{macrocode}
-\def\ps@plainfoot{%
-  \let\@mkboth\@gobbletwo
-  \let\@oddhead\@empty
-  \def\@oddfoot{\normalfont\hfil\thepage\hfil}%
-  \let\@evenhead\@empty
-  \let\@evenfoot\@oddfoot}
-\def\ps@plainhead{%
-  \let\@mkboth\@gobbletwo
-  \let\@oddfoot\@empty
-  \let\@evenfoot\@empty
-  \def\@evenhead{%
-    \if@mparswitch \hss \fi
-    \hbox to \fullwidth{\textbf{\thepage}\hfil}%
-    \if@mparswitch\else \hss \fi}%
-  \def\@oddhead{%
-    \hbox to \fullwidth{\hfil\textbf{\thepage}}\hss}}
-%<book>\if@report \let\ps@plain\ps@plainfoot \else \let\ps@plain\ps@plainhead \fi
-%<!book>\let\ps@plain\ps@plainfoot
+\def\ps@plain{\let\@mkboth\@gobbletwo
+   \let\ps@jpl@in\ps@plain
+   \let\@oddhead\@empty
+   \def\@oddfoot{\reset@font\hfil\thepage\hfil}%
+   \let\@evenhead\@empty
+   \let\@evenfoot\@oddfoot}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1856,41 +1790,6 @@
 % |headings| スタイルはヘッダに見出しとページ番号を出力します。
 % ここではヘッダにアンダーラインを引くようにしてみました。
 %
-% まず article の場合です。
-%
-%    \begin{macrocode}
-%<*article|kiyou>
-\if@twoside
-  \def\ps@headings{%
-    \let\@oddfoot\@empty
-    \let\@evenfoot\@empty
-    \def\@evenhead{\if@mparswitch \hss \fi
-      \underline{\hbox to \fullwidth{\textbf{\thepage}\hfil\leftmark}}%
-      \if@mparswitch\else \hss \fi}%
-    \def\@oddhead{%
-      \underline{%
-        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
-    \let\@mkboth\markboth
-    \def\sectionmark##1{\markboth{%
-       \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
-       ##1}{}}%
-    \def\subsectionmark##1{\markright{%
-       \ifnum \c@secnumdepth >\@ne \thesubsection \hskip1\zw\fi
-       ##1}}%
-  }
-\else % if not twoside
-  \def\ps@headings{%
-    \let\@oddfoot\@empty
-    \def\@oddhead{%
-      \underline{%
-        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
-    \let\@mkboth\markboth
-    \def\sectionmark##1{\markright{%
-        \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
-        ##1}}}
-\fi
-%</article|kiyou>
-%    \end{macrocode}
 %
 % 次は \WORD{} の場合です。
 % [2011-05-10] しっぽ愛好家さん [qa:6370] のパッチを取り込ませていただきました
@@ -1924,19 +1823,6 @@
     ##1}}}%
 %</book>
 %    \end{macrocode}
-%
-% 最後は学会誌の場合です。
-%
-%    \begin{macrocode}
-%<*jspf>
-\def\ps@headings{%
-  \def\@oddfoot{\normalfont\hfil\thepage\hfil}
-  \def\@evenfoot{\normalfont\hfil\thepage\hfil}
-  \def\@oddhead{\normalfont\hfil \@title \hfil}
-  \def\@evenhead{\normalfont\hfil プラズマ・核融合学会誌\hfil}}
-%</jspf>
-%    \end{macrocode}
-%
 % \end{macro}
 %
 % \begin{macro}{\ps@myheadings}
@@ -4256,17 +4142,8 @@
 % 参考文献リストを出力します。
 %
 %    \begin{macrocode}
-\newenvironment{thebibliography}[1]{%
-  \global\let\presectionname\relax
-  \global\let\postsectionname\relax
-%<article|jspf>  \section*{\refname}\@mkboth{\refname}{\refname}%
-%<*kiyou>
-  \vspace{1.5\baselineskip}
-  \subsubsection*{\refname}\@mkboth{\refname}{\refname}%
-  \vspace{0.5\baselineskip}
-%</kiyou>
-%<book>  \chapter*{\bibname}\@mkboth{\bibname}{}%
-%<book>  \addcontentsline{toc}{chapter}{\bibname}%
+\newenvironment{thebibliography}[1]
+{\section*{\refname\@mkboth{\@subtitle}{\@subtitle}}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -4275,7 +4152,6 @@
          \usecounter{enumiv}%
          \let\p@enumiv\@empty
          \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-%<kiyou>   \small
    \sloppy
    \clubpenalty4000
    \@clubpenalty\clubpenalty
@@ -4520,7 +4396,7 @@
 %    \begin{macrocode}
 \renewcommand{\footnoterule}{%
   \kern-3\p@
-  \hrule width .4\columnwidth
+  \hrule width\textwidth
   \kern 2.6\p@}
 %    \end{macrocode}
 % \end{macro}
@@ -4570,11 +4446,9 @@
 % ここでは脚注が左端から一定距離に来るようにしてあります。
 %
 %    \begin{macrocode}
-\newcommand\@makefntext[1]{%
-  \advance\leftskip 3\zw
-  \parindent 1\zw
-  \noindent
-  \llap{\@makefnmark\hskip0.3\zw}#1}
+\newcommand\@makefntext[1]{\parindent 1em
+  \baselineskip = 0.75\baselineskip
+  \noindent\hbox to 1.8em{\hss\@makefnmark}#1}
 %    \end{macrocode}
 % \end{macro}
 %

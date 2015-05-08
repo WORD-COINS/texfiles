@@ -1,10 +1,11 @@
 % \iffalse meta-comment
 %% File: word-lua.dtx
 %  -----------------------------------------
-%  Original: ltjsclasses.dtx git:tags/20141013.0
+%  Original: ltjsclasses.dtx git:tags/20150307.0
 %
 % \fi
-% \CheckSum{5203}
+%
+% \CheckSum{4478}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -20,10 +21,13 @@
 %%   Right bracket \]     Circumflex    \^     Underscore    \_
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
 %
 % \iffalse
 %
-%    \begin{macrocode}
 %<book>\NeedsTeXFormat{LaTeX2e}
 %<book>\ProvidesClass{word-lua}
 %<*driver>
@@ -62,8 +66,6 @@
 \DocInput{word-lua.dtx}
 \end{document}
 %</driver>
-%    \end{macrocode}
-%
 % \fi
 %
 % \title{\WORD{} \LuaLaTeX{} Class\space\fileversion}
@@ -1405,14 +1407,13 @@
 %
 % \begin{macro}{\marginparsep}
 % \begin{macro}{\marginparpush}
-% |\marginparsep|は、本文と傍注の間にあけるスペースの幅です。
-% 横組では本文の左（右）端と傍注、
-% 縦組では本文の下（上）端と傍注の間になります。
-% |\marginparpush|は、傍注と傍注との間のスペースの幅です。
-% WORDでは傍注を使わないので、|\z@|（0）とします
+%
+% |\marginparsep| は欄外の書き込みと本文との間隔です。
+% |\marginparpush| は欄外の書き込みどうしの最小の間隔です。
+%
 %    \begin{macrocode}
-\setlength\marginparsep{\z@}
-\setlength\marginparpush{\z@}
+\setlength\marginparsep{\columnsep}
+\setlength\marginparpush{\baselineskip}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1679,51 +1680,32 @@
 %
 % \section{ページスタイル}\label{sec:pagestyle}
 %
-% WORDクラスファイルでは、つぎの3種類のページスタイルを使用できます。
-% \pstyle{empty}は\file{latex.dtx}で定義されています。 
+% ページスタイルとして，\LaTeXe （欧文版）の標準クラス
+% では |empty|，|plain|，|headings|，|myheadings| があります。
+% このうち |empty|，|plain| スタイルは\LaTeXe 本体
+% で定義されています。 
 %
-% \begin{tabular}{ll}
-% empty      & ヘッダにもフッタにも出力しない\\
-% plain      & フッタにページ番号のみを出力する\\
-% headings   & ヘッダに見出しとページ番号を出力する\\
-% \end{tabular}
-% 
-% ただし、WORDではページ番号を赤入れの時にしか使わないので、
-% |\if@pagenumber|が\pstyle{true}の時のみページ番号を表示します。
-% |\if@pagenumber|はオプションに\pstyle{draft}か\pstyle{pagenum}を指定した時に
-% \pstyle{true}になります。
+% アスキーのクラスファイルでは |headnombre|，|footnombre|，
+% |bothstyle|，|jpl@in| が追加されていますが，
+% ここでは欧文標準のものだけにしました。
 %
-% ページスタイル\pstyle{foo}は、|\ps@foo|コマンドとして定義されます。
-% WORDでは次のように使います。
-%
-% \begin{tabular}{ll}
-% empty      & 通常は使わない\\
-% plain      & 通常は使わない\\
-% headings   & これを使う\\
-% \end{tabular}
+% ページスタイルは |\ps@...| の形のマクロで定義されています。
 %
 % \begin{macro}{\@evenhead}
 % \begin{macro}{\@oddhead}
 % \begin{macro}{\@evenfoot}
 % \begin{macro}{\@oddfoot}
-% これらは|\ps@...|から呼び出され、ヘッダとフッタを出力するマクロです。
 %
-% \DeleteShortVerb{\|}
-% \begin{tabular}{ll}
-% |\@oddhead| & 奇数ページのヘッダを出力\\
-% |\@oddfoot| & 奇数ページのフッタを出力\\
-% |\@evenhead| & 偶数ページのヘッダを出力\\
-% |\@evenfoot| & 偶数ページのフッタを出力\\
-% \end{tabular}
-% \MakeShortVerb{\|}
+% |\@oddhead|，|\@oddfoot|，|\@evenhead|，|\@evenfoot| は
+% 偶数・奇数ページの柱（ヘッダ，フッタ）を出力する命令です。
+% これらは |\fullwidth| 幅の |\hbox| の中で呼び出されます。
+% |\ps@...| の中で定義しておきます。
 %
-% これらの内容は、横組の場合は|\textwidth|の幅を持つ|\hbox|に入れられ、
-% 縦組の場合は|\textheight|の幅を持つ|\hbox|に入れられます。
 % \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}
-
+%
 % 柱の内容は，|\chapter| が呼び出す |\chaptermark{何々}|，
 % |\section| が呼び出す |\sectionmark{何々}| で設定します。
 % 柱を扱う命令には次のものがあります。
@@ -4142,8 +4124,17 @@
 % 参考文献リストを出力します。
 %
 %    \begin{macrocode}
-\newenvironment{thebibliography}[1]
-{\section*{\refname\@mkboth{\@subtitle}{\@subtitle}}%
+\newenvironment{thebibliography}[1]{%
+  \global\let\presectionname\relax
+  \global\let\postsectionname\relax
+%<article|jspf>  \section*{\refname}\@mkboth{\refname}{\refname}%
+%<*kiyou>
+  \vspace{1.5\baselineskip}
+  \subsubsection*{\refname}\@mkboth{\refname}{\refname}%
+  \vspace{0.5\baselineskip}
+%</kiyou>
+%<book>  \chapter*{\bibname}\@mkboth{\bibname}{}%
+%<book>  \addcontentsline{toc}{chapter}{\bibname}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -4152,6 +4143,7 @@
          \usecounter{enumiv}%
          \let\p@enumiv\@empty
          \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+%<kiyou>   \small
    \sloppy
    \clubpenalty4000
    \@clubpenalty\clubpenalty

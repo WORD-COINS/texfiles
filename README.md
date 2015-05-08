@@ -1,4 +1,4 @@
-WORD $$$Lua\LaTeX$$$ Class
+WORD $Lua\LaTeX$ Class
 ===
 
 - できた
@@ -11,6 +11,5 @@ WORD $$$Lua\LaTeX$$$ Class
 		* `\footnote{}`､`\footnoterule`ができた
 
 		* `\subtitle{}`をがんばっている途中
-		
-		* `word-lua.pdf`の文章がガバガバすぎる
 
+		* `word-lua.pdf`の文章がガバガバすぎる

@@ -33,19 +33,19 @@
 \ProvidesFile{word-lua.dtx}
 %</driver>
   [2015/05/07 v0.0
-	WORD LuaLaTeX class]
+	WORD LuaLaTeX Class]
 %<*driver>
 \documentclass{ltjsarticle}
 \usepackage{doc}
-\usepackage[ipaex,kozuka-pr6n]{luatexja-preset}
+\usepackage{luatexja-preset}
 \usepackage{unicode-math}
 \usepackage{metalogo}
 \setmathfont{Latin Modern Math}
 \usepackage[unicode]{hyperref}
-% \newcommand{\WORD}{%
-	% {\textsf{V\kern-.45emV}}\kern-.1em■%
-	% \kern-.81em{\textsf{\textcolor{white}{O}RD}}%
-% }
+\newcommand{\WORD}{%
+	{{V\kern-.45emV}}\kern-.1em■%
+	\kern-.81em{{\textcolor{white}{O}RD}}%
+}
 \hypersetup{%
 	unicode,%
 	colorlinks=true,%
@@ -69,7 +69,7 @@
 %
 % \fi
 %
-% \title{WORD{} \LuaLaTeX{} Class\space\fileversion}
+% \title{\WORD{} \LuaLaTeX{} Class\space\fileversion}
 % \author{Satoru \sc{Kawahara}}
 % \date{\filedate}
 % \maketitle
@@ -77,7 +77,7 @@
 %
 % \MakeShortVerb{\|}
 %
-% これは |ltjsclasses.dtx| をWORD用に改変したものです。
+% これは |ltjsclasses.dtx| を\WORD{}用に改変したものです。
 %
 % まず，|luatexja| を読み込みます。
 %    \begin{macrocode}
@@ -428,7 +428,7 @@
 %
 % \paragraph{数式フォントとして和文フォントを登録しないオプション}
 %
-% p\TeX では数式中では16通りのフォントしか使えませんでしたが，Lua\TeX では
+% \pTeX では数式中では16通りのフォントしか使えませんでしたが，\LuaTeX では
 % Omega拡張が取り込まれていて256通りのフォントが使えます。
 % ただし，\LaTeXe カーネルでは未だに数式ファミリの数は16個に制限されているので，
 % 実際に使用可能な数式ファミリの数を増やすためには |lualatex-math| パッケージを
@@ -678,7 +678,7 @@
 % \texttt{min10}やJISフォントメトリックでは「公称10ポイントの和文フォントは，
 % 実際には9.62216ptで出力される（メトリック側で0.962216倍される）」という
 % 仕様になっています。
-% 一方，Lua\TeX-jaの提供するメトリックでは，そのようなことはありません。
+% 一方，\LuaTeX{}-jaの提供するメトリックでは，そのようなことはありません。
 % 公称10ポイントの和文フォントは，10ポイントで出力されます。
 %
 % この |ltjsclasses| でも，派生元の |jsclasses| と同じように，
@@ -787,9 +787,9 @@
          \romanfamily\ttdefault\kanjifamily\jttdefault\selectfont}
 %    \end{macrocode}
 %%
-% Lua\TeX-jaでは和文組版に伴うグルーはノードベースで挿入するようになり，また
+		 % \LuaTeX{}-jaでは和文組版に伴うグルーはノードベースで挿入するようになり，また
 % 欧文・和文間のグルーとイタリック補正は干渉しないようになりました。
-% まだ「和文の斜体」についてはLua\LaTeX カーネル側でまともな対応がされていませんが，
+		 % まだ「和文の斜体」については\LuaLaTeX{}カーネル側でまともな対応がされていませんが，
 % |jsclasses.dtx| で行われていた |\textmc|, |\textgt| の再定義は不要のように思われます。
 %
 % |jsclasses.dtx| 中で行われていた |\reDeclareMathAlphabet| の再定義は削除。
@@ -821,7 +821,7 @@
 %
 % アスキーの \texttt{kinsoku.dtx} では「’」「“」「”」前後のペナルティが5000に
 % なっていたので，\texttt{jsclasses.dtx} ではそれを 10000 に補正していました。
-% しかし，Lua\TeX-jaでは最初からこれらのパラメータは 10000 なので，
+  % しかし，\LuaTeX{}-jaでは最初からこれらのパラメータは 10000 なので，
 % もはや補正する必要はありません。
 %
 % 「\TeX！」「〒515」の記号と数字の間に四分アキが入らないようにします。
@@ -839,8 +839,8 @@
 \ltjsetparameter{alxspmode={`\%,3}}
 %    \end{macrocode}
 %
-% \texttt{jsclasses.dtx} では80〜ffの文字の |\xspcode| を全て3にしていましたが，
-% Lua\TeX-jaでは同様の内容が最初から設定されていますので，対応する部分は削除。
+% \texttt{jsclasses.dtx} では80～ffの文字の |\xspcode| を全て3にしていましたが，
+% \LuaTeX{}-jaでは同様の内容が最初から設定されていますので，対応する部分は削除。
 %
 % \begin{macro}{\@}
 %
@@ -1338,8 +1338,8 @@
 % \begin{macro}{\footskip}
 %
 % |\footskip| は本文領域下端とフッタ下端との距離です。
-% 標準クラスファイルでは，WORD で0.35in（約8.89mm），
-% WORD 以外で30pt（約10.54mm）となっていましたが，
+% 標準クラスファイルでは，\WORD{} で0.35in（約8.89mm），
+% \WORD{} 以外で30pt（約10.54mm）となっていましたが，
 % ここではA4判のときちょうど1cmとなるように，
 % |\paperheight| の0.03367倍（最小 |\baselineskip|）としました。
 % 書籍については，フッタは使わないことにして，ゼロにしました。
@@ -1372,7 +1372,7 @@
 % \begin{macro}{\headsep}
 %
 % |\headsep| はヘッダ下端と本文領域上端との距離です。
-% 元は WORD で18pt（約6.33mm），
+% 元は \WORD{} で18pt（約6.33mm），
 % それ以外で25pt（約8.79mm）になっていました。
 % ここでは article は |\footskip| $-$ |\topskip| としました。
 %
@@ -1435,7 +1435,7 @@
 % この |\fullwidth| は article では紙幅 |\paperwidth|の0.76倍を超えない
 % 全角幅の整数倍（二段組では全角幅の偶数倍）にします。0.76倍という数値は
 % A4縦置きの場合に紙幅から約2インチを引いた値になるように選びました。
-% WORD では紙幅から36ミリを引いた値にしました。
+% \WORD{} では紙幅から36ミリを引いた値にしました。
 %
 % \begin{macro}{\textwidth}
 %
@@ -1548,7 +1548,7 @@
 % はトンボの内側に |1in| のスペース（|1truein| ではなく）を挿入するので，
 % 場合分けしています。
 %
-% [2011-10-03 LTJ] Lua\TeX{} (pdf\TeX？) では |1truein| ではなく
+% [2011-10-03 LTJ] \LuaTeX{}{} (pdf\TeX？) では |1truein| ではなく
 % |1in| になるようです。
 %
 %    \begin{macrocode}
@@ -1954,7 +1954,7 @@
 %</article|kiyou>
 %    \end{macrocode}
 %
-% 次は WORD の場合です。
+% 次は \WORD{} の場合です。
 % [2011-05-10] しっぽ愛好家さん [qa:6370] のパッチを取り込ませていただきました
 % （北見さん [qa:55896] のご指摘ありがとうございます）。
 %
@@ -2393,7 +2393,7 @@
 % 二つ挿入した |\everyparhook| のうち後者が |\paragraph| 類の後で2回実行され，
 % それ以降は前者が実行されます。
 %
-% [2011-10-05 LTJ] Lua\TeX-jaでは |\everyparhook| は不要なので削除。
+% [2011-10-05 LTJ] \LuaTeX{}-jaでは |\everyparhook| は不要なので削除。
 %
 %    \begin{macrocode}
 \def\@xsect#1{%
@@ -3146,7 +3146,7 @@
 % \begin{macro}{\@listv}
 % \begin{macro}{\@listvi}
 %
-%    第2〜6レベルのリスト環境のパラメータの設定です。
+%    第2～6レベルのリスト環境のパラメータの設定です。
 %
 %    \begin{macrocode}
 \def\@listii{\leftmargin\leftmarginii
@@ -4424,7 +4424,7 @@
 %
 % \begin{environment}{theindex}
 %
-% 2〜3段組の索引を作成します。
+% 2～3段組の索引を作成します。
 % 最後が偶数ページのときにマージンがずれる現象を直しました（Thanks: 藤村さん）。
 %
 %    \begin{macrocode}

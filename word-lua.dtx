@@ -24,7 +24,7 @@
 % \iffalse
 %
 %    \begin{macrocode}
-%<article|book|jspf|kiyou>\NeedsTeXFormat{LaTeX2e}
+%<book|jspf|kiyou>\NeedsTeXFormat{LaTeX2e}
 %<article>\ProvidesClass{ltjsarticle}
 %<book>\ProvidesClass{word-lua}
 %<jspf>\ProvidesClass{ltjspf}
@@ -144,75 +144,13 @@
 % 以下で各オプションを宣言します。
 %
 % \paragraph{用紙サイズ}
-%
-% JISやISOのA0判は面積 $1\,\mathrm{m}^2$，縦横比 $1:\sqrt{2}$
-% の長方形の辺の長さを mm 単位に切り捨てたものです。
-% これを基準として順に半截しては mm 単位に切り捨てたものがA1，A2，…です。
-%
-% B判はJISとISOで定義が異なります。
-% JISではB0判の面積が $1.5\,\mathrm{m}^2$ ですが，
-% ISOではB1判の辺の長さがA0判とA1判の辺の長さの幾何平均です。
-% したがってISOのB0判は $1000\,\mathrm{mm} \times 1414\,\mathrm{mm}$ です。
-% このため，\LaTeXe の \texttt{b5paper}
-% は $250\,\mathrm{mm} \times 176\,\mathrm{mm}$ ですが，
-% \pLaTeXe の \texttt{b5paper}
-% は $257\,\mathrm{mm} \times 182\,\mathrm{mm}$ になっています。
-% ここでは\pLaTeXe にならってJISに従いました。
-% 
-% デフォルトは \texttt{a4paper} です。
-%
-% \texttt{b5var}（B5変形，182mm×230mm），
-% \texttt{a4var}（A4変形，210mm×283mm）を追加しました。
+% 用紙サイズを指定します｡
+% \WORD{}はJIS B5を用います｡
 %
 %    \begin{macrocode}
-\DeclareOption{a3paper}{%
-  \setlength\paperheight {420mm}%
-  \setlength\paperwidth  {297mm}}
-\DeclareOption{a4paper}{%
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5paper}{%
-  \setlength\paperheight {210mm}%
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{a6paper}{%
-  \setlength\paperheight {148mm}%
-  \setlength\paperwidth  {105mm}}
-\DeclareOption{b4paper}{%
-  \setlength\paperheight {364mm}%
-  \setlength\paperwidth  {257mm}}
-\DeclareOption{b5paper}{%
-  \setlength\paperheight {257mm}%
-  \setlength\paperwidth  {182mm}}
-\DeclareOption{b6paper}{%
-  \setlength\paperheight {182mm}%
-  \setlength\paperwidth  {128mm}}
-\DeclareOption{a4j}{%
-  \setlength\paperheight {297mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{a5j}{%
-  \setlength\paperheight {210mm}%
-  \setlength\paperwidth  {148mm}}
-\DeclareOption{b4j}{%
-  \setlength\paperheight {364mm}%
-  \setlength\paperwidth  {257mm}}
 \DeclareOption{b5j}{%
   \setlength\paperheight {257mm}%
   \setlength\paperwidth  {182mm}}
-\DeclareOption{a4var}{%
-  \setlength\paperheight {283mm}%
-  \setlength\paperwidth  {210mm}}
-\DeclareOption{b5var}{%
-  \setlength\paperheight {230mm}%
-  \setlength\paperwidth  {182mm}}
-\DeclareOption{letterpaper}{%
-  \setlength\paperheight {11in}%
-  \setlength\paperwidth  {8.5in}}
-\DeclareOption{legalpaper}{%
-  \setlength\paperheight {14in}%
-  \setlength\paperwidth  {8.5in}}
-\DeclareOption{executivepaper}{%
-  \setlength\paperheight {10.5in}%
-  \setlength\paperwidth  {7.25in}}
 %    \end{macrocode}
 %
 % \paragraph{横置き}

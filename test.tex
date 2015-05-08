@@ -1,13 +1,44 @@
 \documentclass{word}
+\usepackage{listings}
 
-\subtitle{hoge}
-\author{著者}
-
+\author{WORD太郎}
+\subtitle{subtitleだぴょん}
 
 \begin{document}
-\chapter{タイトル}
+\chapter{chapter as Title}
+
+\section{はじめに}
+this is はじめに section.
+
+\section{this is next}
+
 hoge
 
 にほんご\footnote{でぃすいずてすと}
+
+puyo\footnote{footnote}
+
+hoge\footnote{なんでヘッダの横線が1ページ目でなーッ}
+
+ックス\footnote{3page}
+
+\newpage
+
+\section{ほげ}
+
+\newpage
+
+$にほんごinmath$
+
+\newpage
+↑どうなってんねん
+
+\lstset{language=TeX,numbers=left}
+\begin{lstlisting}
+\LuaLaTeX{} can put
+>にほんご<
+correctly in listings
+\end{lstlisting}
+
 
 \end{document}

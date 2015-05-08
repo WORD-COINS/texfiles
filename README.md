@@ -1,15 +1,15 @@
-WORD $Lua\LaTeX$ Class
+WORD LuaLaTeX Class
 ===
 
-- できた
-	+ Makefile
-		* `make lua`で`word-lua.cls`ができる
+- Makefile
+	+ `make lua`で`word-lua.cls`ができる
 
-	+ word-lua.dtx
-		* ltjsclasses.dtx tags/20141013.0ベース
+	+ `word-lua.pdf`の作成に時間がかかるので今は`$(YES) | $(MAKE) $(DOCUMENT`をコメントアウトしている
 
-		* `\footnote{}`､`\footnoterule`ができた
+- word-lua.dtx *based on ltjsclasses.dtx tags/20150307.0*
 
-		* `\subtitle{}`をがんばっている途中
+	+ フォントサイズがややデカい
 
-		* `word-lua.pdf`の文章がガバガバすぎる
+	+ listings.styの`\lstinputlisting`を使うとtreated as Zeroが出る
+
+	+ 偶数頁のヘッダに日本語が入っているとびよ～んとなる

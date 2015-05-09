@@ -8,5 +8,6 @@ WORD $Lua\LaTeX$ Class
 	+ word-lua.dtx
 		* ltjsclasses.dtx tags/20150307.0ベース
 
-		* 座標はともかく見た目はそれっぽくなってきたので､位置の調節を開始した｡
-			- 上から`\textwidth`まで見ていった｡`\fullwidth`とは…｡
+		* フォントサイズがややデカい
+
+		* listings.styの`\lstinputlisting`を使うとtreated as Zeroが出る

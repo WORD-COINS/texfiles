@@ -26,11 +26,8 @@
 % \iffalse
 %
 %    \begin{macrocode}
-%<article|book|jspf|kiyou>\NeedsTeXFormat{LaTeX2e}
-%<article>\ProvidesClass{ltjsarticle}
+%<book>\NeedsTeXFormat{LaTeX2e}
 %<book>\ProvidesClass{word-lua}
-%<jspf>\ProvidesClass{ltjspf}
-%<kiyou>\ProvidesClass{ltjskiyou}
 %<*driver>
 \ProvidesFile{word-lua.dtx}
 %</driver>
@@ -195,9 +192,6 @@
 % |\@ptsize| の定義が変だったのでご迷惑をおかけしましたが，
 % 標準的なドキュメントクラスと同様にポイント数から10を引いたものに直しました。
 %
-% [2003-03-22] 14Qオプションを追加しました。
-%
-% [2003-04-18] 12Qオプションを追加しました。
 %
 %    \begin{macrocode}
 \newcommand{\@ptsize}{0}
@@ -467,10 +461,7 @@
 % |multicols| や |url| を |\RequirePackage| するのはやめました。
 %
 %    \begin{macrocode}
-%<article>\ExecuteOptions{a4paper,oneside,onecolumn,notitlepage,final}
-%<book>\ExecuteOptions{b5j,twoside,onecolumn,titlepage,openright,final}
-%<jspf>\ExecuteOptions{a4paper,twoside,twocolumn,notitlepage,fleqn,final}
-%<kiyou>\ExecuteOptions{a4paper,twoside,twocolumn,notitlepage,final}
+%<book>\ExecuteOptions{b5j,twoside,onecolumn,openright,final}
 \ProcessOptions
 %    \end{macrocode}
 %
@@ -1092,13 +1083,10 @@
 \newcommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
 \if@twocolumn
 %<!kiyou>  \newcommand{\large}{\@setfontsize\large\@xiipt{\n@baseline}}
-%<kiyou>  \newcommand{\large}{\@setfontsize\large{11.111}{\n@baseline}}
 \else
 %<!kiyou>  \newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-%<kiyou>  \newcommand{\large}{\@setfontsize\large{11.111}{17}}
 \fi
 %<!kiyou>\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-%<kiyou>\newcommand{\Large}{\@setfontsize\Large{12.222}{21}}
 \newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
 \newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
 \newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
@@ -1379,24 +1367,8 @@
 % 以前はこの二つは値が同じであったので，変化はないはずです。
 %
 %    \begin{macrocode}
-%<*article|book>
-\if@slide
-  \setlength{\textheight}{0.95\paperheight}
-\else
-  \setlength{\textheight}{0.83\paperheight}
-\fi
-\addtolength{\textheight}{-\topskip}
-\addtolength{\textheight}{-\headsep}
-\addtolength{\textheight}{-\footskip}
-\addtolength{\textheight}{-\topskip}
-\divide\textheight\baselineskip
-\multiply\textheight\baselineskip
-%</article|book>
-%<jspf>\setlength{\textheight}{51\baselineskip}
-%<kiyou>\setlength{\textheight}{47\baselineskip}
+\setlength{\textheight}{33\Cvs}
 \addtolength{\textheight}{\topskip}
-\addtolength{\textheight}{0.1\p@}
-%<jspf>\setlength{\mathindent}{10mm}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1407,8 +1379,8 @@
 % |\marginparpush| は欄外の書き込みどうしの最小の間隔です。
 %
 %    \begin{macrocode}
-\setlength\marginparsep{\columnsep}
-\setlength\marginparpush{\baselineskip}
+\setlength\marginparsep{\z@}
+\setlength\marginparpush{\z@}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1423,19 +1395,13 @@
 % はトンボの内側に |1in| のスペース（|1truein| ではなく）を挿入するので，
 % 場合分けしています。
 %
-% [2011-10-03 LTJ] Lua\TeX{} (pdf\TeX？) では |1truein| ではなく
-% |1in| になるようです。
 %
 %    \begin{macrocode}
-\setlength{\oddsidemargin}{\paperwidth}
-\addtolength{\oddsidemargin}{-\fullwidth}
-\setlength{\oddsidemargin}{.5\oddsidemargin}
+\setlength{\@tempdima}{\paperwidth}
+\addtolength{\@tempdima}{-\textwidth}
+\setlength{\oddsidemargin}{.5\@tempdima}
 \addtolength{\oddsidemargin}{-1in}
 \setlength{\evensidemargin}{\oddsidemargin}
-\if@mparswitch
-  \addtolength{\evensidemargin}{\fullwidth}
-  \addtolength{\evensidemargin}{-\textwidth}
-\fi
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1448,15 +1414,7 @@
 % しました。最後に|1\zw|の整数倍に切り捨てます。
 %
 %    \begin{macrocode}
-\setlength\marginparwidth{\paperwidth}
-\addtolength\marginparwidth{-\oddsidemargin}
-\addtolength\marginparwidth{-1in}
-\addtolength\marginparwidth{-\textwidth}
-\addtolength\marginparwidth{-1cm}
-\addtolength\marginparwidth{-\marginparsep}
-\@tempdima=1\zw
-\divide\marginparwidth\@tempdima
-\multiply\marginparwidth\@tempdima
+\setlength\marginparwidth{\z@}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1472,18 +1430,8 @@
 % |-1in| にします。
 %
 %    \begin{macrocode}
-\setlength\topmargin{\paperheight}
-\addtolength\topmargin{-\textheight}
-\if@slide
-  \addtolength\topmargin{-\headheight}
-\else
-  \addtolength\topmargin{-\topskip}
-\fi
-\addtolength\topmargin{-\headsep}
-\addtolength\topmargin{-\footskip}
-\setlength\topmargin{0.5\topmargin}
-%<kiyou>\setlength\topmargin{81truebp}
-\addtolength\topmargin{-1in}
+\setlength\topmargin{-1.0in}
+\addtolength\topmargin{12mm}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1496,8 +1444,7 @@
 % |\footnotesize| の支柱の高さ（行送りの0.7倍）に等しくします。
 %
 %    \begin{macrocode}
-{\footnotesize\global\setlength\footnotesep{\baselineskip}}
-\setlength\footnotesep{0.7\footnotesep}
+\setlength{\footnotesep}{3mm}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1508,7 +1455,7 @@
 % 和文の行送りを考えてもうちょっと大きくします。
 %
 %    \begin{macrocode}
-\setlength{\skip\footins}{16\p@ \@plus 5\p@ \@minus 2\p@}
+\setlength{\skip\footins}{5mm \@plus 10mm \@minus 3mm}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1526,7 +1473,7 @@
 % [2003-08-23] ちょっと増やしました。
 %
 %    \begin{macrocode}
-\setcounter{topnumber}{9}
+\setcounter{topnumber}{2}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1536,7 +1483,7 @@
 % フロートが入りやすいように，元の値 0.7 を 0.8 [2003-08-23: 0.85] に変えてあります。
 %
 %    \begin{macrocode}
-\renewcommand{\topfraction}{.85}
+\renewcommand{\topfraction}{.7}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1547,7 +1494,7 @@
 % [2003-08-23] ちょっと増やしました。
 %
 %    \begin{macrocode}
-\setcounter{bottomnumber}{9}
+\setcounter{bottomnumber}{1}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1556,7 +1503,7 @@
 % 本文ページ下部のフロートが占有できる最大の割合です。元は 0.3 でした。
 %
 %    \begin{macrocode}
-\renewcommand{\bottomfraction}{.8}
+\renewcommand{\bottomfraction}{.3}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1567,7 +1514,7 @@
 % [2003-08-23] ちょっと増やしました。
 %
 %    \begin{macrocode}
-\setcounter{totalnumber}{20}
+\setcounter{totalnumber}{3}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1577,7 +1524,7 @@
 % フロートが入りやすいように元の 0.2 を 0.1 に変えました。
 %
 %    \begin{macrocode}
-\renewcommand{\textfraction}{.1}
+\renewcommand{\textfraction}{.2}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1777,10 +1724,10 @@
   \let\@evenfoot\@empty
   \def\@evenhead{%
     \if@mparswitch \hss \fi
-    \underline{\hbox to \fullwidth{\@subtitle\hfil}}%
+    \underline{\hbox to \textwidth{\@subtitle\hfil}}%
     \if@mparswitch\else \hss \fi}%
   \def\@oddhead{%
-    \underline{\hbox to \fullwidth{\hfil\@subtitle}\hss}}}
+    \underline{\hbox to \textwidth{\hfil\@subtitle}\hss}}}
 %<book>\if@report \let\ps@plain\ps@plainfoot \else \let\ps@plain\ps@plainhead \fi
 %<!book>\let\ps@plain\ps@plainfoot
 %    \end{macrocode}
@@ -1839,11 +1786,9 @@
   \let\@evenfoot\@empty
   \def\@evenhead{%
     \if@mparswitch \hss \fi
-    \underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        \@subtitle\hfil\leftmark}}%
+	\underline{\hbox to \textwidth{\@subtitle}\hfil}%
     \if@mparswitch\else \hss \fi}%
-  \def\@oddhead{\underline{\hbox to \fullwidth{\ltjsetparameter{autoxspacing={true}}
-        \hfil\@subtitle}}\hss}%
+  \def\@oddhead{\underline{\hbox to \textwidth{\hfil\@subtitle}}\hss}%
   \let\@mkboth\markboth
   \def\chaptermark##1{\markboth{%
     \ifnum \c@secnumdepth >\m@ne
@@ -2675,18 +2620,24 @@
 %
 %    \begin{macrocode}
 \def\@makechapterhead#1{%
-  \vspace*{2\Cvs}% 欧文は50pt
-  {\parindent \z@ \raggedright \normalfont
-    \ifnum \c@secnumdepth >\m@ne
-      \if@mainmatter
-        \huge\headfont \@chapapp\thechapter\@chappos
-        \par\nobreak
-        \vskip \Cvs % 欧文は20pt
-      \fi
-    \fi
-    \interlinepenalty\@M
-    \Huge \headfont #1\par\nobreak
-    \vskip 3\Cvs}} % 欧文は40pt
+  {\parindent\z@
+   \raggedright
+   \reset@font\huge\gt\bfseries
+   \leavevmode
+   \ifnum \c@secnumdepth >\m@ne
+     \setlength\@tempdima{\linewidth}%
+     \if@mainmatter
+       \setbox\z@\hbox{\@chapapp\thechapter\@chappos\hskip1zw}%
+       \addtolength\@tempdima{-\wd\z@}%
+	 \else
+	   \setbox\z@\hbox{}%
+	 \fi
+	 \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss\unhbox\z@\nobreak#1\hss}}%
+   \else
+     #1\relax
+   \fi}\nobreak\vskip\Cvs
+   \hbox to\textwidth{\large\hss\@authormark\hskip\Cwd\@author}%
+   \vskip.5\Cvs}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2736,18 +2687,16 @@
 %    \begin{macrocode}
 \if@twocolumn
   \newcommand{\section}{%
-%<jspf>\ifx\maketitle\relax\else\maketitle\fi
     \@startsection{section}{1}{\z@}%
-%<!kiyou>    {0.6\Cvs}{0.4\Cvs}%
-%<kiyou>    {\Cvs}{0.5\Cvs}%
+%    {\z@}{\z@}%
 %   {\normalfont\large\headfont\@secapp}}
     {\normalfont\large\headfont\raggedright}}
 \else
   \newcommand{\section}{%
     \if@slide\clearpage\fi
     \@startsection{section}{1}{\z@}%
-    {\Cvs \@plus.5\Cdp \@minus.2\Cdp}% 前アキ
-    {.5\Cvs \@plus.3\Cdp}% 後アキ
+    {\z@}% 前アキ
+    {\z@}% 後アキ
 %   {\normalfont\Large\headfont\@secapp}}
     {\normalfont\Large\headfont\raggedright}}
 \fi

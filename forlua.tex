@@ -1,14 +1,17 @@
 \documentclass{word-lua}
-% \setcounter{page}{2}
-% \usepackage{listings}
+\usepackage{listings}
+\usepackage{luatexja-fontspec}
+\setmainfont{TeX Gyre Schola}
 
-\author{著者}
-\subtitle{fuck}
+\author{WORD太郎}
+\subtitle{subtitleだぴょん}
 
 \begin{document}
-\chapter{title}
+\chapter{\Large{}chapter as Title}
 
 \section{はじめに}
+this is はじめに section.
+
 \section{this is next}
 
 hoge
@@ -27,9 +30,17 @@ hoge\footnote{なんでヘッダの横線が1ページ目でなーッ}
 
 \newpage
 
-ぴよ
+$にほんごinmath$
 
-% \lstinputlistings{forlua.tex}
+\newpage
+↑どうなってんねん
+
+\lstset{language=TeX,numbers=left}
+\begin{lstlisting}
+\LuaLaTeX{} can put
+>にほんご<
+correctly in listings
+\end{lstlisting}
 
 
 \end{document}

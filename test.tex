@@ -1,13 +1,16 @@
 \documentclass{word}
+\usepackage{listings}
 
-\author{著者}
-\subtitle{fuck}
+\author{WORD太郎}
+\subtitle{subtitleだぴょん}
 
 \begin{document}
-\chapter{title}
+\chapter{chapter as Title}
 
 \section{はじめに}
-\section{つぎに}
+this is はじめに section.
+
+\section{this is next}
 
 hoge
 
@@ -15,16 +18,27 @@ hoge
 
 puyo\footnote{footnote}
 
-\newpage
-
 hoge\footnote{なんでヘッダの横線が1ページ目でなーッ}
 
+ックス\footnote{3page}
+
 \newpage
 
-\chapter*{fuckbaby}
+\section{ほげ}
 
+\newpage
 
-ックス\footnote{3page}
+$にほんごinmath$
+
+\newpage
+↑どうなってんねん
+
+\lstset{language=TeX,numbers=left}
+\begin{lstlisting}
+\LuaLaTeX{} can put
+>にほんご<
+correctly in listings
+\end{lstlisting}
 
 
 \end{document}

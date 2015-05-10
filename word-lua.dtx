@@ -80,10 +80,7 @@
 % 次のドキュメントクラス（スタイルファイル）を生成します。
 % \begin{quote}
 %   \begin{tabular}{lll}
-%     $\langle$\textsf{article}$\rangle$ & \texttt{ltjsarticle.cls}  & 論文・レポート用 \\
 %     $\langle$\textsf{word-lua}$\rangle$    & \texttt{word-lua.cls}     & WORD用 \\
-%     $\langle$\textsf{jspf}$\rangle$    & \texttt{ltjspf.cls}       & 某学会誌用 \\
-%     $\langle$\textsf{kiyou}$\rangle$   & \texttt{ltjskiyou.cls}      & 某紀要用
 %   \end{tabular}
 % \end{quote}
 %
@@ -485,9 +482,7 @@
 % 基準となる行送りをポイント単位で表したものです。
 %
 %    \begin{macrocode}
-%<article|book>\if@slide\def\n@baseline{13}\else\def\n@baseline{16}\fi
-%<jspf>\def\n@baseline{14.554375}
-%<kiyou>\def\n@baseline{14.897}
+%<book>\if@slide\def\n@baseline{13}\else\def\n@baseline{16}\fi
 %    \end{macrocode}
 % \end{macro}
 %
@@ -582,10 +577,6 @@
   \mag 1302
   \def\inv@mag{0.768049}
 \fi
-%<*kiyou>
-\mag 977
-\def\inv@mag{1.02354}
-%</kiyou>
 \setlength\paperwidth{\inv@mag\paperwidth}%
 \setlength\paperheight{\inv@mag\paperheight}%
 %    \end{macrocode}
@@ -637,7 +628,6 @@
 % セットされるものです。
 %
 %    \begin{macrocode}
-%<*!jspf>
 \expandafter\let\csname JY3/mc/m/n/10\endcsname\relax
 \ifmingoth
   \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.924872] \ltj@stdmcfont:jfm=min}{}
@@ -651,7 +641,6 @@
     \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.924872] \ltj@stdgtfont:jfm=ujis}{}
   \fi
 \fi
-%</!jspf>
 %    \end{macrocode}
 %
 % これにより，公称10ポイントの和文フォントを0.924872倍したことにより，
@@ -659,45 +648,8 @@
 % DTPで使う単位（1/72インチ）では9.21ポイントということになり，
 % 公称10ポイントといっても実は9ポイント強になります。
 %
-% 某学会誌では，
-% 和文フォントをPostScriptの9ポイントにするために，
-% $0.9*72.27/72 \simeq 0.903375$ 倍します。
-%
-%    \begin{macrocode}
-%<*jspf>
-\expandafter\let\csname JY3/mc/m/n/10\endcsname\relax
-\ifmingoth
-  \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=min}{}
-  \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=min}{}
-\else
-  \ifptexjis
-    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=jis}{}
-    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=jis}{}
-  \else
-    \DeclareFontShape{JY3}{mc}{m}{n}{<-> s * [0.903375] \ltj@stdmcfont:jfm=ujis}{}
-    \DeclareFontShape{JY3}{gt}{m}{n}{<-> s * [0.903375] \ltj@stdgtfont:jfm=ujis}{}
-  \fi
-\fi
-%</jspf>
-%    \end{macrocode}
-%
 % 和文でイタリック体，斜体，サンセリフ体，
 % タイプライタ体の代わりにゴシック体を使うことにします。
-%
-% [2014-03-25 LTJ] タイプライタ体に合わせるファミリを |\jttdefault| とし，
-% 通常のゴシック体と別にできるようにしました．|\jttdefault| は，標準で
-% |\gtdefault| と定義しています．
-%
-% [2003-03-16] イタリック体，斜体について，和文でゴシックを当てていましたが，
-% 数学の定理環境などで多量のイタリック体を使うことがあり，ゴシックに
-% すると黒々となってしまうという弊害がありました。
-% |amsthm| を使わない場合は定理の本文が明朝になるように |\newtheorem|
-% 環境を手直ししてしのいでいましたが，
-% \TeX が数学で多用されることを考えると，イタリック体に明朝体を
-% 当てたほうがいいように思えてきましたので，
-% イタリック体・斜体に対応する和文を明朝体に変えることにしました。
-%
-% [2004-11-03] |\rmfamily| も和文対応にしました。
 %
 %    \begin{macrocode}
 \DeclareFontShape{JY3}{mc}{bx}{n}{<->ssub*gt/m/n}{}
@@ -926,48 +878,13 @@
 %
 % 標準のフォントサイズと行送りを選ぶコマンドです。
 %
-% 本文10ポイントのときの行送りは，
-% 欧文の標準クラスファイルでは12ポイント，
-% アスキーの和文クラスファイルでは15ポイントになっていますが，
-% ここでは16ポイントにしました。
-% ただし |\narrowbaselines| で欧文用の12ポイントになります。
-%
-% 公称10ポイントの和文フォントが約9.25ポイント
-% （アスキーのものの0.961倍）であることもあり，
-% 行送りがかなりゆったりとしたと思います。
-% 実際，$16/9.25 \approx 1.73$ であり，
-% 和文の推奨値の一つ「二分四分」（1.75）
-% に近づきました。
-%
 %    \begin{macrocode}
 \renewcommand{\normalsize}{%
-  \ifnarrowbaselines
-    \@setfontsize\normalsize\@xpt\@xiipt
-  \else
-    \@setfontsize\normalsize\@xpt{\n@baseline}%
-  \fi
-%    \end{macrocode}
-%
-% 数式の上のアキ（|\abovedisplayskip|），
-% 短い数式の上のアキ（|\abovedisplayshortskip|），
-% 数式の下のアキ（|\belowdisplayshortskip|）の設定です。
-%
-% [2003-02-16] ちょっと変えました。
-%
-% [2009-08-26] \TeX\ Q\,\&\,A 52569から始まる議論について逡巡して
-% いましたが，結局，微調節してみることにしました。
-%
-%    \begin{macrocode}
-  \abovedisplayskip 11\p@ \@plus3\p@ \@minus4\p@
+  \@setfontsize\normalsize{8.5}{17}%
+  \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
   \abovedisplayshortskip \z@ \@plus3\p@
-  \belowdisplayskip 9\p@ \@plus3\p@ \@minus4\p@
-  \belowdisplayshortskip \belowdisplayskip
-%    \end{macrocode}
-%
-% 最後に，リスト環境のトップレベルのパラメータ |\@listI| を，
-% |\@listi| にコピーしておきます。|\@listI| の設定は後で出てきます。
-%
-%    \begin{macrocode}
+  \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+  \belowdisplayskip \abovedisplayskip
   \let\@listi\@listI}
 %    \end{macrocode}
 %
@@ -988,10 +905,9 @@
 % 基準となる長さの設定をします。
 % \texttt{lltjfont.sty}で宣言されている
 % パラメータに実際の値を設定します。
-% たとえば |\Cwd| は |\normalfont| の全角幅（|1\zw|）です。
 %
 %    \begin{macrocode}
-\setbox0\hbox{\char"3000}% 全角スペース
+\setbox0\hbox{\char\euc"A1A1}%
 \setlength\Cht{\ht0}
 \setlength\Cdp{\dp0}
 \setlength\Cwd{\wd0}
@@ -1007,56 +923,36 @@
 % \begin{macro}{\small}
 %
 % |\small| も |\normalsize| と同様に設定します。
-% 行送りは，|\normalsize| が16ポイントなら，
-% 割合からすれば $16 \times 0.9 = 14.4$ ポイントになりますが，
-% |\small| の使われ方を考えて，ここでは和文13ポイント，
-% 欧文11ポイントとします。
-% また，|\topsep| と |\parsep| は，元はそれぞれ $4 \pm 2$，$2 \pm 1$
-% ポイントでしたが，ここではゼロ（|\z@|）にしました。
 %
 %    \begin{macrocode}
 \newcommand{\small}{%
-  \ifnarrowbaselines
-%<!kiyou>    \@setfontsize\small\@ixpt{11}%
-%<kiyou>    \@setfontsize\small{8.8888}{11}%
-  \else
-%<!kiyou>    \@setfontsize\small\@ixpt{13}%
-%<kiyou>    \@setfontsize\small{8.8888}{13.2418}%
-  \fi
-  \abovedisplayskip 9\p@ \@plus3\p@ \@minus4\p@
-  \abovedisplayshortskip  \z@ \@plus3\p@
-  \belowdisplayskip \abovedisplayskip
-  \belowdisplayshortskip \belowdisplayskip
+  \@setfontsize\small{7.5}{14}%
+  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  \abovedisplayshortskip  \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
   \def\@listi{\leftmargin\leftmargini
-              \topsep \z@
-              \parsep \z@
-              \itemsep \parsep}}
+              \topsep 4\p@ \@plus2\p@ \@minus2\p@
+              \parsep 2\p@ \@plus\p@ \@minus\p@
+              \itemsep \parsep}%
+  \belowdisplayskip \abovedisplayskip}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\footnotesize}
 %
 % |\footnotesize| も同様です。
-% |\topsep| と |\parsep| は，元はそれぞれ$3 \pm 1$，$2 \pm 1$
-% ポイントでしたが，ここではゼロ（|\z@|）にしました。
 %
 %    \begin{macrocode}
 \newcommand{\footnotesize}{%
-  \ifnarrowbaselines
-%<!kiyou>    \@setfontsize\footnotesize\@viiipt{9.5}%
-%<kiyou>    \@setfontsize\footnotesize{8.8888}{11}%
-  \else
-%<!kiyou>    \@setfontsize\footnotesize\@viiipt{11}%
-%<kiyou>    \@setfontsize\footnotesize{8.8888}{13.2418}%
-  \fi
-  \abovedisplayskip 6\p@ \@plus2\p@ \@minus3\p@
-  \abovedisplayshortskip  \z@ \@plus2\p@
-  \belowdisplayskip \abovedisplayskip
-  \belowdisplayshortskip \belowdisplayskip
+  \@setfontsize\footnotesize\@viipt{13}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
   \def\@listi{\leftmargin\leftmargini
-              \topsep \z@
-              \parsep \z@
-              \itemsep \parsep}}
+              \topsep 3\p@ \@plus\p@ \@minus\p@
+              \parsep 2\p@ \@plus\p@ \@minus\p@
+              \itemsep \parsep}%
+  \belowdisplayskip \abovedisplayskip}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1076,20 +972,14 @@
 % 行送りを |\normalsize| と同じにすることによって，
 % 節見出しが複数行にわたっても段間で行が揃うようにします。
 %
-% [2004-11-03] |\HUGE| を追加。
-%
 %    \begin{macrocode}
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
-\newcommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
-\if@twocolumn
-%<!kiyou>  \newcommand{\large}{\@setfontsize\large\@xiipt{\n@baseline}}
-\else
-%<!kiyou>  \newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-\fi
-%<!kiyou>\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
-\newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
-\newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
+\newcommand{\scriptsize}{\@setfontsize\scriptsize\@vpt\@viiipt}
+\newcommand{\tiny}{\@setfontsize\tiny{4.25}\@vipt}
+\newcommand{\large}{\@setfontsize\large{9.5}{19}}
+\newcommand{\Large}{\@setfontsize\Large{10.5}{21}}
+\newcommand{\LARGE}{\@setfontsize\LARGE{12.75}{25}}
+\newcommand{\huge}{\@setfontsize\huge{17}{28}}
+\newcommand{\Huge}{\@setfontsize\Huge\@xxpt{33}}
 \newcommand{\HUGE}{\@setfontsize\HUGE{30}{40}}
 %    \end{macrocode}
 % \end{macro}
@@ -1145,7 +1035,6 @@
 %
 %    \begin{macrocode}
 %<!kiyou>\setlength\columnsep{2\zw}
-%<kiyou>\setlength\columnsep{28truebp}
 \setlength\columnseprule{0\p@}
 %    \end{macrocode}
 % \end{macro}
@@ -1198,12 +1087,8 @@
 % |\parindent| は段落の先頭の字下げ幅です。
 %
 %    \begin{macrocode}
-\setlength\parskip{0\p@}
-\if@slide
-  \setlength\parindent{0\zw}
-\else
-  \setlength\parindent{1\zw}
-\fi
+\setlength\parskip{\z@}
+\setlength\parindent{\Cwd}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2518,24 +2403,12 @@
 % 番号を付けない部です。
 %
 %    \begin{macrocode}
-%<*!book>
-\def\@spart#1{{%
-    \parindent \z@ \raggedright
-    \interlinepenalty \@M
-    \normalfont
-    \huge \headfont #1\par}%
-  \nobreak
-  \vskip 3ex
-  \@afterheading}
-%</!book>
-%<*book>
 \def\@spart#1{{%
     \centering
     \interlinepenalty \@M
     \normalfont
     \Huge \headfont #1\par}%
   \@endpart}
-%</book>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2546,7 +2419,6 @@
 % 二段組のときには，二段組に戻します。
 %
 %    \begin{macrocode}
-%<*book>
 \def\@endpart{\vfil\newpage
   \if@twoside
     \null
@@ -2556,7 +2428,6 @@
   \if@restonecol
     \twocolumn
   \fi}
-%</book>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2684,57 +2555,40 @@
 %
 % 段組のときはなるべく左右の段が狂わないように工夫しています。
 %
+% また､p\LaTeX{}向けWORDテンプレートで度々上がっていた､文の終わりと次の見出しの間は多少空けてあります｡
+%
+% |\section|は|3\zw|空いています｡
+%
 %    \begin{macrocode}
-\if@twocolumn
-  \newcommand{\section}{%
-    \@startsection{section}{1}{\z@}%
-%    {\z@}{\z@}%
-%   {\normalfont\large\headfont\@secapp}}
-    {\normalfont\large\headfont\raggedright}}
-\else
-  \newcommand{\section}{%
-    \if@slide\clearpage\fi
-    \@startsection{section}{1}{\z@}%
-    {\z@}% 前アキ
+  \newcommand{\section}{\@startsection{section}{1}{\z@}%
+    {3\zw}% 前アキ
     {\z@}% 後アキ
-%   {\normalfont\Large\headfont\@secapp}}
-    {\normalfont\Large\headfont\raggedright}}
-\fi
+    {\reset@font\LARGE\gt\bfseries}}
 %    \end{macrocode}
 %
 % \end{macro}
 %
 % \begin{macro}{\subsection}
 %
-% 同上です。
+% 同上です。|\subsection|は|2\zw|空いています｡
 %
 %    \begin{macrocode}
-\if@twocolumn
-  \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-    {\z@}{\z@}%
-    {\normalfont\normalsize\headfont}}
-\else
-  \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-    {\Cvs \@plus.5\Cdp \@minus.2\Cdp}% 前アキ
-    {.5\Cvs \@plus.3\Cdp}% 後アキ
-    {\normalfont\large\headfont}}
-\fi
+\newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+   {2\zw}%
+   {\z@}%
+   {\reset@font\Large\gt\bfseries}}
 %    \end{macrocode}
 %
 % \end{macro}
 %
+% |\subsubsection|には|1\zw|の空きを入れました｡
+%
 % \begin{macro}{\subsubsection}
 %    \begin{macrocode}
-\if@twocolumn
-  \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-    {\z@}{\z@}%
-    {\normalfont\normalsize\headfont}}
-\else
-  \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-    {\Cvs \@plus.5\Cdp \@minus.2\Cdp}%
-    {\z@}%
-    {\normalfont\normalsize\headfont}}
-\fi
+\newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+   {1\zw}%
+   {\z@}%
+   {\reset@font\large\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2743,18 +2597,10 @@
 %    見出しの後ろで改行されません。
 %
 %    \begin{macrocode}
-\if@twocolumn
-  \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-    {\z@}{-1\zw}% 改行せず 1\zw のアキ
-%<jspf>    {\normalfont\normalsize\headfont}}
-%<!jspf>    {\normalfont\normalsize\headfont ■}}
-\else
-  \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
-    {0.5\Cvs \@plus.5\Cdp \@minus.2\Cdp}%
-    {-1\zw}% 改行せず 1\zw のアキ
-%<jspf>    {\normalfont\normalsize\headfont}}
-%<!jspf>    {\normalfont\normalsize\headfont ■}}
-\fi
+\newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
+   {\z@}%
+   {\z@}%
+   {\reset@font\normalsize\gt\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2764,8 +2610,9 @@
 %
 %    \begin{macrocode}
 \newcommand{\subparagraph}{\@startsection{subparagraph}{5}{\z@}%
-   {\z@}{-1\zw}%
-   {\normalfont\normalsize\headfont}}
+   {3.25ex \@plus 1ex \@minus .2ex}%
+   {-1em}%
+   {\reset@font\normalsize\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -4162,28 +4009,21 @@
     \fi
     \columnseprule.4pt \columnsep 2\zw
     \ifx\multicols\@undefined
-%<book>      \twocolumn[\@makeschapterhead{\indexname}%
-%<book>      \addcontentsline{toc}{chapter}{\indexname}]%
-%<!book>      \def\presectionname{}\def\postsectionname{}%
-%<!book>      \twocolumn[\section*{\indexname}]%
+      \twocolumn[\@makeschapterhead{\indexname}%
+      \addcontentsline{toc}{chapter}{\indexname}]%
     \else
       \ifdim\textwidth<\fullwidth
         \setlength{\evensidemargin}{\oddsidemargin}
         \setlength{\textwidth}{\fullwidth}
         \setlength{\linewidth}{\fullwidth}
-%<book>        \begin{multicols}{3}[\chapter*{\indexname}%
-%<book>        \addcontentsline{toc}{chapter}{\indexname}]%
-%<!book>        \def\presectionname{}\def\postsectionname{}%
-%<!book>        \begin{multicols}{3}[\section*{\indexname}]%
+        \begin{multicols}{3}[\chapter*{\indexname}%
+        \addcontentsline{toc}{chapter}{\indexname}]%
       \else
-%<book>        \begin{multicols}{2}[\chapter*{\indexname}%
-%<book>        \addcontentsline{toc}{chapter}{\indexname}]%
-%<!book>        \def\presectionname{}\def\postsectionname{}%
-%<!book>        \begin{multicols}{2}[\section*{\indexname}]%
+        \begin{multicols}{2}[\chapter*{\indexname}%
+        \addcontentsline{toc}{chapter}{\indexname}]%
       \fi
     \fi
-%<book>    \@mkboth{\indexname}{}%
-%<!book>    \@mkboth{\indexname}{\indexname}%
+    \@mkboth{\indexname}{}%
     \plainifnotempty % \thispagestyle{plain}
     \parindent\z@
     \parskip\z@ \@plus .3\p@\relax
@@ -4208,9 +4048,9 @@
 % 索引項目の字下げ幅です。|\@idxitem| は |\item| の項目の字下げ幅です。
 %
 %    \begin{macrocode}
-\newcommand{\@idxitem}{\par\hangindent 4\zw} % 元 40pt
-\newcommand{\subitem}{\@idxitem \hspace*{2\zw}} % 元 20pt
-\newcommand{\subsubitem}{\@idxitem \hspace*{3\zw}} % 元 30pt
+\newcommand{\@idxitem}{\par\hangindent 40\p@}
+\newcommand{\subitem}{\@idxitem \hspace*{20\p@}}
+\newcommand{\subsubitem}{\@idxitem \hspace*{30\p@}}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -4591,7 +4431,6 @@
       \fi
     \fi
   \fi}
-
 \DeclareRobustCommand{\LaTeX}{%
   \def\@tempa{cmr}%
   \ifx\f@family\@tempa\cmrLaTeX
@@ -4734,9 +4573,7 @@
 % \begin{macro}{\tablename}
 %    \begin{macrocode}
 %<!jspf>\newcommand{\figurename}{\if@english Fig.~\else 図\fi}
-%<jspf>\newcommand{\figurename}{Fig.~}
 %<!jspf>\newcommand{\tablename}{\if@english Table~\else 表\fi}
-%<jspf>\newcommand{\tablename}{Table~}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -4817,7 +4654,6 @@
 %    \begin{macrocode}
 %<article|kiyou>\if@slide \pagestyle{empty} \else \pagestyle{plain} \fi
 %<book>\if@report \pagestyle{plain} \else \pagestyle{headings} \fi
-%<jspf>\pagestyle{headings}
 \pagenumbering{arabic}
 \if@twocolumn
   \twocolumn

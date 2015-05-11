@@ -1550,27 +1550,25 @@
 %
 %    \begin{macrocode}
 \newif\if@omit@number
-\def\ps@headings{%
+\def\ps@headings{
+  \let\ps@jpl@in\ps@headings
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
-  \def\@evenhead{%
-    \if@mparswitch \hss \fi
-	\underline{\hbox to \textwidth{\@subtitle}\hfil}%
-    \if@mparswitch\else \hss \fi}%
-  \def\@oddhead{\underline{\hbox to \textwidth{\hfil\@subtitle}}\hss}%
   \let\@mkboth\markboth
-  \def\chaptermark##1{\markboth{%
-    \ifnum \c@secnumdepth >\m@ne
-      \if@mainmatter
-        \if@omit@number\else
-          \@chapapp\thechapter\@chappos\hskip1\zw
-        \fi
-      \fi
-    \fi
-    ##1}{}}%
-  \def\sectionmark##1{\markright{%
-    \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
-    ##1}}}%
+%    \end{macrocode}
+% 次にヘッダーを定義します。
+%    \begin{macrocode}
+  \def\@evenhead{\vbox{%
+    \hbox to\textwidth{%
+      \@subtitle\hfil%
+      }
+    \vskip.05\Cvs
+    \hrule}}
+  \def\@oddhead{\vbox{%
+    \hbox to\textwidth{%
+      \hfil\@subtitle}
+    \vskip.05\Cvs
+    \hrule}}}
 %    \end{macrocode}
 %
 % \end{macro}

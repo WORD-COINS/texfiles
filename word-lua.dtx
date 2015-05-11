@@ -31,7 +31,7 @@
 %<*driver>
 \ProvidesFile{word-lua.dtx}
 %</driver>
-  [2015/05/07 v0.0 ]
+  [2015/05/11 v0.1 ]
 %<*driver>
 \documentclass{ltjsarticle}
 \usepackage{doc}
@@ -72,17 +72,20 @@
 % \maketitle
 % \tableofcontents
 %
-% \MakeShortVerb{\|}
 %
 % \section{はじめに}
 %
+% \MakeShortVerb{\|}
 % これは|ltjsclasses.dtx|をWORD用に改変したものです｡
 % 次のドキュメントクラス（スタイルファイル）を生成します。
+% \DeleteShortVerb{\|}
 % \begin{quote}
-%   \begin{tabular}{lll}
-%     $\langle$\textsf{word-lua}$\rangle$    & \texttt{word-lua.cls}     & WORD用 \\
+%   \begin{tabular}{l|l}
+%     オプション & 意味 \\\hline
+%     $\langle$\textsf{word-lua}$\rangle$ & word-luaクラスを生成 \\
 %   \end{tabular}
 % \end{quote}
+% \MakeShortVerb{\|}
 %
 % 以下では実際のコードに即して説明します。
 % \section{Lua\TeX-jaの読み込み}
@@ -180,76 +183,6 @@
 %    \begin{macrocode}
 \newif\if@slide
 \@slidefalse
-%    \end{macrocode}
-%
-% \paragraph{サイズオプション}
-%
-% 10pt，11pt，12pt のほかに，8pt，9pt，14pt，17pt，21pt，25pt，30pt，36pt，43pt を追加しました。
-% これは等比数列になるように選んだものです（従来の 20pt も残しました）。
-% |\@ptsize| の定義が変だったのでご迷惑をおかけしましたが，
-% 標準的なドキュメントクラスと同様にポイント数から10を引いたものに直しました。
-%
-%
-%    \begin{macrocode}
-\newcommand{\@ptsize}{0}
-\DeclareOption{slide}{\@slidetrue\renewcommand{\@ptsize}{26}\@landscapetrue\@titlepagetrue}
-\DeclareOption{8pt}{\renewcommand{\@ptsize}{-2}}
-\DeclareOption{9pt}{\renewcommand{\@ptsize}{-1}}
-\DeclareOption{10pt}{\renewcommand{\@ptsize}{0}}
-\DeclareOption{11pt}{\renewcommand{\@ptsize}{1}}
-\DeclareOption{12pt}{\renewcommand{\@ptsize}{2}}
-\DeclareOption{14pt}{\renewcommand{\@ptsize}{4}}
-\DeclareOption{17pt}{\renewcommand{\@ptsize}{7}}
-\DeclareOption{20pt}{\renewcommand{\@ptsize}{10}}
-\DeclareOption{21pt}{\renewcommand{\@ptsize}{11}}
-\DeclareOption{25pt}{\renewcommand{\@ptsize}{15}}
-\DeclareOption{30pt}{\renewcommand{\@ptsize}{20}}
-\DeclareOption{36pt}{\renewcommand{\@ptsize}{26}}
-\DeclareOption{43pt}{\renewcommand{\@ptsize}{33}}
-\DeclareOption{12Q}{\renewcommand{\@ptsize}{1200}}
-\DeclareOption{14Q}{\renewcommand{\@ptsize}{1400}}
-\DeclareOption{10ptj}{\renewcommand{\@ptsize}{1001}}
-\DeclareOption{10.5ptj}{\renewcommand{\@ptsize}{1051}}
-\DeclareOption{11ptj}{\renewcommand{\@ptsize}{1101}}
-\DeclareOption{12ptj}{\renewcommand{\@ptsize}{1201}}
-%    \end{macrocode}
-%
-% \paragraph{トンボオプション}
-%
-% トンボ（crop marks）を出力します。
-% 実際の処理は |lltjcore.sty| で行います。
-% オプション \texttt{tombow} で日付付きのトンボ，
-% オプション \texttt{tombo} で日付なしのトンボを出力します。
-% これらはアスキー版のままです。
-% カウンタ |\hour|，|\minute| は |luatexja-compat.sty| で宣言されています。
-%
-%    \begin{macrocode}
-\hour\time \divide\hour by 60\relax
-\@tempcnta\hour \multiply\@tempcnta 60\relax
-\minute\time \advance\minute-\@tempcnta
-\DeclareOption{tombow}{%
-  \tombowtrue \tombowdatetrue
-  \setlength{\@tombowwidth}{.1\p@}%
-  \@bannertoken{%
-     \jobname\space(\number\year-\two@digits\month-\two@digits\day
-     \space\two@digits\hour:\two@digits\minute)}%
-  \maketombowbox}
-\DeclareOption{tombo}{%
-  \tombowtrue \tombowdatefalse
-  \setlength{\@tombowwidth}{.1\p@}%
-  \maketombowbox}
-%    \end{macrocode}
-%
-% \paragraph{面付け}
-%
-% オプション \texttt{mentuke} で幅ゼロのトンボを出力します。
-% 面付けに便利です。これもアスキー版のままです。
-%
-%    \begin{macrocode}
-\DeclareOption{mentuke}{%
-  \tombowtrue \tombowdatefalse
-  \setlength{\@tombowwidth}{\z@}%
-  \maketombowbox}
 %    \end{macrocode}
 %
 % \paragraph{両面，片面オプション}
@@ -486,100 +419,6 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \paragraph{拡大率の設定}
-%
-% サイズの変更は\TeX のプリミティブ |\mag| を使って行います。
-% 9ポイントについては行送りも若干縮めました。
-% サイズについては全面的に見直しました。
-%
-% [2008-12-26] 1000 / |\mag| に相当する |\inv@mag| を定義しました。
-% |truein| を使っていたところを |\inv@mag in| に直しましたので，
-% |geometry| パッケージと共存できると思います。
-% なお，新ドキュメントクラス側で |10pt| 以外にする場合の注意：
-% \begin{itemize}
-% \item |geometry| 側でオプション |truedimen| を指定してください。
-% \item |geometry| 側でオプション |mag| は使えません。
-% \end{itemize}
-%
-%    \begin{macrocode}
-\def\inv@mag{1}
-\ifnum\@ptsize=-2
-  \mag 833
-  \def\inv@mag{1.20048}
-  \def\n@baseline{15}%
-\fi
-\ifnum\@ptsize=-1
-  \mag 913 % formerly 900
-  \def\inv@mag{1.09529}
-  \def\n@baseline{15}%
-\fi
-\ifnum\@ptsize=1
-  \mag 1095 % formerly 1100
-  \def\inv@mag{0.913242}
-\fi
-\ifnum\@ptsize=2
-  \mag 1200
-  \def\inv@mag{0.833333}
-\fi
-\ifnum\@ptsize=4
-  \mag 1440
-  \def\inv@mag{0.694444}
-\fi
-\ifnum\@ptsize=7
-  \mag 1728
-  \def\inv@mag{0.578704}
-\fi
-\ifnum\@ptsize=10
-  \mag 2000
-  \def\inv@mag{0.5}
-\fi
-\ifnum\@ptsize=11
-  \mag 2074
-  \def\inv@mag{0.48216}
-\fi
-\ifnum\@ptsize=15
-  \mag 2488
-  \def\inv@mag{0.401929}
-\fi
-\ifnum\@ptsize=20
-  \mag 2986
-  \def\inv@mag{0.334896}
-\fi
-\ifnum\@ptsize=26
-  \mag 3583
-  \def\inv@mag{0.279096}
-\fi
-\ifnum\@ptsize=33
-  \mag 4300
-  \def\inv@mag{0.232558}
-\fi
-\ifnum\@ptsize=1200
-  \mag 923
-  \def\inv@mag{1.0834236}
-\fi
-\ifnum\@ptsize=1400
-  \mag 1077
-  \def\inv@mag{0.928505}
-\fi
-\ifnum\@ptsize=1001
-  \mag 1085
-  \def\inv@mag{0.921659}
-\fi
-\ifnum\@ptsize=1051
-  \mag 1139
-  \def\inv@mag{0.877963}
-\fi
-\ifnum\@ptsize=1101
-  \mag 1194
-  \def\inv@mag{0.837521}
-\fi
-\ifnum\@ptsize=1201
-  \mag 1302
-  \def\inv@mag{0.768049}
-\fi
-\setlength\paperwidth{\inv@mag\paperwidth}%
-\setlength\paperheight{\inv@mag\paperheight}%
-%    \end{macrocode}
 %
 % \paragraph{PDFの用紙サイズの設定}
 %
@@ -4521,7 +4360,6 @@
 % ページ設定の初期化です。
 %
 %    \begin{macrocode}
-%<article|kiyou>\if@slide \pagestyle{empty} \else \pagestyle{plain} \fi
 %<book>\if@report \pagestyle{plain} \else \pagestyle{headings} \fi
 \pagenumbering{arabic}
 \if@twocolumn

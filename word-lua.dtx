@@ -770,66 +770,6 @@
 %   \@xipt    10.95      \@xiipt  12      \@xivpt  14.4
 %\end{verbatim}
 %
-% \begin{macro}{\@setfontsize}
-%
-% ここでは |\@setfontsize| の定義を少々変更して，
-% 段落の字下げ |\parindent|，
-% 和文文字間のスペース |kanjiskip|，
-% 和文・欧文間のスペース |xkanjiskip| を変更しています。
-%
-% |kanjiskip| は |ltj-latex.sty| で |0pt plus 0.4pt minus 0.4pt| に
-% 設定していますが，
-% これはそもそも文字サイズの変更に応じて変わるべきものです。
-% それに，プラスになったりマイナスになったりするのは，
-% 追い出しと追い込みの混在が生じ，統一性を欠きます。
-% なるべく追い出しになるようにプラスの値だけにしたいところですが，
-% ごくわずかなマイナスは許すことにしました。
-%
-% |xkanjiskip| については，四分つまり全角の1/4を標準として，
-% 追い出すために三分あるいは二分まで延ばすのが一般的ですが，
-% ここではTimesやPalatinoのスペースがほぼ四分であることに着目して，
-% これに一致させています。これなら書くときにスペースを空けても
-% 空けなくても同じ出力になります。
-%
-% |\parindent| については，0（以下）でなければ全角幅（|1\zw|）に直します。
-%
-% [2008-02-18] |english| オプションで |\parindent| を 1em にしました。
-%
-% [2014-05-14 LTJ] |\ltjsetparameter|の実行は時間がかかるので，
-% |\ltjsetkanjiskip| と |\ltjsetxkanjiskip|（両者とも，
-% 実行前には |\ltj@setpar@global| の実行が必要）にしました．
-%
-% [2014-12-24 LTJ] |jsclasses| では，|\@setfontsize| 中で |xkanjiskip| を
-% 設定するのは現在の和欧文間空白の自然長が正の場合だけでした．
-% |ltjsclasses| では最初からこの判定が抜けてしまっていたので，復活させます．
-%
-%    \begin{macrocode}
-\def\@setfontsize#1#2#3{%
-% \@nomath#1%
-  \ifx\protect\@typeset@protect
-    \let\@currsize#1%
-  \fi
-  \fontsize{#2}{#3}\selectfont
-  \ifdim\parindent>\z@
-    \if@english
-      \parindent=1em
-    \else
-      \parindent=1\zw
-    \fi
-  \fi
-  \ltj@setpar@global
-  \ltjsetkanjiskip{\z@ plus .1\zw minus .01\zw}
-  \@tempskipa=\ltjgetparameter{xkanjiskip}
-  \ifdim\@tempskipa>\z@
-    \if@slide 
-      \ltjsetxkanjiskip{0.1em}
-    \else
-      \ltjsetxkanjiskip{0.25em plus 0.15em minus 0.06em}
-    \fi
-  \fi}
-%    \end{macrocode}
-% \end{macro}
-%
 % これらのグルーをもってしても行分割ができない場合は，
 % |\emergencystretch| に訴えます。
 %
@@ -1204,28 +1144,11 @@
 % \begin{macro}{\textwidth}
 %
 % 書籍以外では本文領域の幅 |\textwidth| は |\fullwidth| と等しくします。
-% |article| ではA4縦置きで49文字となります。
-% 某学会誌スタイルでは|50\zw|（25文字×2段）＋段間8mmとします。
+% WORDでは横48文字としています｡
 %
 %    \begin{macrocode}
-%<*book>
-\if@report
-  \setlength\fullwidth{0.76\paperwidth}
-\else
-  \setlength\fullwidth{\paperwidth}
-  \addtolength\fullwidth{-36mm}
-\fi
-\if@twocolumn \@tempdima=2\zw \else \@tempdima=1\zw \fi
-\divide\fullwidth\@tempdima \multiply\fullwidth\@tempdima
-\setlength\textwidth{\fullwidth}
-\if@report \else
-  \if@twocolumn \else
-    \ifdim \fullwidth>40\zw
-      \setlength\textwidth{40\zw}
-    \fi
-  \fi
-\fi
-%</book>
+  \setlength\fullwidth{48\Cwd}
+  \setlength\textwidth{\fullwidth}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1625,46 +1548,7 @@
 % |headings| スタイルはヘッダに見出しとページ番号を出力します。
 % ここではヘッダにアンダーラインを引くようにしてみました。
 %
-% まず article の場合です。
-%
 %    \begin{macrocode}
-%<*article|kiyou>
-\if@twoside
-  \def\ps@headings{%
-    \let\@oddfoot\@empty
-    \let\@evenfoot\@empty
-    \def\@evenhead{\if@mparswitch \hss \fi
-      \underline{\hbox to \fullwidth{\textbf{\thepage}\hfil\leftmark}}%
-      \if@mparswitch\else \hss \fi}%
-    \def\@oddhead{%
-      \underline{%
-        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
-    \let\@mkboth\markboth
-    \def\sectionmark##1{\markboth{%
-       \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
-       ##1}{}}%
-    \def\subsectionmark##1{\markright{%
-       \ifnum \c@secnumdepth >\@ne \thesubsection \hskip1\zw\fi
-       ##1}}%
-  }
-\else % if not twoside
-  \def\ps@headings{%
-    \let\@oddfoot\@empty
-    \def\@oddhead{%
-      \underline{%
-        \hbox to \fullwidth{{\rightmark}\hfil\textbf{\thepage}}}\hss}%
-    \let\@mkboth\markboth
-    \def\sectionmark##1{\markright{%
-        \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
-        ##1}}}
-\fi
-%</article|kiyou>
-%    \end{macrocode}
-%
-% 次は book の場合です。
-%
-%    \begin{macrocode}
-%<*book>
 \newif\if@omit@number
 \def\ps@headings{%
   \let\@oddfoot\@empty
@@ -1687,19 +1571,6 @@
   \def\sectionmark##1{\markright{%
     \ifnum \c@secnumdepth >\z@ \thesection \hskip1\zw\fi
     ##1}}}%
-%</book>
-%    \end{macrocode}
-%
-% 最後は学会誌の場合です。
-%
-%    \begin{macrocode}
-%<*jspf>
-\def\ps@headings{%
-  \def\@oddfoot{\normalfont\hfil\thepage\hfil}
-  \def\@evenfoot{\normalfont\hfil\thepage\hfil}
-  \def\@oddhead{\normalfont\hfil \@title \hfil}
-  \def\@evenhead{\normalfont\hfil プラズマ・核融合学会誌\hfil}}
-%</jspf>
 %    \end{macrocode}
 %
 % \end{macro}

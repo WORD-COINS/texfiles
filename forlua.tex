@@ -2,9 +2,10 @@
 \usepackage{listings}
 \usepackage{luatexja-fontspec}
 \setmainfont{TeX Gyre Schola}
+\setsansjfont{Source Han Sans JP}
 
 \author{WORD太郎}
-\subtitle{subtitleだぴょん}
+\subtitle{subtitleだぴょんhoge}
 
 \begin{document}
 \chapter{chapter as Title}
@@ -13,6 +14,8 @@
 this is はじめに section.
 
 \subsection{ディスイズサブセクション}
+
+\subsubsection{nest}
 
 \section{this is next}
 
@@ -46,16 +49,7 @@ hoge\footnote{なんでヘッダの横線が1ページ目でなーッ}
 
 {\tiny tiny}
 
-\newpage
-
-\section{ほげ}
-
-\newpage
-
-$にほんごinmath$
-
-\newpage
-↑どうなってんねん
+あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんだ。おい、オレたちを出せ。
 
 \lstset{language=TeX,numbers=left}
 \begin{lstlisting}
@@ -64,5 +58,6 @@ $にほんごinmath$
 correctly in listings
 \end{lstlisting}
 
+\lstinputlisting{forlua.tex}
 
 \end{document}

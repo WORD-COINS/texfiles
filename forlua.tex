@@ -1,9 +1,14 @@
 \documentclass{word-lua}
 \usepackage{listings}
-\usepackage{luatexja-fontspec}
-\setmainfont{TeX Gyre Schola}
-\setsansjfont{Source Han Sans JP}
-\setmonofont{Monaco}
+\errorcontextlines 10000
+% \usepackage{luatexja-fontspec}
+% \defaultjfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold}
+% \defaultfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold}
+% \setmainfont{Times New Roman}
+% \setsansjfont{Source Han Sans JP}
+% \setsansjfont{Source Han Sans JP Bold}
+% \setmonofont{cmsy 10}
+% \setmonojfont{Monaco}
 
 \author{WORD太郎}
 \subtitle{subtitleだぴょんhoge}
@@ -14,13 +19,20 @@
 \section{はじめに}
 this is はじめに section.
 
+Ligature FFTFAFXF
+
+fj
+
 \subsection{ディスイズサブセクション}
 
 \subsubsection{nest}
+もれではない。
+
+{\textsf{ほあ}}
 
 \section{this is next}
 
-hoge
+{\bf hogeぴよ}
 
 にほんご\footnote{でぃすいずてすと}
 
@@ -52,7 +64,7 @@ hoge\footnote{なんでヘッダの横線が1ページ目でなーッ}
 
 あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんだ。おい、オレたちを出せ。
 
-\lstset{language=TeX,numbers=left}
+\lstset{language=TeX,numbers=left,title={fuck}}
 \begin{lstlisting}
 \LuaLaTeX{} can put
 >にほんご<
@@ -73,8 +85,8 @@ correctly in listings
 			\item one-one
 
 				\begin{itemize}
-						\item one-one-one
-					\end{itemize}
+					\item one-one-one
+				\end{itemize}
 		\end{itemize}
 
 	\item two

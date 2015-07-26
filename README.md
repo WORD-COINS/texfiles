@@ -19,6 +19,28 @@ WORD LuaLaTeX Class
 - 文と次の見出しの間
 	+ ｢狭い｣という意見がたまにあり､暫定的に`\section`では3`\zw`､`\subsection`では`2\zw`､`\subsubsection`では`1\zw`広げた｡
 
+- 新機能の追加
+	+ `\authormark{hoge}`で、著者名前の「文 編集部」を編集できるようになった。
+	+ `swapheader`オプションで、ヘッダの位置を入れ替えられるようになった。記事が偶数ページから始まる時に便利。
+
+- 不要な機能の削除
+	+ オプション
+		* english
+		* landscape
+		* slide
+		* titlepage
+		* notitlepage
+		* openright
+		* openany
+		* papersize ( LuaLaTeXではpapersizeスペシャルは意味を成さない )
+		* report
+	+ スタイル
+		* headings ( plain への統合 )
+		* myheadings
+	+ マクロ
+		* \maketitle ( `Chapter as Title` )
+		* TeXロゴ出力系 ( TeX と LaTeX は LaTeXカーネルで定義されている )
+
 ## TODO
 あらかじめluatexja-fontspecなどを読み込んで､word.clsとフォントのあたりを寄せたい｡
 

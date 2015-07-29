@@ -45,5 +45,5 @@ word-lua:
 	SRC=word-lua $(MAKE)
 
 clean:
-	rm -f *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out *.fls
+	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out *.fls
 

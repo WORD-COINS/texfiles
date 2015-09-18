@@ -44,10 +44,6 @@
 	colorlinks=true,%
 	pdftitle={WORD LuaLaTeX}
 }
-\newcommand{\WORD}{%
-	{{V\kern-.45emV}}\kern-.1em■%
-	\kern-.81em{{\textcolor{white}{O}RD}}%
-}
 \addtolength{\textwidth}{-1in}
 \addtolength{\evensidemargin}{1in}
 \addtolength{\oddsidemargin}{1in}
@@ -65,7 +61,7 @@
 %    \end{macrocode}
 %
 % \fi
-% \title{\WORD{} Lua\LaTeX{} Class\space\fileversion}
+% \title{WORD Lua\LaTeX{} Class\space\fileversion}
 % \author{Satoru \sc{Kawahara}}
 %
 % \date{\filedate}
@@ -92,7 +88,7 @@
 %
 % まず，|luatexja| を読み込みます。
 %    \begin{macrocode}
-\RequirePackage{luatexja}
+\RequirePackage{luatexja,lineno}
 %    \end{macrocode}
 %
 % \section{用紙サイズ}
@@ -1350,6 +1346,9 @@
 %
 %    \begin{macrocode}
 \def\@startsection#1#2#3#4#5#6{%
+% describe here!!! I can't input Japnese now ;(
+  \directlua{function setaki(aki) tex.print(tonumber(\theLineNumber) > 1 and aki or "0" .. \asluastring{\zw})}
+  \def\setaki{#1}{\directlua{setaki(#1)}}
   \if@noskipsec \leavevmode \fi
   \par
 % 見出し上の空きを \@tempskipa にセットする
@@ -1872,7 +1871,7 @@
 %
 %    \begin{macrocode}
   \newcommand{\section}{\@startsection{section}{1}{\z@}%
-    {3\zw}% 前アキ
+    {\setaki{3}}% 前アキ
     {\z@}% 後アキ
     {\reset@font\LARGE\gt\bfseries}}
 %    \end{macrocode}
@@ -1885,7 +1884,7 @@
 %
 %    \begin{macrocode}
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-   {2\zw}%
+   {\setaki{2}}%
    {\z@}%
    {\reset@font\Large\gt\bfseries}}
 %    \end{macrocode}
@@ -1897,7 +1896,7 @@
 % \begin{macro}{\subsubsection}
 %    \begin{macrocode}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-   {1\zw}%
+   {\setaki{1}}%
    {\z@}%
    {\reset@font\large\gt\bfseries}}
 %    \end{macrocode}
@@ -3472,8 +3471,6 @@
 %
 %    \begin{macrocode}
 \RequirePackage{luatexja-fontspec}
-\defaultjfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold,Mapping=tex-text}
-\defaultfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold,Mapping=tex-text}
 %    \end{macrocode}
 %
 % 以上です。

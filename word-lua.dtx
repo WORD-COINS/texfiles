@@ -3158,7 +3158,7 @@
 % もし脚注番号が空なら記号も出力しないようにしてあります。
 %
 %    \begin{macrocode}
-\def\@makefnmark{\hbox{\unless\ifnum\ltjgetparameter{direction}=3 $\m@th^{\@thefnmark}$
+\renewcommand\@makefnmark{\hbox{\unless\ifnum\ltjgetparameter{direction}=3 $\m@th^{\@thefnmark}$
       \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
 %    \end{macrocode}
 % \end{macro}

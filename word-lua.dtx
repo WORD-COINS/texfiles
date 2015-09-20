@@ -3158,9 +3158,8 @@
 % もし脚注番号が空なら記号も出力しないようにしてあります。
 %
 %    \begin{macrocode}
-\renewcommand\@makefnmark{\hbox{}\hbox{%
-  \ifydir \@textsuperscript{\normalfont\@thefnmark}%
-  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}\hbox{}}
+\renewcommand\@makefnmark{\hbox{\unless\ifnum\ltjgetparameter{direction}=3 $\m@th^{\@thefnmark}$
+      \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
 %    \end{macrocode}
 % \end{macro}
 %

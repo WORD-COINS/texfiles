@@ -88,7 +88,7 @@
 %
 % まず，|luatexja| を読み込みます。
 %    \begin{macrocode}
-\RequirePackage{luatexja,lineno}
+\RequirePackage{luatexja}
 %    \end{macrocode}
 %
 % \section{用紙サイズ}
@@ -104,8 +104,8 @@
 %
 % \section{オプション}
 %
-% これらのクラスは |\documentclass{ltjsarticle}|
-% あるいは |\documentclass[オプション]{ltjsarticle}|
+% これらのクラスは |\documentclass{word-lua}|
+% あるいは |\documentclass[オプション]{word-lua}|
 % のように呼び出します。
 %
 % まず，オプションに関連するいくつかのコマンドやスイッチ（論理変数）を定
@@ -185,8 +185,6 @@
 %
 % \paragraph{eqnarray環境と数式の位置}
 %
-% 森本さんのご教示にしたがって前に移動しました。
-%
 % \begin{environment}{eqnarray}
 %
 %    \LaTeX の |eqnarray| 環境では |&| でできるアキが大きすぎる
@@ -214,7 +212,6 @@
 %
 % \texttt{leqno} で数式番号が左側になります。
 % \texttt{fleqn} で数式が本文左端から一定距離のところに出力されます。
-% 森本さんにしたがって訂正しました。
 %
 %    \begin{macrocode}
 \DeclareOption{leqno}{\input{leqno.clo}}
@@ -1345,10 +1342,21 @@
 % の整数倍にならなくてもいいから前の行と重ならないようにしました。
 %
 %    \begin{macrocode}
+\directlua{
+	thepage = "1"
+
+	function setaki(aki, page)
+		page = tostring(page)
+		issamepage = tostring(thepage) == tostring(page)
+
+		if not issamepage then
+			thepage = page
+		end
+
+		tex.print(issamepage and tostring(aki) .. \asluastring{\zw} or "0pt")
+	end
+}
 \def\@startsection#1#2#3#4#5#6{%
-% describe here!!! I can't input Japnese now ;(
-  \directlua{function setaki(aki) tex.print(tonumber(\theLineNumber) > 1 and aki or "0" .. \asluastring{\zw})}
-  \def\setaki{#1}{\directlua{setaki(#1)}}
   \if@noskipsec \leavevmode \fi
   \par
 % 見出し上の空きを \@tempskipa にセットする
@@ -1362,9 +1370,6 @@
     \everypar{}%
   \else
     \addpenalty\@secpenalty
-% 次の行は削除
-%   \addvspace\@tempskipa
-% 次の \noindent まで追加
     \ifdim \@tempskipa >\z@
       \null
       \vspace*{-\baselineskip}%
@@ -1372,7 +1377,6 @@
     \fi
   \fi
   \noindent
-% 追加終わり
   \@ifstar
     {\@ssect{#3}{#4}{#5}{#6}}%
     {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
@@ -1871,7 +1875,7 @@
 %
 %    \begin{macrocode}
   \newcommand{\section}{\@startsection{section}{1}{\z@}%
-    {\setaki{3}}% 前アキ
+    {\directlua{setaki(3, \thepage)}}% 前アキ
     {\z@}% 後アキ
     {\reset@font\LARGE\gt\bfseries}}
 %    \end{macrocode}
@@ -1884,7 +1888,7 @@
 %
 %    \begin{macrocode}
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
-   {\setaki{2}}%
+   {\directlua{setaki(2, \thepage)}}%
    {\z@}%
    {\reset@font\Large\gt\bfseries}}
 %    \end{macrocode}
@@ -1896,7 +1900,7 @@
 % \begin{macro}{\subsubsection}
 %    \begin{macrocode}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
-   {\setaki{1}}%
+   {\directlua{setaki(1, \thepage)}}%
    {\z@}%
    {\reset@font\large\gt\bfseries}}
 %    \end{macrocode}
@@ -3465,12 +3469,6 @@
   \onecolumn
   \raggedbottom
 \fi
-%    \end{macrocode}
-%
-% WORDのフォントに対応するために|luatexja-fontspec|を読み込みます｡
-%
-%    \begin{macrocode}
-\RequirePackage{luatexja-fontspec}
 %    \end{macrocode}
 %
 % 以上です。

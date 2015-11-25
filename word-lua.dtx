@@ -3468,12 +3468,22 @@
 \fi
 %    \end{macrocode}
 %
-% WORDのフォントに対応するために|luatexja-fontspec|を読み込みます｡
+% WORDのLaTeXコンパイルサーバー上のコンパイル時にはヒラギノフォントを埋め込みます｡
 %
 %    \begin{macrocode}
-\RequirePackage{luatexja-fontspec}
-\defaultjfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold,Mapping=tex-text}
-\defaultfontfeatures{Ligatures=TeX,BoldFont=Source Han Sans JP Bold,Mapping=tex-text}
+\AtBeginDocument{%
+  \directlua{%
+    if os.getenv"USER" == "wordian" then
+      tex.print(\asluastring{%
+          \@ifpackageloaded{luatexja-preset}{%
+            \@ifpackagewith{luatexja-preset}{hiragino-pro}{}{\errmessage{^^JERROR^^J}}%
+            }{%
+            \usepackage[hiragino-pro]{luatexja-preset}%
+          }%
+        })
+    end
+  }%
+}
 %    \end{macrocode}
 %
 % 以上です。

@@ -40,13 +40,13 @@
 \setmathfont{Latin Modern Math}
 \usepackage[unicode]{hyperref}
 \hypersetup{%
-	unicode,%
-	colorlinks=true,%
-	pdftitle={WORD LuaLaTeX}
+  unicode,%
+  colorlinks=true,%
+  pdftitle={WORD LuaLaTeX}
 }
 \newcommand{\WORD}{%
-	{{V\kern-.45emV}}\kern-.1em■%
-	\kern-.81em{{\textcolor{white}{O}RD}}%
+  {{V\kern-.45emV}}\kern-.1em■%
+  \kern-.81em{{\textcolor{white}{O}RD}}%
 }
 \addtolength{\textwidth}{-1in}
 \addtolength{\evensidemargin}{1in}
@@ -1812,10 +1812,10 @@
      \if@mainmatter
        \setbox\z@\hbox{\@chapapp\thechapter\@chappos\hskip1zw}%
        \addtolength\@tempdima{-\wd\z@}%
-	 \else
-	   \setbox\z@\hbox{}%
-	 \fi
-	 \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss\unhbox\z@\nobreak#1\hss}}%
+   \else
+     \setbox\z@\hbox{}%
+   \fi
+   \vtop{\hsize\@tempdima\hbox to\@tempdima{\hss\unhbox\z@\nobreak#1\hss}}%
    \else
      #1\relax
    \fi}\nobreak\vskip\Cvs
@@ -3471,18 +3471,13 @@
 % WORDのLaTeXコンパイルサーバー上のコンパイル時にはヒラギノフォントを埋め込みます｡
 %
 %    \begin{macrocode}
-\AtBeginDocument{%
-  \directlua{%
-    if os.getenv"USER" == "wordian" then
-      tex.print(\asluastring{%
-          \@ifpackageloaded{luatexja-preset}{%
-            \@ifpackagewith{luatexja-preset}{hiragino-pro}{}{\errmessage{^^JERROR^^J}}%
-            }{%
-            \usepackage[hiragino-pro]{luatexja-preset}%
-          }%
-        })
-    end
-  }%
+\directlua{
+  local word_font = os.getenv"WORD_FONT"
+  
+  if word_font then
+    tex.print(\asluastring{\PassOptionsToPackage}, "{", word_font , "}{luatexja-preset}",
+      \asluastring{\AtBeginDocument{\@ifpackageloaded{luatexja-preset}{}{\usepackage{luatexja-preset}}}})
+  end
 }
 %    \end{macrocode}
 %

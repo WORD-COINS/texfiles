@@ -3468,7 +3468,7 @@
 \fi
 %    \end{macrocode}
 %
-% WORDのLaTeXコンパイルサーバー上のコンパイル時にはヒラギノフォントを埋め込みます｡
+% WORDのLaTeXコンパイルサーバー上でのコンパイル時にはヒラギノフォントを埋め込みます｡
 %
 %    \begin{macrocode}
 \directlua{
@@ -3476,7 +3476,7 @@
   
   if word_font then
     tex.print(\asluastring{\PassOptionsToPackage}, "{", word_font , "}{luatexja-preset}",
-      \asluastring{\AtBeginDocument{\@ifpackageloaded{luatexja-preset}{}{\usepackage{luatexja-preset}}}})
+      \asluastring{\AtBeginDocument{\@ifpackageloaded{luatexja-preset}{\relax}{\usepackage{luatexja-preset}}}})
   end
 }
 %    \end{macrocode}

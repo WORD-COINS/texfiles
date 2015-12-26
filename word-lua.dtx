@@ -96,10 +96,11 @@
 %    \end{macrocode}
 %
 % \section{用紙サイズ}
-%
 % 用紙サイズを指定します｡
-%
 % WORDは \texttt{JIS B5} です。
+% \begin{macrocode}
+\AtBeginDvi{\special{papersize=182mm,257mm}}
+% \end{macrocode}
 %
 %    \begin{macrocode}
 \setlength\paperheight {257mm}

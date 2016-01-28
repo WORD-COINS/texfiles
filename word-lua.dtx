@@ -3472,10 +3472,10 @@
 %
 %    \begin{macrocode}
 \directlua{
-  local word_font = os.getenv"WORD_FONT"
+  WORD_FONT = os.getenv"WORD_FONT"
   
-  if word_font then
-    tex.print(\asluastring{\PassOptionsToPackage}, "{", word_font , "}{luatexja-preset}",
+  if WORD_FONT then
+    tex.print(\asluastring{\PassOptionsToPackage}, "{", WORD_FONT , "}{luatexja-preset}",
       \asluastring{\AtBeginDocument{\@ifpackageloaded{luatexja-preset}{\relax}{\usepackage{luatexja-preset}}}})
   end
 }

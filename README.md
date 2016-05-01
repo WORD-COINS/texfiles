@@ -1,5 +1,8 @@
 WORD Class
 ===
+
+[![Build Status](https://travis-ci.org/WORD-COINS/texfiles.svg?branch=master)](https://travis-ci.org/WORD-COINS/texfiles)
+
 ## about source code
 
 - Makefile

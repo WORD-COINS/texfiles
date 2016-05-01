@@ -1,0 +1,8 @@
+os:
+  - osx
+install:
+  - curl -L -O http://mirror.ctan.org/systems/mac/mactex/MacTeX.pkg
+  - sudo installer -pkg MacTeX.pkg -target /
+  - export PATH=$PATH:/usr/texbin
+script:
+  - make all

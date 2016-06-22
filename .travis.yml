@@ -1,8 +1,33 @@
 os:
   - osx
+cache:
+  directories:
+    - "$HOME/Library/texlive/2016basic/texmf-var/luatex-cache"
 install:
-  - curl -L -O http://mirror.ctan.org/systems/mac/mactex/MacTeX.pkg
-  - sudo installer -pkg MacTeX.pkg -target /
+  - curl -L -O http://mirrors.concertpass.com/tex-archive/systems/mac/mactex/BasicTeX.pkg
+  - sudo installer -pkg BasicTeX.pkg -target /
+  - rm BasicTeX.pkg
   - export PATH=$PATH:/usr/texbin
+  - sudo tlmgr update --self --all
+  - sudo tlmgr install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
 script:
   - make all
+after_success:
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\nIdentityFile ~/.ssh/deploy.key\n" >> ~/.ssh/config
+  - openssl aes-256-cbc -k "$SERVER_KEY" -in deploy_key.enc -d -a -out deploy.key
+  - cp deploy.key ~/.ssh/
+  - chmod 600 ~/.ssh/deploy.key
+  - git config --global user.email "m@yyu.pw"
+  - git config --global user.name "Yoshimura Yuu"
+  - git clone git@github.com:WORD-COINS/texfiles-document.git
+  - cd texfiles-document
+  - git fetch origin gh-pages:gh-pages
+  - git checkout gh-pages
+  - mv ../word.pdf word.pdf
+  - mv ../word-lua.pdf word-lua.pdf
+  - git add word.pdf word-lua.pdf
+  - git commit -a -m "auto commit on travis $TRAVIS_JOB_NUMBER $TRAVIS_COMMIT"
+  - git push origin gh-pages:gh-pages
+env:
+  global:
+    secure: CKg93mds99OKADGnDxtJB2TTT+u8jcEQAW3c82QUa6MNNKXHvK6L5U9eUdgMrJTm+MRAKd6g7unG8ECW63a8q909vlhPU0g2Ssv/1t+OlpK3sJKEvYVuMrFy1GndC60LEktpaHvOj/WCu9ftf2mcvR1s+U73jBMm43HATaimXs4m/uD6fRRb4g6ZXi4zeDj8EQe6BirSrslUczEu+G6dT/+i6S61FOOu/OF1PUieEFqlI5J6wJewOnBU6FpynkJdTet6q44BEvCMLgKG8L1XQ03G13MDAgMea3mimzjz2E7b7SbdTX5FkyjrGS1Rx4unVPh7tYK65MQvwc1qj71zf9ARkaaR/iuuDvG9Isacgxwhvd3HiegbXOd/7wqmSwPqVu8IZBJSW24lEMaVz7OfpwE/eOCEgGbRdY+E43FATqdJH6KpAwd5KyEx6AWmRYvykAPtRzLKmWMJRIupBzGEIrLAmyO9UXJQB4xSSn/fGvOuBRYBrdlcEcfvIad1VGZMRAJE9omseLBuj6x3fbl4y66TkevgA9gD9cikiKcORF2REGFsRW6ny/YfqlPnwOjPSL6q3SZsgxG/cieHQjmHbyzWhmu/s+xiv7Jqr4q+QwYp4pW3+h3t8+yxu4L/M4lsIZsNgSUa86dmC4lDWRbRHEMOdUk7Sc35wXlTx9PZnb8=

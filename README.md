@@ -20,3 +20,7 @@ WORD Class
 - word-luaのみの機能
 	+ `\authormark{hoge}`で、著者名前の「文 編集部」を編集できる。
 	+ `swapheader`オプションで、ヘッダの位置を入れ替えられる。記事が偶数ページから始まる時に便利。
+
+# ライセンス
+
+License: modified BSD (see LICENSE)

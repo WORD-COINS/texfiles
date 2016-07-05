@@ -322,9 +322,27 @@
 %
 %
 % \paragraph{PDFの用紙サイズの設定}
-%
-% \begin{macro}{\pdfpagewidth}
-% \begin{macro}{\pdfpageheight}
+\directlua{
+  local t = lua.get_functions_table()
+  local version = status.luatex_version
+  local pagewidth, pageheight
+  if version < 90 then
+    pagewidth = [[\pdfpagewidth]]
+    pageheight = [[\pdfpageheight]]
+  else
+    pagewidth = [[\pagewidth]]
+    pageheight = [[\pageheight]]
+  end
+
+  t[101] = function()
+    tex.print(pagewidth)
+  end
+  t[102] = function()
+    tex.print(pageheight)
+  end
+}
+% \begin{macro}{\luafunction101}
+% \begin{macro}{\luafunction102}
 % 出力のPDFの用紙サイズをここで設定しておきます。
 % |tombow| が真のときは2インチ足しておきます。
 %    \begin{macrocode}
@@ -334,8 +352,8 @@
   \advance \@tempdima 2in
   \advance \@tempdimb 2in
 \fi
-\setlength{\pdfpagewidth}{\@tempdima}
-\setlength{\pdfpageheight}{\@tempdimb}
+\setlength{\luafunction101}{\@tempdima}
+\setlength{\luafunction102}{\@tempdimb}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

@@ -327,11 +327,11 @@
   local version = status.luatex_version
   local pagewidth, pageheight
   if version < 90 then
-    pagewidth = [[\pdfpagewidth]]
-    pageheight = [[\pdfpageheight]]
+    pagewidth = \asluastring{\pdfpagewidth}
+	pageheight = \asluastring{\pdfpageheight}
   else
-    pagewidth = [[\pagewidth]]
-    pageheight = [[\pageheight]]
+  pagewidth = \asluastring{\pagewidth}
+    pageheight = \asluastring{\pageheight}
   end
 
   t[101] = function()

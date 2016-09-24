@@ -3495,7 +3495,7 @@
   
   if WORD_FONT then
     tex.print(\asluastring{\PassOptionsToPackage}, "{", WORD_FONT , "}{luatexja-preset}",
-      \asluastring{\AtBeginDocument{\@ifpackageloaded{luatexja-preset}{\relax}{\usepackage{luatexja-preset}}}})
+      \asluastring{\@ifpackageloaded{luatexja-preset}{\relax}{\usepackage{luatexja-preset}}})
   end
 }
 %    \end{macrocode}

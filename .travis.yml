@@ -1,4 +1,4 @@
-language: tex
+language: generic
 os:
   - osx
   - linux

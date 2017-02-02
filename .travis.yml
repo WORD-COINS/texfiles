@@ -1,3 +1,4 @@
+language: tex
 os:
   - osx
   - linux

@@ -2,6 +2,7 @@ WORD Class
 ===
 
 [![Build Status](https://travis-ci.org/WORD-COINS/texfiles.svg?branch=master)](https://travis-ci.org/WORD-COINS/texfiles)
+[![Build status](https://ci.appveyor.com/api/projects/status/12vr1y6pdxs2av2v?svg=true)](https://ci.appveyor.com/project/y-yu/texfiles)
 
 ## about source code
 

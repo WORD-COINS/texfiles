@@ -1,0 +1,13 @@
+image: Visual Studio 2015
+environment:
+  PATH: '%PATH%;C:\texlive\2016\bin\win32'
+cache:
+  - 'C:\texlive\2016\texmf-var\fonts\cache'
+  - 'C:\texlive\2016\texmf-var\luatex-cache'
+install:
+  - choco install make
+  - curl -O https://raw.githubusercontent.com/y-yu/install-tex-appveyor/master/install-tex.sh
+  - bash ./install-tex.sh
+build_script:
+  - tlmgr install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
+  - make all

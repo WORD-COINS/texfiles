@@ -13,7 +13,7 @@
 %</driver>
 % 
 %    \begin{macrocode}
-%<word>\ProvidesClass{word}[2017/05/14 WORD Standard LaTeX class]
+\ProvidesClass{word}[2017/05/14 WORD Standard LaTeX class]
 %    \end{macrocode}
 %    \begin{macrocode}
 \LoadClassWithOptions{bxjsarticle}
@@ -31,7 +31,8 @@
 %\fi
 %
 %\def\fileversion{1.0}
-%\title{WORDStandardbxjsClass}
+%\def\filedate{2017/05/16}
+%\title{WORDStandardbxjsClass\fileversion}
 %\author{hidaruma}
 %\date{\filedate}
 %\maketitle
@@ -74,21 +75,25 @@
 %\section{オプションの宣言}
 %    \begin{macrocode}
 \DeclareOption{evenstart}{\@evenstarttrue}
+%    \end{macrocode}
 
+%    \begin{macrocode}
 \DeclareOption{draft}{%
 	\setlength\overfullrule{5pt}
 	\@drafttrue
 	\@pagenumbertrue
 }
-
+%    \end{macrocode}
+%    \begin{macrocode}
 \DeclareOption{lualatex}{%
 	\setmainjfont{HiraMinProN W3}
 	\setsansjfont{HiraKakuProN W6}
 }
-
+%    \end{macrocode}
+%    \begin{macrocode}
 \ProcessOptions\relax
 %    \end{macrocode}
-
+% \section{パッケージのロード}
 %    \begin{macrocode}
 \RequirePackage{fancyhdr}
 \RequirePackage{txfonts}

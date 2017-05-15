@@ -25,8 +25,14 @@ TEXINSLUA = $(addsuffix .ins, $(SRC))
 word: $(TARGETS)
 		$(MAKE) $(TARGETS)
 
+word-lua: $(TARGETSLUA)
+		$(MAKE) $(TARGETSLUA)
+
 doc: $(DOCUMENT)
 		$(MAKE) $(DOCUMENT)
+		
+doc-lua: $(DOCUMENTLUA)
+		$(MAKE) $(DOCUMENTLUA)
 
 all: $(TARGETS) $(DOCUMENT)
 

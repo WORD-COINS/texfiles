@@ -11,45 +11,68 @@
 %<*driver>
 \ProvidesFile{word.dtx}
 %</driver>
-%\fi
-
-\ProvidesClass{word}[2017/05/14 WORD Standard LaTeX class]
+% 
+%    \begin{macrocode}
+%<word>\ProvidesClass{word}[2017/05/14 WORD Standard LaTeX class]
+%    \end{macrocode}
+%    \begin{macrocode}
 \LoadClassWithOptions{bxjsarticle}
-
-
+%    \end{macrocode}
+% \fi
 %\iffalse
 %<*driver>
-\documentclass{jltxdoc}
-\def\fileversion{1.0}
-\def\filedate{2017/05/15}
-\def\filename{word.dtx}
-\title{word.dtx}
-\author{hidaruma<hidaruma@outlook.jp>}
-\date{\filedate}
+\documentclass{bxjsarticle}
+\usepackage{doc}
+\GetFileInfo{word.dtx}
 \begin{document}
- \maketitle
- \tableofcontents
- \newpage
  \DocInput{\filename}
 \end{document}
 %\</driver>
 %\fi
-
-
+%
+%\def\fileversion{1.0}
+%\title{WORDStandardbxjsClass}
+%\author{hidaruma}
+%\date{\filedate}
+%\maketitle
+%\tableofcontents
+% 
+% \section{オプションスイッチ}
+% 後程使用する幾つかのスイッチを定義しています。
+% \begin{macro}{\@twosidetrue}
+% WORDでは奇数ページと偶数ページで出力が異なるため、twosideを強制的にtrueにしています。fancyhdrの設定で使われます。
+%
+%    \begin{macrocode}
 \makeatletter
 \@twosidetrue
 \makeatother
+%    \end{macrocode}
+%\end{macro}
 
-\RequirePackage{fancyhdr}
-\RequirePackage{txfonts}
-
+% \begin{macro}{\if@evenstart}
+% 偶数始まりかどうかのスイッチです。主にヘッダの位置に関わります。
+%    \begin{macrocode}
 \newif\if@evenstart \@evenstartfalse
+%    \end{macrocode}
+% \end{macro}
+
+%\begin{macro}{\if@draft}
+% draftかどうかのスイッチです。オンでページ番号を付与します。画像をオフにしたいときはgraphicxのオプションに別にdraftを付けてください。
+%    \begin{macrocode}
 \newif\if@draft \@draftfalse
 \newif\if@pagenumber \@pagenumberfalse
+%    \end{macrocode}
+% \end{macro}
 
+% \begin{macro}{\if@lualatex}
+% lualatexで処理するかどうかのスイッチです。bxjsarticleに渡す他、lualatexだった場合のフォントの指定に使います。
+%    \begin{macrocode}
 \newif\if@lualatex \@lualatexfalse
+%    \end{macrocode}
+%\end{macro}
 
-
+%\section{オプションの宣言}
+%    \begin{macrocode}
 \DeclareOption{evenstart}{\@evenstarttrue}
 
 \DeclareOption{draft}{%
@@ -64,7 +87,15 @@
 }
 
 \ProcessOptions\relax
+%    \end{macrocode}
 
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+\RequirePackage{txfonts}
+%    \end{macrocode}
+
+
+%    \begin{macrocode}
 \fancyhead{}
 \if@pagenumber
   \if@evenstart
@@ -84,18 +115,30 @@
    \fi
 \fi
 
+%    \end{macrocode}
+
+%    \begin{macrocode}
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty
 \renewenvironment{titlepage}
 {%
 \thispagestyle{fancy}%
 }
+%    \end{macrocode}
 
+%    \begin{macrocode}
 \renewcommand{\rmdefault}{ptm}
 \renewcommand{\sfdefault}{ptm}
+%    \end{macrocode}
 
+
+
+%    \begin{macrocode}
 \newcommand{\@authormark}{文　編集部}
+%    \end{macrocode}
 
+
+%    \begin{macrocode}
 \renewcommand{\maketitle}{\begin{titlepage}%
 \begin{center}%
 {\LARGE \gt{\@title} \par}%
@@ -110,5 +153,10 @@
 \global\let\title\relax
 \global\let\author\relax
 }
+%    \end{macrocode}
 
+% \section{本文スタイル}
+% fancyhdrを用いて設定したため、基本的なページスタイルをfancyにセットします。
+%    \begin{macrocode}
 \pagestyle{fancy}
+%    \end{macrocode}

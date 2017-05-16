@@ -1,6 +1,8 @@
 % \iffalse-meta comment
 %% File: word.dtx
 %
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
 % \fi
 %\CheckSum{0}
 %\iffalse
@@ -13,7 +15,8 @@
 %</driver>
 % 
 %    \begin{macrocode}
-\ProvidesClass{word}[2017/05/14 WORD Standard LaTeX class]
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{word}[2017/05/16 WORD Standard LaTeX class]
 %    \end{macrocode}
 %    \begin{macrocode}
 \LoadClassWithOptions{bxjsarticle}
@@ -23,11 +26,12 @@
 %<*driver>
 \documentclass{bxjsarticle}
 \usepackage{doc}
+\usepackage[hiragino-pron]{luatexja-preset}
 \GetFileInfo{word.dtx}
 \begin{document}
  \DocInput{\filename}
 \end{document}
-%\</driver>
+%</driver>
 %\fi
 %
 %\def\fileversion{1.0}
@@ -165,3 +169,6 @@
 %    \begin{macrocode}
 \pagestyle{fancy}
 %    \end{macrocode}
+%
+% \Finale
+\endinput

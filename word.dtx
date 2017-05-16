@@ -104,6 +104,7 @@
 
 %    \begin{macrocode}
 \fancyhead{}
+\fancyfoot{}
 \if@pagenumber
   \if@evenstart
     \fancyhead[RE]{\@subtitle\thepage}
@@ -123,7 +124,7 @@
 \fi
 
 %    \end{macrocode}
-
+% \section{}
 %    \begin{macrocode}
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty
@@ -133,18 +134,21 @@
 }
 %    \end{macrocode}
 
+% \section{基本フォントの変更}
+% フォントの英数字部分をTimesフォントに変更しています。
 %    \begin{macrocode}
 \renewcommand{\rmdefault}{ptm}
 \renewcommand{\sfdefault}{ptm}
 %    \end{macrocode}
 
-
-
+% \section{\@authormarkの定義}
+% 著者名の横に付与する情報です。表示したくない場合、プリアンブルに\authormark{}と記述してください。
 %    \begin{macrocode}
 \newcommand{\@authormark}{文　編集部}
 %    \end{macrocode}
 
-
+% \section{タイトル表記の変更}
+% タイトルの記述をデフォルトから改造しています。
 %    \begin{macrocode}
 \renewcommand{\maketitle}{\begin{titlepage}%
 \begin{center}%
@@ -160,6 +164,14 @@
 \global\let\title\relax
 \global\let\author\relax
 }
+%    \end{macrocode}
+% \section{脚注の線}
+% 脚注部に引く線をテキストの幅に変更しています。
+%    \begin{macrocode}
+\renewcommand{\footnoterule}{%
+\kern-3\p@
+\hrule width\textwidth
+\kern 2.6\p@}
 %    \end{macrocode}
 
 % \section{本文スタイル}

@@ -15,7 +15,7 @@ before_install:
 install:
   - . ./install-tex.sh
   - ./tlmgr.sh update --self --all || echo "ignore errors"
-  - ./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
+  - ./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math patchcmd
 script:
   - make all
 after_success:

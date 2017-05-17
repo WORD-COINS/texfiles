@@ -15,8 +15,6 @@ TEXINS = $(addsuffix .ins, $(SRC))
 
 TARGETSLUA = $(addsuffix .cls, $(SRC))
 DOCUMENTLUA = $(addsuffix .pdf, $(SRC))
-TEXDTXLUA = $(addsuffix .dtx, $(SRC))
-TEXINSLUA = $(addsuffix .ins, $(SRC))
 
 .PHONY: all doc clean word
 
@@ -33,12 +31,10 @@ doc: $(DOCUMENT)
 all: $(TARGETS) $(DOCUMENT)
 
 $(TARGETS) : $(TEXINS) $(TEXDTX)
-		$(LATEX) $(LATEXFLAG) $(TEXDTX)
+		$(LUALATEX)  $(TEXDTX)
 
 $(DOCUMENT) : $(TEXDTX)
-		$(LATEX)  $(LATEXFLAG) $(TEXDTX)
-		$(LATEX) $(LATEXFLAG)  $(TEXDTX)
-		$(DVIPDFM) $(SRC)
+		$(LUALATEX) $(TEXDTX)
 
 clean:
 		rm *aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls

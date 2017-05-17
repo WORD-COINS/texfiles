@@ -9,12 +9,11 @@ cache:
     - "$HOME/Library/texlive/2016basic/texmf-var/luatex-cache"
     - "$HOME/texlive/2016/texmf-var/luatex-cache"
 before_install:
-  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
-  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
+  - wget https://raw.githubusercontent.com/hidaruma/install-tex-travis/master/install-tex.sh
+  - wget https://raw.githubusercontent.com/hidaruma/install-tex-travis/master/tlmgr.sh
   - chmod +x install-tex.sh tlmgr.sh
 install:
   - . ./install-tex.sh
-  - sudo /usr/local/texlive/2015/bin/x86_64-darwin/tlmgr path add
   - ./tlmgr.sh update --self --all || echo "ignore errors"
   - ./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
 script:

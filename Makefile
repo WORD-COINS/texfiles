@@ -25,14 +25,10 @@ TEXINSLUA = $(addsuffix .ins, $(SRC))
 word: $(TARGETS)
 		$(MAKE) $(TARGETS)
 
-word-lua: $(TARGETSLUA)
-		$(MAKE) $(TARGETSLUA)
 
 doc: $(DOCUMENT)
 		$(MAKE) $(DOCUMENT)
 		
-doc-lua: $(DOCUMENTLUA)
-		$(MAKE) $(DOCUMENTLUA)
 
 all: $(TARGETS) $(DOCUMENT)
 
@@ -40,16 +36,9 @@ $(TARGETS) : $(TEXINS) $(TEXDTX)
 		$(LATEX) $(LATEXFLAG) $(TEXDTX)
 
 $(DOCUMENT) : $(TEXDTX)
-		$(LATEX) $(LATEXFLAG) $(TEXDTX)
-		$(LATEX) $(LATEXFLAG) $(TEXDTX)
+		$(LATEX)  $(LATEXFLAG) $(TEXDTX)
+		$(LATEX) $(LATEXFLAG)  $(TEXDTX)
 		$(DVIPDFM) $(SRC)
-
-$(TARGETSLUA) : $(TEXINSLUA) $(TEXDTXLUA)
-		$(LUALATEX) $(TEXINSLUA)
-
-$(DOCUMENTLUA) : $(TEXDTXLUA)
-		$(LUALATEX) $(TEXDTXLUA)
-		$(LUALATEX) $(TEXDTXLUA)
 
 clean:
 		rm *aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls

@@ -165,6 +165,18 @@
 \global\let\author\relax
 }
 %    \end{macrocode}
+%
+%    \begin{macrocode}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+ {\z@}%
+ {\z@}%
+ {\reset@font\Large\gt\bfseries}}
+ 
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+   {\z@}%
+   {\z@}%
+   {\reset@font\large\gt\bfseries}}
+%    \end{macrocode}
 % \section{脚注の線}
 % 脚注部に引く線をテキストの幅に変更しています。
 %    \begin{macrocode}

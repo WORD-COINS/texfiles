@@ -14,6 +14,7 @@ before_install:
   - chmod +x install-tex.sh tlmgr.sh
 install:
   - . ./install-tex.sh
+  - sudo /usr/local/texlive/2015/bin/x86_64-darwin/tlmgr path add
   - ./tlmgr.sh update --self --all || echo "ignore errors"
   - ./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
 script:

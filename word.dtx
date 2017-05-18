@@ -68,7 +68,7 @@
 % \end{macro}
 
 % \begin{macro}{\if@lualatex}
-% lualatexで処理するかどうかのスイッチです。bxjsarticleに渡す他、lualatexだった場合のフォントの指定に使います。
+% lualatexで処理するかどうかのスイッチです。
 %    \begin{macrocode}
 \newif\if@lualatex \@lualatexfalse
 %    \end{macrocode}
@@ -87,10 +87,7 @@
 }
 %    \end{macrocode}
 %    \begin{macrocode}
-\DeclareOption{lualatex}{%
-	\setmainjfont{HiraMinProN W3}
-	\setsansjfont{HiraKakuProN W6}
-}
+\DeclareOption{lualatex}{\@lualatextrue}
 %    \end{macrocode}
 %    \begin{macrocode}
 \ProcessOptions\relax
@@ -101,7 +98,13 @@
 \RequirePackage{txfonts}
 %    \end{macrocode}
 
-
+%    \begin{macrocode}
+\if@lualatex
+  \RequirePackage{luatexja-preset}
+\fi
+%    \end{macrocode}
+% \section{スタイル}
+% \subsection{ヘッダの設定}
 %    \begin{macrocode}
 \fancyhead{}
 \fancyfoot{}
@@ -124,7 +127,7 @@
 \fi
 
 %    \end{macrocode}
-% \section{}
+% \subsection{ヘッダの内容設定}
 %    \begin{macrocode}
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty

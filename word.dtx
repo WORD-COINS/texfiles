@@ -41,7 +41,11 @@
 %\date{\filedate}
 %\maketitle
 %\tableofcontents
-% 
+%\section{テキスト幅}
+%    \begin{macrocode}
+\setlength\fullwidth{48\Cwd}
+\setlength\textwidth{\fullwidth}
+%    \end{macrocode}
 % \section{オプションスイッチ}
 % 後程使用する幾つかのスイッチを定義しています。
 % \begin{macro}{\@twosidetrue}
@@ -168,8 +172,13 @@
 \global\let\author\relax
 }
 %    \end{macrocode}
-% \section{subsection、subsubsectionのゴシック体化}
+% \section{section、subsection、subsubsectionのゴシック体化}
 %    \begin{macrocode}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}%
+ {\z@}%
+ {\z@}%
+ {\reset@font\LARGE\gt\bfseries}}
+ 
 \renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
  {\z@}%
  {\z@}%

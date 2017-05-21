@@ -151,7 +151,8 @@
 % \section{\@authormarkの定義}
 % 著者名の横に付与する情報です。表示したくない場合、プリアンブルでauthormarkを上書きしてください。
 %    \begin{macrocode}
-\newcommand{\@authormark}{文　編集部}
+\def\authormark#1{\gdef\authormark{#1}}
+\newcommand{\@authormark}{文\hskip\Cwd編集部}
 %    \end{macrocode}
 
 % \section{タイトル表記の変更}

@@ -45,11 +45,6 @@
 \geometry{top=25truemm, bottom=15truemm, right=19truemm, left=19truemm}
 \renewcommand{\baselinestretch}{1.35}
 %    \end{macrocode}
-%\section{テキスト幅}
-%    \begin{macrocode}
-\setlength\fullwidth{48\Cwd}
-\setlength\textwidth{\fullwidth}
-%    \end{macrocode}
 % \section{オプションスイッチ}
 % 後程使用する幾つかのスイッチを定義しています。
 % \begin{macro}{\@twosidetrue}
@@ -168,8 +163,8 @@
 %    \begin{macrocode}
 \newcommand{\chapter}{%
 \clearpage
-\global\topnum\z@
-\afterindextrue
+\global\@topnum\z@
+\afterindenttrue
 \@chapter}
 
 \def\chapter#1{\@makechapterhead{#1}\afterheading}
@@ -178,16 +173,16 @@
 \raggedright
 \reset@font\huge\gt\bfseries
 \leavevmode
-\setlength\@tempdima{\linelength}%
-\setbox\z@\vtop{\hbox{}\centering
+\begin{center}
 \setlength\baselineskip{.7\baselineskip} #1}%
-\vtop{\hsize\@tempdima
-\centering
-\box\z@}}
+\end{center}
 \par \nobreak \vskip\Cvs
 \begin{flushright}
-{\large\hss\@authormark\hskip\Cwd\@author}%
-\vskip.5\Cvs}
+{\large\@authormark\hskip\Cwd\@author}%
+\end{flushright}
+\vskip.5\Cvs
+\reset@font\normalsize
+}
 %    \end{macrocode}
 % \section{section、subsection、subsubsectionのゴシック体化}
 %    \begin{macrocode}

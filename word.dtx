@@ -131,14 +131,10 @@
 \fi
 
 %    \end{macrocode}
-% \subsection{ヘッダの内容設定}
+% \subsection{subtitleの定義}
 %    \begin{macrocode}
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty
-\renewenvironment{titlepage}
-{%
-\thispagestyle{fancy}%
-}
 %    \end{macrocode}
 
 % \section{基本フォントの変更}
@@ -155,23 +151,31 @@
 \newcommand{\@authormark}{文\hskip\Cwd編集部}
 %    \end{macrocode}
 
-% \section{タイトル表記の変更}
-% タイトルの記述をデフォルトから改造しています。
+% \section{Chapterの設定}
+% 
 %    \begin{macrocode}
-\renewcommand{\maketitle}{\begin{titlepage}%
-\begin{center}%
-{\huge \gt\bfseries{\@title} \par}%
-\vskip 3em
-\end{center}%
-\begin{flushright}%%
-{\normalsize \@authormark\hskip\Cwd\@author}%
-\end{flushright}%
-\end{titlepage}%
-\global\let\@title\@empty
-\global\let\@author\@empty
-\global\let\title\relax
-\global\let\author\relax
-}
+\newcommand{\chapter}{%
+\clearpage
+\global\topnum\z@
+\afterindextrue
+\@chapter
+
+\def\chapter#1{\@makechapterhead{#1}\afterheading}
+\def\makechapterhead#1{%
+{\parindent\z@
+\raggedright
+\reset@font\huge\gt\bfseries
+\leavevmode
+\setlength\@tempdima{\linelength}%
+\setbox\z@\vtop{\hbox{}\centering
+\setlength\baselineskip{.7\baselineskip} #1}%
+\vtop{\hsize\@tempdima
+\centering
+\box\z@}}
+\par \nobreak \vskip\Cvs
+\begin{flushright}
+{\large\hss\@authormark\hskip\Cwd\@author}%
+\vskip.5\Cvs}
 %    \end{macrocode}
 % \section{section、subsection、subsubsectionのゴシック体化}
 %    \begin{macrocode}

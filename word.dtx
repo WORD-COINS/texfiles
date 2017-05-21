@@ -41,6 +41,10 @@
 %\date{\filedate}
 %\maketitle
 %\tableofcontents
+%    \begin{macrocode}
+\geometry{top=25truemm, bottom=15truemm, right=19truemm, left=19truemm}
+\renewcommand{\baselinestretch}{1.35}
+%    \end{macrocode}
 %\section{テキスト幅}
 %    \begin{macrocode}
 \setlength\fullwidth{48\Cwd}
@@ -166,7 +170,7 @@
 \clearpage
 \global\topnum\z@
 \afterindextrue
-\@chapter
+\@chapter}
 
 \def\chapter#1{\@makechapterhead{#1}\afterheading}
 \def\makechapterhead#1{%

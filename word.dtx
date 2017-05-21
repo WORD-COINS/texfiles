@@ -114,19 +114,19 @@
 \fancyfoot{}
 \if@pagenumber
   \if@evenstart
-    \fancyhead[RE]{\@subtitle\thepage}
-    \fancyhead[LO]{\thepage\@subtitle}
+    \fancyhead[RE]{\@subtitle\@articleheader\thepage}
+    \fancyhead[LO]{\thepage\@articleheader\@subtitle}
   \else
-    \fancyhead[RO]{\@subtitle\thepage}
-    \fancyhead[LE]{\thepage\@subtitle}
+    \fancyhead[RO]{\@subtitle\@articleheader\thepage}
+    \fancyhead[LE]{\thepage\@articleheader\@subtitle}
   \fi
  \else
    \if@evenstart
-     \fancyhead[RE]{\@subtitle}
-     \fancyhead[LO]{\@subtitle}
+     \fancyhead[RE]{\@subtitle\@articleheader}
+     \fancyhead[LO]{\@articleheader\@subtitle}
    \else
-     \fancyhead[RO]{\@subtitle}
-     \fancyhead[LE]{\@subtitle}
+     \fancyhead[RO]{\@subtitle\@articleheader}
+     \fancyhead[LE]{\@articleheader\@subtitle}
    \fi
 \fi
 
@@ -136,6 +136,14 @@
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \let\@subtitle\@empty
 %    \end{macrocode}
+
+% \subsection{articleheaderの定義}
+% subtitle互換のarticleheaderを定義しました。
+%    \begin{macrocode}
+\def\articleheader#1{\gdef\@articleheader{#1}}
+\let\@articleheader\@empty
+%    \end{macrocode}
+
 
 % \section{基本フォントの変更}
 % フォントの英数字部分をTimesフォントに変更しています。

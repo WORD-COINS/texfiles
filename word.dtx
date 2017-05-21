@@ -155,7 +155,7 @@
 % 著者名の横に付与する情報です。表示したくない場合、プリアンブルでauthormarkを上書きしてください。
 %    \begin{macrocode}
 \def\authormark#1{\gdef\authormark{#1}}
-\newcommand{\@authormark}{文\hskip\Cwd編集部}
+\newcommand{\@authormark}{文\hskip\Cwd 編集部}
 %    \end{macrocode}
 
 % \section{Chapterの設定}
@@ -167,7 +167,7 @@
 \afterindenttrue
 \@chapter}
 
-\def\chapter#1{\@makechapterhead{#1}\afterheading}
+\def\chapter#1{\@makechapterhead{#1}\@afterheading}
 \def\makechapterhead#1{%
 {\parindent\z@
 \raggedright
@@ -178,7 +178,7 @@
 \end{center}
 \par \nobreak \vskip\Cvs
 \begin{flushright}
-{\large\@authormark\hskip\Cwd\@author}%
+{\reset@font\large\@authormark\hskip\Cwd\@author}%
 \end{flushright}
 \vskip.5\Cvs
 \reset@font\normalsize

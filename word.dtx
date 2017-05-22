@@ -171,7 +171,7 @@
 \def\@makechapterhead#1{%
 {\parindent\z@
 \raggedright
-\reset@font\huge\gt\bfseries
+\reset@font\huge\textgt\bfseries
 \leavevmode
 \begin{center}
 \setlength\baselineskip{.7\baselineskip} #1%
@@ -189,18 +189,37 @@
 \renewcommand{\section}{\@startsection{section}{1}{\z@}%
  {\z@}%
  {\z@}%
- {\reset@font\LARGE\gt\bfseries}}
+ {\reset@font\LARGE\textgt\bfseries}}
  
 \renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
  {\z@}%
  {\z@}%
- {\reset@font\Large\gt\bfseries}}
+ {\reset@font\Large\textgt\bfseries}}
  
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
    {\z@}%
    {\z@}%
-   {\reset@font\large\gt\bfseries}}
+   {\reset@font\large\textgt\bfseries}}
 %    \end{macrocode}
+% \section{future settings}
+%    \begin{macrocode}
+\def\articletitle#1{\gdef\@articletitle{#1}}
+\let\@articletitle\@empty
+\def\articleauthor#1{\gdef\@articleauthor{#1}}
+\let\articleauthor\@empty
+
+\newcommand{\makearticletitle}{%
+  \begin{center}
+  {\huge\textgt\bfseries\@articletitle}
+  \end{center}
+  \nobreak
+  \begin{flushright}
+  {\large\@authormark\hskip\Cwd\@articleauthor}
+  \end{flushright}
+  \vskip.5\Cvs
+ }
+%    \end{macrocode}
+
 % \section{脚注の線}
 % 脚注部に引く線をテキストの幅に変更しています。
 %    \begin{macrocode}

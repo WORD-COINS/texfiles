@@ -4,9 +4,9 @@
 % \setcounter{StandardModuleDepth}{1}
 % \StopEventually{}
 % \fi
-%\CheckSum{0}
 %\iffalse
-%\changes{v1.0}{2017/05/15}{First Release}
+%\CheckSum{0}
+%\changes{v1.0}{2017/05/23}{First Release}
 %\fi
 %
 %\iffalse
@@ -16,17 +16,18 @@
 % 
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{word}[2017/05/16 WORD Standard LaTeX class]
+\ProvidesClass{word}[2017/05/23 WORD Standard LaTeX class]
 %    \end{macrocode}
-%    \begin{macrocode}
-\LoadClassWithOptions{bxjsarticle}
-%    \end{macrocode}
+%
 % \fi
 %\iffalse
 %<*driver>
 \documentclass{bxjsarticle}
 \usepackage{doc}
+\usepackage{ifluatex}
+\ifluatex
 \usepackage[ipaex]{luatexja-preset}
+\fi
 \GetFileInfo{word.dtx}
 \begin{document}
  \DocInput{\filename}
@@ -41,20 +42,8 @@
 %\date{\filedate}
 %\maketitle
 %\tableofcontents
-%    \begin{macrocode}
-\geometry{top=25truemm, bottom=15truemm, right=19truemm, left=19truemm}
-\renewcommand{\baselinestretch}{1.35}
-%    \end{macrocode}
 % \section{オプションスイッチ}
 % 後程使用する幾つかのスイッチを定義しています。
-% \begin{macro}{\@twosidetrue}
-% WORDでは奇数ページと偶数ページで出力が異なるため、twosideを強制的にtrueにしています。fancyhdrの設定で使われます。
-%
-%    \begin{macrocode}
-\@twosidetrue
-%    \end{macrocode}
-%\end{macro}
-
 % \begin{macro}{\if@evenstart}
 % 偶数始まりかどうかのスイッチです。主にヘッダの位置に関わります。
 %    \begin{macrocode}
@@ -70,12 +59,6 @@
 %    \end{macrocode}
 % \end{macro}
 
-% \begin{macro}{\if@lualatex}
-% lualatexで処理するかどうかのスイッチです。
-%    \begin{macrocode}
-\newif\if@lualatex \@lualatexfalse
-%    \end{macrocode}
-%\end{macro}
 
 %\section{オプションの宣言}
 %    \begin{macrocode}
@@ -90,19 +73,38 @@
 }
 %    \end{macrocode}
 %    \begin{macrocode}
-\DeclareOption{lualatex}{\@lualatextrue}
-%    \end{macrocode}
-%    \begin{macrocode}
 \ProcessOptions\relax
 %    \end{macrocode}
+
+%
+%\section{クラスのロード}
+%    \begin{macrocode}
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard]{bxjsarticle}
+%    \end{macrocode}
+%\section{set spacing}
+% WORDでは日本語フォントが8.5pt（12Q）、で48字33行を設定している。設定自体に必然性は無いが、一太郎での設定との互換のために
+% 現在の設定になっている。左右は一太郎では19mmだが、1行48字を実現するため下記のようになっている。
+%    \begin{macrocode}
+\geometry{top=25truemm, bottom=15truemm, right=19.5truemm, left=19.5truemm}
+\renewcommand{\baselinestretch}{1.35}
+%    \end{macrocode}
+% \begin{macro}{\@twosidetrue}
+% WORDでは奇数ページと偶数ページで出力が異なるため、twosideを強制的にtrueにしています。fancyhdrの設定で使われます。
+%
+%    \begin{macrocode}
+\@twosidetrue
+%    \end{macrocode}
+%\end{macro}
+
 % \section{パッケージのロード}
 %    \begin{macrocode}
 \RequirePackage{fancyhdr}
 \RequirePackage{txfonts}
+\RequirePackage{ifluatex}
 %    \end{macrocode}
 
 %    \begin{macrocode}
-\if@lualatex
+\ifluatex
   \RequirePackage{luatexja-preset}
 \fi
 %    \end{macrocode}
@@ -171,7 +173,7 @@
 \def\@makechapterhead#1{%
 {\parindent\z@
 \raggedright
-\reset@font\huge\textgt\bfseries
+\reset@font\huge\gtfamily\bfseries
 \leavevmode
 \begin{center}
 \setlength\baselineskip{.7\baselineskip} #1%
@@ -189,34 +191,37 @@
 \renewcommand{\section}{\@startsection{section}{1}{\z@}%
  {\z@}%
  {\z@}%
- {\reset@font\LARGE\textgt\bfseries}}
+ {\reset@font\LARGE\gtfamily\bfseries}}
  
 \renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
  {\z@}%
  {\z@}%
- {\reset@font\Large\textgt\bfseries}}
+ {\reset@font\Large\gtfamily\bfseries}}
  
 \renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
    {\z@}%
    {\z@}%
-   {\reset@font\large\textgt\bfseries}}
+   {\reset@font\large\gtfamily\bfseries}}
 %    \end{macrocode}
 % \section{future settings}
 %    \begin{macrocode}
 \def\articletitle#1{\gdef\@articletitle{#1}}
 \let\@articletitle\@empty
 \def\articleauthor#1{\gdef\@articleauthor{#1}}
-\let\articleauthor\@empty
+\let\@articleauthor\@empty
 
 \newcommand{\makearticletitle}{%
   \begin{center}
-  {\huge\textgt\bfseries\@articletitle}
+  {\huge\gtfamily\bfseries\@articletitle}
   \end{center}
   \nobreak
   \begin{flushright}
   {\large\@authormark\hskip\Cwd\@articleauthor}
   \end{flushright}
   \vskip.5\Cvs
+  \let\@articleauthor\relax
+  \let\@articletitle\relax
+  \let\@thanks\rela
  }
 %    \end{macrocode}
 

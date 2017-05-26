@@ -79,7 +79,19 @@
 %
 %\section{クラスのロード}
 %    \begin{macrocode}
+\RequirePackage{ifluatex}
+\RequirePackage{ifxetex}
+\ifluatex
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard, jafont=auto]{bxjsarticle}
+\else
+\ifxetex
+\newcommand{\mathmc}{\mcfamily}
+\newcommand{\mathgt}{\gtfamily}
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard, jafont=auto]{bxjsarticle}
+\else
 \LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard]{bxjsarticle}
+\fi
+\fi
 %    \end{macrocode}
 %\section{set spacing}
 % WORDでは日本語フォントが8.5pt（12Q）、で48字33行を設定している。設定自体に必然性は無いが、一太郎での設定との互換のために
@@ -99,14 +111,9 @@
 % \section{パッケージのロード}
 %    \begin{macrocode}
 \RequirePackage{fancyhdr}
-\RequirePackage{txfonts}
+\RequirePackage{amsmath, amssymb}
+\RequirePackage{newtxtext, newtxmath}
 \RequirePackage{ifluatex}
-%    \end{macrocode}
-
-%    \begin{macrocode}
-\ifluatex
-  \RequirePackage{luatexja-preset}
-\fi
 %    \end{macrocode}
 % \section{スタイル}
 % \subsection{ヘッダの設定}
@@ -222,6 +229,12 @@
   \let\@articleauthor\relax
   \let\@articletitle\relax
   \let\@thanks\rela
+ }
+
+ \newcommand{\makeerticleauthor}{%
+ \begin{flushright}
+  {\large\@authormark\hskip\Cwd\@articleauthor} 
+ \end{flushright}
  }
 %    \end{macrocode}
 

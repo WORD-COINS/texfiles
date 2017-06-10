@@ -231,9 +231,13 @@
 
 \newcommand{\makearticletitle}{%
   \begin{center}
+  \parindent\z@
+  \raggedright
+  \setlength\baselineskip{.7\baselineskip}
   {\huge\gtfamily\bfseries\@articletitle}
   \end{center}
-  \nobreak
+  \par \nobreak \vskip\Cvs
+  \par \nobreak \vskip/Cvs
   \begin{flushright}
   {\large\@authormark\hskip\Cwd\@articleauthor}
   \end{flushright}

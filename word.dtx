@@ -82,23 +82,23 @@
 \RequirePackage{ifluatex}
 \RequirePackage{ifxetex}
 \ifluatex
-\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard, jafont=auto]{bxjsarticle}
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, base=8.5pt, b5j, ja=standard, jafont=auto]{bxjsarticle}
 \else
 \ifxetex
 \newcommand{\mathmc}{\mcfamily}
 \newcommand{\mathgt}{\gtfamily}
-\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard, jafont=auto]{bxjsarticle}
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, base=8.5pt, b5j, ja=standard, jafont=auto]{bxjsarticle}
 \else
-\LoadClass[autodetect-engine, dvipdfmx-if-dvi, jbase=12Q, b5j, ja=standard]{bxjsarticle}
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, base=8.5pt, b5j, ja=standard]{bxjsarticle}
 \fi
 \fi
 %    \end{macrocode}
 %\section{set spacing}
-% WORDでは日本語フォントが8.5pt（12Q）、で48字33行を設定している。設定自体に必然性は無いが、一太郎での設定との互換のために
-% 現在の設定になっている。左右は一太郎では19mmだが、1行48字を実現するため下記のようになっている。
+% WORDでは欧文フォントが8.5ptで48字33行を設定している。設定自体に必然性は無いが、一太郎での設定との互換のために
+% 現在の設定になっている。左右は一太郎では24mmだが、1行48字を実現するため下記のようになっている。
 %    \begin{macrocode}
-\geometry{top=15truemm, bottom=15truemm, right=19.5truemm, left=19.5truemm, includehead, includefoot}
-\renewcommand{\baselinestretch}{1.35}
+\geometry{top=15truemm, bottom=15truemm, right=24.25truemm, left=24.25truemm, includehead, includefoot}
+\renewcommand{\baselinestretch}{1.4}
 %    \end{macrocode}
 % \begin{macro}{\@twosidetrue}
 % WORDでは奇数ページと偶数ページで出力が異なるため、twosideを強制的にtrueにしています。fancyhdrの設定で使われます。

@@ -9,5 +9,5 @@ install:
   - curl -O https://raw.githubusercontent.com/y-yu/install-tex-appveyor/master/install-tex.sh
   - bash ./install-tex.sh
 build_script:
-  - tlmgr install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math
+  - tlmgr install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math everyhook svn-prov
   - make all

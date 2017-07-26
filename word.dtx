@@ -258,6 +258,15 @@
 \fi
 %    \end{macrocode}
 %
+% \section{脚注の位置}
+% \begin{macrocode}
+\renewcommand\@makefntext[1]{%
+\parindent 1em
+  \baselineskip = 0.75\baselineskip
+  \noindent\hbox to 1em{\hss\@makefnmark}
+#1}
+% \end{macrocode}
+%
 % \section{脚注の線}
 % 脚注部に引く線をテキストの幅に変更しています。
 %    \begin{macrocode}

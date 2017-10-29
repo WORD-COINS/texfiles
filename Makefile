@@ -16,25 +16,17 @@ TEXINS = $(addsuffix .ins, $(SRC))
 TARGETSLUA = $(addsuffix .cls, $(SRC))
 DOCUMENTLUA = $(addsuffix .pdf, $(SRC))
 
-.PHONY: all doc clean word
+.PHONY: all clean
 
 .DEFAULT_GOAL := all
 
-word: $(TARGETS)
-		$(MAKE) $(TARGETS)
-
-
-doc: $(DOCUMENT)
-		$(MAKE) $(DOCUMENT)
-		
-
 all: $(TARGETS) $(DOCUMENT)
 
-$(TARGETS) : $(TEXINS) $(TEXDTX)
-		$(LUALATEX)  $(TEXINS)
+$(TARGETS): $(TEXINS) $(TEXDTX)
+	$(LUALATEX)  $(TEXINS)
 
-$(DOCUMENT) : $(TEXDTX)
-		$(LUALATEX) $(TEXDTX)
+$(DOCUMENT): $(TEXDTX)
+	$(LUALATEX) $(TEXDTX)
 
 clean:
-		rm *aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls
+	rm *.aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls

@@ -1,15 +1,13 @@
 WORD Class
 ===
 
-[![Build Status](https://travis-ci.org/hidaruma/texfiles.svg?branch=master)](https://travis-ci.org/hidaruma/texfiles)
+[![Build Status](https://travis-ci.org/WORD-COINS/texfiles.svg?branch=master)](https://travis-ci.org/WORD-COINS/texfiles)
+[![Build status](https://ci.appveyor.com/api/projects/status/12vr1y6pdxs2av2v?svg=true)](https://ci.appveyor.com/project/y-yu/texfiles)
 
 ## about source code
 
 - Makefile
-	+ `make`で`word.cls`ができる
-
-	+ `make doc`で`word.cls`のドキュメントが生成される｡
-
+	+ `make`で`word.cls`と`word.pdf`ができる
 - word.dtx
     + A class extended bxjsarticle for WORD-coins.
 

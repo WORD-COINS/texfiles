@@ -1,4 +1,7 @@
 *.clo
 *.cls
 *.log
-
+CMakeFiles
+autom4te.cache
+cmake_install.cmake
+CMakeCache.txt

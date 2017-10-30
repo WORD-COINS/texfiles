@@ -10,5 +10,4 @@ install:
   - bash ./install-tex.sh
 build_script:
   - tlmgr install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm mdframed needspace unicode-math everyhook svn-prov
-  - cmake .
-  - cmake --build .
+  - make

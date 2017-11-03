@@ -1,10 +1,6 @@
-MAKE = make
-
-LATEX ?= platex
 LUALATEX ?= lualatex
-LATEXFLAG = --kanji=utf8 -halt-on-error
-
-DVIPDFM ?= dvipdfmx
+LATEXFLAG += --kanji=utf8 -halt-on-error
+RM = rm
 
 SRC = word
 
@@ -13,9 +9,6 @@ DOCUMENT = $(addsuffix .pdf, $(SRC))
 TEXDTX = $(addsuffix .dtx, $(SRC))
 TEXINS = $(addsuffix .ins, $(SRC))
 
-TARGETSLUA = $(addsuffix .cls, $(SRC))
-DOCUMENTLUA = $(addsuffix .pdf, $(SRC))
-
 .PHONY: all clean
 
 .DEFAULT_GOAL := all
@@ -23,10 +16,10 @@ DOCUMENTLUA = $(addsuffix .pdf, $(SRC))
 all: $(TARGETS) $(DOCUMENT)
 
 $(TARGETS): $(TEXINS) $(TEXDTX)
-	$(LUALATEX)  $(TEXINS)
+	$(LUALATEX) $(LATEXFLAG) $(TEXINS)
 
 $(DOCUMENT): $(TEXDTX)
-	$(LUALATEX) $(TEXDTX)
+	$(LUALATEX) $(LATEXFLAG) $(TEXDTX)
 
 clean:
-	rm *.aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls
+	$(RM) -f *.aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls

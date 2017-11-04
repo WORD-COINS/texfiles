@@ -78,11 +78,26 @@
 
 %
 %\section{クラスのロード}
+% WORDでは環境変数によって変数を指定しています。環境変数\texttt{WORD\_FONT}によって、
+% 埋め込むフォントを決定します。この環境変数が指定されていない場合、フォントは\texttt{auto}となります。
 %    \begin{macrocode}
 \RequirePackage{ifluatex}
 \RequirePackage{ifxetex}
 \ifluatex
-\LoadClass[autodetect-engine, dvipdfmx-if-dvi, base=8.5pt, b5j, ja=standard, jafont=auto]{bxjsarticle}
+  \newcommand{\WORDFONT}{%
+    \directlua{
+      WORD_FONT = os.getenv("WORD_FONT")
+
+      if WORD_FONT then
+        tex.print(WORD_FONT)
+      else
+        tex.print("auto")
+      end
+    }
+  }
+\fi
+\ifluatex
+\LoadClass[autodetect-engine, dvipdfmx-if-dvi, base=8.5pt, b5j, ja=standard, jafont=\WORDFONT]{bxjsarticle}
 \else
 \ifxetex
 \newcommand{\mathmc}{\mcfamily}

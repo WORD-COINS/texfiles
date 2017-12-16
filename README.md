@@ -7,20 +7,19 @@ WORD Class
 ## about source code
 
 - Makefile
-	+ `make`で`word.cls`､`word.clo`ができる
-	+ `make lua`で`word-lua.cls`ができる
-	+ `make doc`で`word.cls`のドキュメントが生成される｡`make doc-lua`で`word-lua.cls`のドキュメントが
+	+ `make`で`word.cls`と`word.pdf`ができる
+- word.dtx
+    + A class extended bxjsarticle for WORD-coins.
 
-- word-lua.dtx *based on ltjsclasses.dtx tags/20150307.0*
+## word.cls
 
-## word.clsとword-lua.cls
-
-- 文と次の見出しの間
-	+ `\section`では3`\zw`､`\subsection`では`2\zw`､`\subsubsection`では`1\zw`､`word-lua.cls`のほうが***広い***｡
-
-- word-luaのみの機能
+- オプション
 	+ `\authormark{hoge}`で、著者名前の「文 編集部」を編集できる。
-	+ `swapheader`オプションで、ヘッダの位置を入れ替えられる。記事が偶数ページから始まる時に便利。
+	+ `evenstart`オプションで、ヘッダの位置を入れ替えられる。記事が偶数ページから始まる時に便利。
+    + `draft`オプションで、ヘッダにページ番号を付与する。画像を読み込む時はgraphicxにも、draftオプションを付ける。
+	+ `\articleheader`が従来の`\subtitle`の代わりとして登場した。`\subtitle`は互換のために保持。
+    + `\articleheader{hoge}`をプリアンブルに入れるとヘッダに`hoge`が入る。
+    + `\articleheader{fuga}`を文章中に入れると、そのページからヘッダが`fuga`に変更される。
 
 # ライセンス
 

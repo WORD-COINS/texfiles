@@ -1,4 +1,5 @@
-\input docstrip
-\generate{\file{word.cls}{\from{word.dtx}{book}}}
-\generate{\file{word.clo}{\from{word.dtx}{geometry}}}
+\def\batchfile{word.ins}
+\input docstrip.tex
+\keepsilent
+\generateFile{word.cls}{f}{\from{word.dtx}{word}}
 \endbatchfile

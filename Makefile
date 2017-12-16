@@ -1,57 +1,25 @@
-MAKE        = make
+LUALATEX ?= lualatex
+LATEXFLAG += --kanji=utf8 -halt-on-error
+RM = rm
 
-LATEX      ?= platex
-LUALATEX   ?= lualatex
-LATEXFLAG   = --kanji=utf8 -halt-on-error
+SRC = word
 
-DVIPDFM    ?= dvipdfmx
+TARGETS = $(addsuffix .cls, $(SRC))
+DOCUMENT = $(addsuffix .pdf, $(SRC))
+TEXDTX = $(addsuffix .dtx, $(SRC))
+TEXINS = $(addsuffix .ins, $(SRC))
 
-SRC         = word
-SRCLUA      = word-lua
-
-TARGETS     = $(addsuffix .cls, $(SRC)) $(addsuffix .clo, $(SRC))
-DOCUMENT    = $(addsuffix .pdf, $(SRC))
-TEXDTX      = $(addsuffix .dtx, $(SRC))
-TEXINS      = $(addsuffix .ins, $(SRC))
-
-TARGETSLUA  = $(addsuffix .cls, $(SRCLUA))
-DOCUMENTLUA = $(addsuffix .pdf, $(SRCLUA))
-TEXDTXLUA   = $(addsuffix .dtx, $(SRCLUA))
-TEXINSLUA   = $(addsuffix .ins, $(SRCLUA))
-
-.PHONY: all doc doc-lua clean word-lua word
+.PHONY: all clean
 
 .DEFAULT_GOAL := all
 
-word: $(TARGETS)
-	$(MAKE) $(TARGETS)
+all: $(TARGETS) $(DOCUMENT)
 
-word-lua: $(TARGETSLUA)
-	$(MAKE) $(TARGETSLUA)
+$(TARGETS): $(TEXINS) $(TEXDTX)
+	$(LUALATEX) $(LATEXFLAG) $(TEXINS)
 
-doc: $(DOCUMENT)
-	$(MAKE) $(DOCUMENT)
-
-doc-lua: $(DOCUMENTLUA)
-	$(MAKE) $(DOCUMENTLUA)
-
-all: $(TARGETS) $(TARGETSLUA) $(DOCUMENT) $(DOCUMENTLUA)
-
-$(TARGETS) : $(TEXINS) $(TEXDTX)
-	$(LATEX) $(LATEXFLAG) $(TEXINS)
-
-$(DOCUMENT) : $(TEXDTX)
-	$(LATEX) $(LATEXFLAG) $(TEXDTX)
-	$(LATEX) $(LATEXFLAG) $(TEXDTX)
-	$(DVIPDFM) $(SRC)
-
-$(TARGETSLUA) : $(TEXINSLUA) $(TEXDTXLUA)
-	$(LUALATEX) $(TEXINSLUA)
-
-$(DOCUMENTLUA) : $(TEXDTXLUA)
-	$(LUALATEX) $(TEXDTXLUA)
-	$(LUALATEX) $(TEXDTXLUA)
+$(DOCUMENT): $(TEXDTX)
+	$(LUALATEX) $(LATEXFLAG) $(TEXDTX)
 
 clean:
-	rm *.aux *.cls *.clo *.log *.toc *.dvi *.pdf *.out *.fls
-
+	$(RM) -f *.aux *.cls *.log *.toc *.dvi *.pdf *.out *.fls

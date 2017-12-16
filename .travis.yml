@@ -3,6 +3,8 @@ os:
   - osx
   - linux
 dist: trusty
+# This is a workaround for shell_session_update error
+osx_image: xcode9.2
 sudo: false
 cache:
   directories:

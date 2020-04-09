@@ -1,3 +1,5 @@
+**This Project is moved to BitBucket. See https://bitbucket.org/word-coins/texfiles **
+
 WORD Class
 ===
 
